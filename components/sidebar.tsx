@@ -16,6 +16,74 @@ import {
   LogOut
 } from 'lucide-react';
 
+const SidebarContent = ({ navClass }: { navClass: (path: string) => string }) => (
+  <div className="flex flex-col h-full bg-surface border-r border-border">
+    <div className="h-14 lg:h-16 flex items-center px-4 font-bold text-lg tracking-tight border-b border-border">
+      RETRY
+      <div className="ml-2 text-[10px] text-text-secondary font-normal uppercase tracking-widest">
+        Revenue Recovery
+      </div>
+    </div>
+    <div className="flex-1 py-6 flex flex-col gap-8 px-2 overflow-y-auto">
+      
+      {/* OPERATE */}
+      <div>
+        <div className="px-3 mb-2 text-[10px] uppercase tracking-widest text-zinc-500 font-bold">Operate</div>
+        <div className="flex flex-col gap-1">
+          <Link href="/dashboard" className={navClass("/dashboard")}>
+            <LayoutDashboard size={16} /> Overview
+          </Link>
+          <Link href="/cases" className={navClass("/cases")}>
+            <Inbox size={16} /> Recovery cases
+          </Link>
+          <Link href="/analytics" className={navClass("/analytics")}>
+            <BarChart3 size={16} /> Analytics
+          </Link>
+        </div>
+      </div>
+
+      {/* DEVELOP */}
+      <div>
+        <div className="px-3 mb-2 text-[10px] uppercase tracking-widest text-zinc-500 font-bold">Develop</div>
+        <div className="flex flex-col gap-1">
+          <Link href="/demo" className={navClass("/demo")}>
+            <Beaker size={16} /> Demo lab
+          </Link>
+          <Link href="/integration" className={navClass("/integration")}>
+            <Plug size={16} /> Integration
+          </Link>
+        </div>
+      </div>
+
+      {/* CONTROL */}
+      <div>
+        <div className="px-3 mb-2 text-[10px] uppercase tracking-widest text-zinc-500 font-bold">Control</div>
+        <div className="flex flex-col gap-1">
+          <Link href="/settings/guardrails" className={navClass("/settings/guardrails")}>
+            <ShieldAlert size={16} /> Guardrails
+          </Link>
+          <Link href="/settings" className={navClass("/settings")}>
+            <Settings size={16} /> Settings
+          </Link>
+        </div>
+      </div>
+    </div>
+
+    <div className="mt-auto border-t border-border p-4 bg-background">
+      <div className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold mb-3">
+        Demo workspace · Test mode
+      </div>
+      <div className="flex flex-col gap-1">
+        <div className="text-sm font-bold truncate">Hemanth R.</div>
+        <div className="text-xs text-text-secondary truncate mb-2">NammaMart Demo Store</div>
+        <button className="flex items-center gap-2 text-xs text-text-secondary hover:text-text-primary transition-colors">
+          <LogOut size={12} /> Log out
+        </button>
+      </div>
+    </div>
+  </div>
+);
+
 export function Sidebar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
@@ -37,74 +105,6 @@ export function Sidebar() {
     }`;
   };
 
-  const SidebarContent = () => (
-    <div className="flex flex-col h-full bg-surface border-r border-border">
-      <div className="h-14 lg:h-16 flex items-center px-4 font-bold text-lg tracking-tight border-b border-border">
-        RETRY
-        <div className="ml-2 text-[10px] text-text-secondary font-normal uppercase tracking-widest">
-          Revenue Recovery
-        </div>
-      </div>
-      <div className="flex-1 py-6 flex flex-col gap-8 px-2 overflow-y-auto">
-        
-        {/* OPERATE */}
-        <div>
-          <div className="px-3 mb-2 text-[10px] uppercase tracking-widest text-zinc-500 font-bold">Operate</div>
-          <div className="flex flex-col gap-1">
-            <Link href="/dashboard" className={navClass("/dashboard")}>
-              <LayoutDashboard size={16} /> Overview
-            </Link>
-            <Link href="/cases" className={navClass("/cases")}>
-              <Inbox size={16} /> Recovery cases
-            </Link>
-            <Link href="/analytics" className={navClass("/analytics")}>
-              <BarChart3 size={16} /> Analytics
-            </Link>
-          </div>
-        </div>
-
-        {/* DEVELOP */}
-        <div>
-          <div className="px-3 mb-2 text-[10px] uppercase tracking-widest text-zinc-500 font-bold">Develop</div>
-          <div className="flex flex-col gap-1">
-            <Link href="/demo" className={navClass("/demo")}>
-              <Beaker size={16} /> Demo lab
-            </Link>
-            <Link href="/integration" className={navClass("/integration")}>
-              <Plug size={16} /> Integration
-            </Link>
-          </div>
-        </div>
-
-        {/* CONTROL */}
-        <div>
-          <div className="px-3 mb-2 text-[10px] uppercase tracking-widest text-zinc-500 font-bold">Control</div>
-          <div className="flex flex-col gap-1">
-            <Link href="/settings/guardrails" className={navClass("/settings/guardrails")}>
-              <ShieldAlert size={16} /> Guardrails
-            </Link>
-            <Link href="/settings" className={navClass("/settings")}>
-              <Settings size={16} /> Settings
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-auto border-t border-border p-4 bg-background">
-        <div className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold mb-3">
-          Demo workspace · Test mode
-        </div>
-        <div className="flex flex-col gap-1">
-          <div className="text-sm font-bold truncate">Hemanth R.</div>
-          <div className="text-xs text-text-secondary truncate mb-2">NammaMart Demo Store</div>
-          <button className="flex items-center gap-2 text-xs text-text-secondary hover:text-text-primary transition-colors">
-            <LogOut size={12} /> Log out
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-
   return (
     <>
       {/* Mobile Toggle */}
@@ -119,14 +119,14 @@ export function Sidebar() {
       {isOpen && (
         <div className="fixed inset-0 z-40 bg-black/50 md:hidden" onClick={toggleSidebar}>
           <div className="w-[240px] h-full" onClick={(e) => e.stopPropagation()}>
-            <SidebarContent />
+            <SidebarContent navClass={navClass} />
           </div>
         </div>
       )}
 
       {/* Desktop Sidebar */}
       <aside className="w-[220px] shrink-0 min-h-screen hidden md:flex flex-col">
-        <SidebarContent />
+        <SidebarContent navClass={navClass} />
       </aside>
     </>
   );

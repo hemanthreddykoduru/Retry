@@ -1,6 +1,6 @@
 import { CaseStatus } from "@/lib/demo-data";
 
-export function StatusBadge({ status, label }: { status: CaseStatus, label?: string }) {
+export function StatusBadge({ status, label, showDot }: { status: CaseStatus, label?: string, showDot?: boolean }) {
   let colorClass = "bg-neutral text-neutral";
   let dotClass = "bg-neutral";
   let defaultLabel = "Unknown";
@@ -40,7 +40,7 @@ export function StatusBadge({ status, label }: { status: CaseStatus, label?: str
 
   return (
     <div className={`inline-flex items-center gap-1.5 ${colorClass} text-[10px] font-bold uppercase tracking-wider`}>
-      <span className={`w-1.5 h-1.5 rounded-none ${dotClass}`}></span>
+      {showDot && <span className={`w-1.5 h-1.5 rounded-none ${dotClass}`}></span>}
       <span>{label || defaultLabel}</span>
     </div>
   );

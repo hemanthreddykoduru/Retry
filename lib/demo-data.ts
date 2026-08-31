@@ -127,7 +127,7 @@ export const mockCases: RecoveryCase[] = [
     ]
   },
   {
-    id: "rc_3x4y5z",
+    id: "rc_c931",
     merchant_id: "m_1",
     customer_id: "cus_3",
     checkout_session_id: "cs_3",
@@ -143,14 +143,15 @@ export const mockCases: RecoveryCase[] = [
     recovered_amount: null,
     opened_at: "2026-08-31T15:11:22Z",
     closed_at: null,
-    customer: mockCustomers[2],
+    customer: { ...mockCustomers[2], name: "Srilatha P.", phone: "+919876541207" },
     audit_logs: [
-      { id: 8, recovery_case_id: "rc_3x4y5z", actor: "system", action: "payment.failed", reasoning: "Webhook received: INSUFFICIENT_FUNDS", metadata: {}, created_at: "2026-08-31T15:11:22Z" },
-      { id: 9, recovery_case_id: "rc_3x4y5z", actor: "agent", action: "policy.decided", reasoning: "Telugu voice call selected because cart is ≥ ₹500.", metadata: {}, created_at: "2026-08-31T15:11:23Z" },
-      { id: 10, recovery_case_id: "rc_3x4y5z", actor: "system", action: "sarvam.outcome", reasoning: "Call completed. Customer promised to pay.", metadata: { promise_date: "2026-09-02" }, created_at: "2026-08-31T15:12:47Z" }
+      { id: 8, recovery_case_id: "rc_c931", actor: "system", action: "payment.failed", reasoning: "Webhook received: INSUFFICIENT_FUNDS", metadata: {}, created_at: "2026-08-31T15:11:22Z" },
+      { id: 9, recovery_case_id: "rc_c931", actor: "agent", action: "policy.decided", reasoning: "Telugu voice call selected because cart is ≥ ₹500.", metadata: {}, created_at: "2026-08-31T15:11:23Z" },
+      { id: 10, recovery_case_id: "rc_c931", actor: "agent", action: "guardrail.checked", reasoning: "Passed constraints: 09:00-21:00 IST, threshold ₹500 met, not DND.", metadata: {}, created_at: "2026-08-31T15:11:24Z" },
+      { id: 11, recovery_case_id: "rc_c931", actor: "system", action: "sarvam.outcome", reasoning: "Call completed. Customer promised to pay.", metadata: { promise_date: "2026-09-02" }, created_at: "2026-08-31T15:12:47Z" }
     ],
     interventions: [
-      { id: "int_3", recovery_case_id: "rc_3x4y5z", type: "voice_call", status: "completed", scheduled_for: "2026-08-31T15:11:30Z", executed_at: "2026-08-31T15:11:45Z", outcome: "promise_to_pay" }
+      { id: "int_3", recovery_case_id: "rc_c931", type: "voice_call", status: "completed", scheduled_for: "2026-08-31T15:11:30Z", executed_at: "2026-08-31T15:11:45Z", outcome: "promise_to_pay" }
     ]
   }
 ];
