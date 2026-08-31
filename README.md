@@ -199,3 +199,23 @@ Recovery is one agent in a larger surface. Next: a **Track-2 crossover** that tu
 ---
 
 *Built solo for the Razorpay AI Buildathon 2026. Code speaks louder than a résumé — so every claim here is reproducible from this repo.*
+
+## Production Deployment Checklist
+
+Before deploying to Vercel or your preferred host, ensure the following steps are complete:
+
+1. **Environment Variables:**
+   - Configure `NEXT_PUBLIC_APP_URL` to your production domain.
+   - Add all `RAZORPAY_*` credentials (`RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, `RAZORPAY_WEBHOOK_SECRET`).
+   - Add `SARVAM_API_KEY`, `SARVAM_AGENT_ID`, and `SARVAM_WEBHOOK_SECRET` with live values.
+   - Set `DEMO_MODE=false`, `SARVAM_MOCK_MODE=false`.
+2. **Razorpay Webhooks:**
+   - Add your production URL `https://<domain>/api/webhooks/razorpay` to your Razorpay dashboard.
+   - Subscribe to `payment.failed`, `payment_link.paid`, etc.
+3. **Sarvam Callback URL:**
+   - Register `https://<domain>/api/webhooks/sarvam` in your Sarvam agent settings.
+4. **Test the Live Flow:**
+   - Run a test failure in Razorpay test mode first and verify Sarvam initiates a live outbound call to a designated test number.
+5. **Limitations:**
+   - WhatsApp is intentionally omitted in this build.
+   - Do not use for non-INR currencies without modifying the `formatCurrency` logic.
