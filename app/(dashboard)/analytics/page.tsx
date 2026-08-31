@@ -151,7 +151,7 @@ export default function AnalyticsPage() {
             <div className="w-full bg-neutral-bg h-1.5"><div className="bg-recovered h-full" style={{ width: '39%' }}></div></div>
 
             <div className="flex justify-between items-center mt-2">
-              <span className="text-text-primary">WhatsApp Payment Link</span>
+              <span className="text-text-primary">Payment-link follow-up</span>
               <span className="font-bold text-recovered">22 recovered</span>
             </div>
             <div className="w-full bg-neutral-bg h-1.5"><div className="bg-recovered h-full" style={{ width: '36%' }}></div></div>

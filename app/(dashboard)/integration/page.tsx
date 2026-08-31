@@ -80,12 +80,12 @@ export default function IntegrationPage() {
                 <span className="bg-active-bg border border-active text-active px-2 py-1 text-[10px] uppercase tracking-widest font-bold">MOCK MODE</span>
               </div>
               <div className="flex justify-between items-center p-3 border border-border">
-                <span className="font-bold">WhatsApp Cloud API</span>
-                <span className="bg-active-bg border border-active text-active px-2 py-1 text-[10px] uppercase tracking-widest font-bold">MOCK MODE</span>
-              </div>
-              <div className="flex justify-between items-center p-3 border border-border">
                 <span className="font-bold">Razorpay Payment Links</span>
-                <span className="bg-active-bg border border-active text-active px-2 py-1 text-[10px] uppercase tracking-widest font-bold">MOCK MODE</span>
+                <span className="bg-active-bg border border-active text-active px-2 py-1 text-[10px] uppercase tracking-widest font-bold">TEST MODE</span>
+              </div>
+              <div className="flex justify-between items-center p-3 border border-border bg-surface opacity-60">
+                <span className="font-bold flex items-center gap-2">WhatsApp / SMS <span className="text-[10px] tracking-widest font-mono bg-neutral-bg px-1.5 py-0.5 border border-border">ROADMAP</span></span>
+                <span className="text-text-secondary px-2 py-1 text-[10px] uppercase tracking-widest font-bold">NOT CONFIGURED</span>
               </div>
             </div>
           </div>
@@ -150,7 +150,7 @@ export default function IntegrationPage() {
                 <ServerCrash size={16} className="text-waiting shrink-0 mt-0.5" />
                 <div>
                   <div className="font-bold text-text-primary">Sarvam Unavailable</div>
-                  <div className="text-xs">If the Sarvam AI API fails, Retry automatically falls back to WhatsApp nudges.</div>
+                  <div className="text-xs">If the Sarvam AI API fails, Retry automatically marks the case for manual follow-up with a Payment Link.</div>
                 </div>
               </div>
               

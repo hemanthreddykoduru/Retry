@@ -198,7 +198,7 @@ export default function CaseDetailPage() {
           <div className="bg-neutral-bg border border-border p-4 font-mono text-xs text-text-secondary italic">
             <div className="font-bold text-text-primary mb-2 not-italic text-[10px] uppercase tracking-widest">Transcript Preview</div>
             &quot;Avunu, nenu payment complete chesthanu. Link pampandi.&quot;<br/><br/>
-            [System: intent classified as PROMISE_TO_PAY. Sent link request to WhatsApp fallback.]
+            [System: intent classified as PROMISE_TO_PAY. Sent link request to Payment Link fallback.]
           </div>
         </div>
 
@@ -233,6 +233,41 @@ export default function CaseDetailPage() {
                 <span className="text-recovered">ENFORCED (₹1,999)</span>
               </div>
             </div>
+          </div>
+        </div>
+
+        <div className="sharp-card p-6">
+          <div className="text-[11px] font-bold tracking-[0.12em] uppercase text-text-secondary mb-4 border-b border-border pb-2 flex items-center gap-2">
+            Payment Link
+          </div>
+          <div className="flex flex-col gap-4 font-mono text-sm">
+            <div className="flex justify-between items-center">
+              <span className="text-text-secondary">Status</span>
+              <span className={c.status === 'recovered' ? 'text-recovered font-bold' : 'text-active font-bold'}>
+                {c.status === 'recovered' ? 'PAID' : c.razorpay_payment_link_id ? 'ACTIVE' : 'NOT CREATED'}
+              </span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-text-secondary">Amount</span>
+              <span>{formatCurrency(c.amount)}</span>
+            </div>
+            {c.razorpay_payment_link_id && (
+              <>
+                <div className="flex justify-between items-center">
+                  <span className="text-text-secondary">Reference ID</span>
+                  <span>{c.razorpay_payment_link_id}</span>
+                </div>
+                <div className="flex flex-col gap-2 mt-2">
+                  <span className="text-text-secondary">Secure Link</span>
+                  <div className="flex items-center gap-2">
+                    <div className="flex-1 bg-surface border border-border p-2 text-xs truncate">
+                      https://rzp.io/i/{c.razorpay_payment_link_id.replace('plink_', '')}
+                    </div>
+                    <button className="btn-secondary px-3 py-1.5" onClick={() => navigator.clipboard.writeText(`https://rzp.io/i/${c.razorpay_payment_link_id?.replace('plink_', '')}`)}>Copy</button>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>

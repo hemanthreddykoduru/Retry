@@ -98,7 +98,7 @@ export default function GuardrailsPage() {
         <div className="flex flex-col">
           <SettingRow 
             label="Voice-call Threshold" 
-            description="Minimum cart value required to trigger an AI voice call. Lower amounts use WhatsApp."
+            description="Minimum cart value required to trigger an AI voice call."
           >
             <div className="relative font-mono">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary">₹</span>
@@ -128,7 +128,7 @@ export default function GuardrailsPage() {
 
           <SettingRow 
             label="Contact Window (Quiet Hours)" 
-            description="Time window during which AI calls and WhatsApp messages are permitted (IST)."
+            description="Time window during which AI calls are permitted (IST)."
           >
             <div className="flex items-center gap-2 font-mono text-sm">
               <input 

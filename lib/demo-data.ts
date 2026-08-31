@@ -33,7 +33,7 @@ export interface AuditLog {
 export interface Intervention {
   id: string;
   recovery_case_id: string;
-  type: 'smart_retry' | 'whatsapp_nudge' | 'voice_call' | 'human_escalation';
+  type: "smart_retry" | "whatsapp_nudge" | "payment_link_follow_up" | "email_nudge" | "human_escalation";
   status: 'queued' | 'sent' | 'delivered' | 'answered' | 'completed' | 'failed' | 'skipped';
   scheduled_for: string;
   executed_at: string | null;
@@ -123,7 +123,7 @@ export const mockCases: RecoveryCase[] = [
       { id: 7, recovery_case_id: "rc_2d3e4f", actor: "system", action: "payment_link.created", reasoning: "Created Razorpay payment link", metadata: { link: "plink_123" }, created_at: "2026-08-31T14:21:10Z" }
     ],
     interventions: [
-      { id: "int_2", recovery_case_id: "rc_2d3e4f", type: "whatsapp_nudge", status: "delivered", scheduled_for: "2026-08-31T14:21:10Z", executed_at: "2026-08-31T14:21:12Z", outcome: null }
+      { id: "int_2", recovery_case_id: "rc_2d3e4f", type: "payment_link_follow_up", status: "delivered", scheduled_for: "2026-08-31T14:21:10Z", executed_at: "2026-08-31T14:21:12Z", outcome: null }
     ]
   },
   {

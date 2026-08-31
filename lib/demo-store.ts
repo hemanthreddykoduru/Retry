@@ -49,7 +49,7 @@ export const demoStore = {
       });
     }
   },
-  addIntervention: (caseId: string, type: 'smart_retry' | 'whatsapp_nudge' | 'voice_call' | 'human_escalation', status: string, outcome: string | null = null) => {
+  addIntervention: (caseId: string, type: 'smart_retry' | 'whatsapp_nudge' | 'payment_link_follow_up' | 'voice_call' | 'human_escalation', status: string, outcome: string | null = null) => {
     const state = demoStore.getState();
     const caseObj = state.cases.find(c => c.id === caseId);
     if (caseObj) {
