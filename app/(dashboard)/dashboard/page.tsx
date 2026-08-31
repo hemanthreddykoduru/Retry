@@ -1,12 +1,44 @@
-import Link from "next/link";
+"use client";
+
 import { MetricCard } from "@/components/metric-card";
 import { ReceiptRow } from "@/components/receipt-row";
 import { DiagnosisBreakdown } from "@/components/diagnosis-breakdown";
-import { liveReceipts, mockCases, formatCurrency } from "@/lib/demo-data";
+import { useState, useEffect } from "react";
+import { formatCurrency, metricsData, RecoveryCase, mockCases, ReceiptEvent } from "@/lib/demo-data";
 import { StatusBadge } from "@/components/status-badge";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 
 export default function Dashboard() {
+  const [metrics, setMetrics] = useState(metricsData);
+  const [feed, setFeed] = useState<RecoveryCase[]>([]);
+
+  const refreshState = async () => {
+    try {
+      const res = await fetch('/api/demo/state');
+      const data = await res.json();
+      setMetrics(data.metrics);
+      setFeed(data.cases.filter((c: RecoveryCase) => c.status === "recovered").slice(0, 5));
+    } catch (e) {
+      //
+    }
+  };
+
+  useEffect(() => {
+    fetch('/api/demo/state').then(r => r.json()).then(data => {
+      setMetrics(data.metrics);
+      setFeed(data.cases.filter((c: RecoveryCase) => c.status === "recovered").slice(0, 5));
+    }).catch(() => {});
+    const interval = setInterval(() => {
+      fetch('/api/demo/state').then(r => r.json()).then(data => {
+        setMetrics(data.metrics);
+        setFeed(data.cases.filter((c: RecoveryCase) => c.status === "recovered").slice(0, 5));
+      }).catch(() => {});
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const liveFeed = feed.length > 0 ? feed : mockCases.filter(c => c.status === "recovered").slice(0, 5);
+
   return (
     <div className="max-w-[1400px] mx-auto flex flex-col gap-8 pb-10">
       {/* Page Heading */}
@@ -22,36 +54,35 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Metric Grid */}
+      {/* Primary Metrics */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <MetricCard
           title="RECOVERED REVENUE"
-          value="₹48,620"
-          detail="+121% vs baseline"
+          value={`₹${formatCurrency(metrics.recovered_revenue_paise)}`}
+          detail={`+${metrics.recovered_revenue_trend}% vs baseline`}
           isPositive={true}
         />
         <MetricCard
           title="RECOVERY RATE"
-          value="61.2%"
-          detail="+23.4 pts baseline"
+          value={`${metrics.recovery_rate}%`}
+          detail={`+${metrics.recovery_rate_trend} pts baseline`}
         />
         <MetricCard
           title="CONTACTS AVOIDED"
-          value="37"
+          value={metrics.contacts_avoided.toString()}
           detail="Bank downtime cases"
           isWarning={true}
         />
         <MetricCard
           title="COST / RECOVERY"
-          value="₹79"
+          value={`₹${metrics.cost_per_recovery}`}
           detail="Voice + WhatsApp"
         />
       </div>
 
-      {/* Main Content Split */}
-      <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
-        {/* Left: Hero Panel (Live Recovery Receipts) */}
-        <div className="flex-1 lg:w-[65%] shrink-0 border border-border bg-surface overflow-hidden flex flex-col">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        {/* Main Feed Column */}
+        <div className="lg:col-span-2 sharp-card flex flex-col">
           <div className="flex justify-between items-center p-4 border-b border-border bg-background/50">
             <div>
               <h2 className="text-[11px] font-bold tracking-[0.12em] uppercase text-text-secondary">Live Recovery Receipts</h2>
@@ -64,63 +95,44 @@ export default function Dashboard() {
           </div>
           
           <div className="flex flex-col">
-            {liveReceipts.map((receipt, idx) => (
-              <ReceiptRow key={receipt.id + idx} event={receipt} />
-            ))}
+            {liveFeed.map((receipt, idx) => {
+              const mapped = {
+                id: receipt.id,
+                time: "Just now",
+                event: receipt.status === 'recovered' ? 'Recovered via Smart Retry' : 'Case updated',
+                amount: receipt.amount,
+                customer: receipt.customer_id,
+                detail: receipt.failure_reason,
+                state: receipt.status
+              };
+              return <ReceiptRow key={receipt.id + idx} event={mapped as unknown as ReceiptEvent} />;
+            })}
+          </div>
+          
+          <div className="p-4 bg-neutral-bg border-t border-border flex justify-between items-center text-xs font-mono uppercase tracking-widest text-text-secondary">
+            <span>Showing latest {liveFeed.length} recoveries</span>
+            <button className="hover:text-text-primary transition-colors flex items-center gap-1">View all <ArrowRight size={14}/></button>
           </div>
         </div>
 
-        {/* Right: Diagnosis Breakdown */}
-        <div className="w-full lg:w-[35%] shrink-0">
-          <div className="p-5 border border-border bg-surface h-full">
-             <DiagnosisBreakdown />
-          </div>
-        </div>
-      </div>
-
-      <div className="border-l-4 border-waiting bg-waiting-bg p-5 text-sm text-text-primary">
-        <div className="font-bold mb-2 tracking-[0.12em] uppercase text-[11px] text-waiting flex items-center gap-2">
-          Policy Impact
-        </div>
-        <span className="font-mono">37 customers were not contacted because Retry identified active bank downtime.</span><br/>
-        <span className="text-text-secondary mt-1 block">That is 37 unnecessary calls avoided — without sacrificing recovery.</span>
-      </div>
-
-      <div className="flex flex-col gap-4 mt-4">
-        <div className="flex justify-between items-end">
-          <h2 className="text-[11px] font-bold tracking-[0.12em] uppercase text-text-secondary">Recent Recovery Cases</h2>
-          <Link href="/cases" className="text-xs font-mono text-text-secondary hover:text-text-primary uppercase tracking-widest flex items-center gap-1">
-            View all <ArrowRight size={12} />
-          </Link>
-        </div>
-        <div className="sharp-card overflow-x-auto">
-          <div className="grid grid-cols-6 gap-4 p-4 border-b border-border bg-neutral-bg text-[10px] font-bold tracking-[0.12em] uppercase text-text-secondary min-w-[800px]">
-            <div className="col-span-1">Case ID</div>
-            <div className="col-span-1">Customer</div>
-            <div className="col-span-1 text-right">Amount</div>
-            <div className="col-span-1">Root Cause</div>
-            <div className="col-span-2 text-right">Status</div>
-          </div>
-          <div className="flex flex-col min-w-[800px]">
-            {mockCases.slice(0, 3).map(c => (
-              <Link 
-                href={`/cases/${c.id}`} 
-                key={c.id}
-                className="grid grid-cols-6 gap-4 p-4 border-b border-border/50 hover:bg-neutral-bg transition-colors cursor-pointer group last:border-0 items-center"
-              >
-                <div className="col-span-1 font-mono text-xs font-bold text-text-primary">{c.id}</div>
-                <div className="col-span-1 font-mono text-xs text-text-secondary">{c.customer?.name}</div>
-                <div className="col-span-1 font-mono text-xs font-bold text-text-primary text-right">{formatCurrency(c.amount)}</div>
-                <div className="col-span-1 font-mono text-[11px] text-text-secondary uppercase">{c.root_cause.replace('_', ' ')}</div>
-                <div className="col-span-2 text-right flex justify-end">
-                  <StatusBadge status={c.status} showDot={true} />
-                </div>
-              </Link>
-            ))}
+        {/* Right Sidebar Column */}
+        <div className="flex flex-col gap-8">
+          <DiagnosisBreakdown />
+          
+          <div className="sharp-card p-5 bg-waiting-bg border-waiting flex flex-col gap-3">
+            <h3 className="text-[11px] font-bold tracking-[0.12em] uppercase text-waiting flex items-center gap-2">
+              <StatusBadge status="awaiting_downtime_resolution" showDot={true} />
+              Policy Impact
+            </h3>
+            <p className="text-sm text-text-primary">
+              <span className="font-bold">{metrics.contacts_avoided} customers</span> are currently suppressed from automated recovery workflows due to active issuer-bank downtime.
+            </p>
+            <p className="text-xs text-text-secondary">
+              Bounded smart retries will queue automatically when APIs stabilize.
+            </p>
           </div>
         </div>
       </div>
-
     </div>
   );
 }

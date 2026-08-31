@@ -2,17 +2,41 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useState } from "react";
-import { formatCurrency, mockCases, CaseStatus, AuditLog, Intervention } from "@/lib/demo-data";
+import { useState, useEffect } from "react";
+import { formatCurrency, CaseStatus, AuditLog, Intervention, RecoveryCase } from "@/lib/demo-data";
 import { StatusBadge } from "@/components/status-badge";
 import { ChevronDown, ChevronRight, Beaker, ShieldCheck } from "lucide-react";
 
 export default function CaseDetailPage() {
   const params = useParams();
   const id = Array.isArray(params.id) ? params.id[0] : params.id;
-  const c = mockCases.find(rc => rc.id === id) || mockCases.find(rc => rc.id === "rc_c931") || mockCases[0];
+  const [c, setC] = useState<RecoveryCase | null>(null);
+
+  const refreshState = async () => {
+    const res = await fetch('/api/demo/state');
+    const data = await res.json();
+    const caseObj = data.cases.find((rc: RecoveryCase) => rc.id === id) || data.cases.find((rc: RecoveryCase) => rc.id === "rc_c931") || data.cases[0];
+    setC(caseObj);
+  };
+
+  useEffect(() => {
+    fetch('/api/demo/state').then(r => r.json()).then(data => {
+      const caseObj = data.cases.find((rc: RecoveryCase) => rc.id === id) || data.cases.find((rc: RecoveryCase) => rc.id === "rc_c931") || data.cases[0];
+      setC(caseObj);
+    }).catch(() => {});
+    
+    const interval = setInterval(() => {
+      fetch('/api/demo/state').then(r => r.json()).then(data => {
+        const caseObj = data.cases.find((rc: RecoveryCase) => rc.id === id) || data.cases.find((rc: RecoveryCase) => rc.id === "rc_c931") || data.cases[0];
+        setC(caseObj);
+      }).catch(() => {});
+    }, 2000);
+    return () => clearInterval(interval);
+  }, [id]);
 
   const [webhookOpen, setWebhookOpen] = useState(false);
+
+  if (!c) return <div className="p-8">Loading...</div>;
 
   const maskPhone = (phone: string) => {
     if (!phone) return "—";
@@ -31,8 +55,14 @@ export default function CaseDetailPage() {
   };
 
   // Demo controls alert
-  const simulateAction = (action: string) => {
-    alert(`Demo: Sent POST /api/demo/events/${action}`);
+  const simulateAction = async (action: string) => {
+    try {
+      const res = await fetch(`/api/demo/events/${action}`, { method: 'POST' });
+      const data = await res.json();
+      alert(`Demo: ${data.message || 'Action executed'}`);
+    } catch(err) {
+      alert('Demo error');
+    }
   };
 
   const getActionColor = (action: string) => {
@@ -53,10 +83,19 @@ export default function CaseDetailPage() {
           <div className="text-[11px] font-medium tracking-[0.12em] uppercase text-text-secondary">
             Recovery Case
           </div>
-          <h1 className="text-3xl font-bold tracking-tight text-text-primary flex items-center gap-4 uppercase">
+          <button onClick={async () => {
+                  try {
+                    const res = await fetch(`/api/recovery-cases/${c.id}/voice-call`, { method: 'POST' });
+                    const data = await res.json();
+                    if (!res.ok) alert(`Blocked: ${data.reasons?.join(', ')}`);
+                    else alert(data.message || 'Action executed');
+                  } catch (e) {
+                    alert('Demo error');
+                  }
+                }} className="btn-primary py-1.5 w-full flex items-center justify-center gap-2">
             {c.id}
             <StatusBadge status={c.status} showDot={true} />
-          </h1>
+          </button>
         </div>
         <div className="text-right flex flex-col gap-1 bg-surface border border-border p-4">
           <div className="text-[11px] font-medium tracking-[0.12em] uppercase text-text-secondary">

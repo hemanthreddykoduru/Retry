@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { mockCases, formatCurrency, RecoveryCase } from "@/lib/demo-data";
+import { useState, useEffect } from "react";
+import { formatCurrency, RecoveryCase } from "@/lib/demo-data";
 import { StatusBadge } from "@/components/status-badge";
 import { Search, Download, FilterX, Inbox } from "lucide-react";
 
@@ -10,6 +10,25 @@ export default function CasesPage() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [causeFilter, setCauseFilter] = useState("all");
+  const [mockCases, setMockCases] = useState<RecoveryCase[]>([]);
+
+  const refreshState = async () => {
+    const res = await fetch('/api/demo/state');
+    const data = await res.json();
+    setMockCases(data.cases);
+  };
+
+  useEffect(() => {
+    fetch('/api/demo/state').then(r => r.json()).then(data => {
+      setMockCases(data.cases);
+    });
+    const interval = setInterval(() => {
+      fetch('/api/demo/state').then(r => r.json()).then(data => {
+        setMockCases(data.cases);
+      });
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
 
   const filteredCases = mockCases.filter(c => {
     if (statusFilter !== "all" && c.status !== statusFilter) return false;

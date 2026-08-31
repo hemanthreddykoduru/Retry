@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { verifySarvamWebhookSignature, normalizeSarvamCallOutcome } from '@/lib/sarvam';
+import { RecoveryService } from '@/lib/recovery-service';
 
 export async function POST(request: Request) {
   // 1. Read Raw Body for signature verification
@@ -31,36 +32,25 @@ export async function POST(request: Request) {
 
   console.log(`[PROCESS] Received outcome '${outcome}' for case ${recoveryCaseId}`);
 
-  // 3. Process Outcomes (Mocked DB Actions)
-  switch (outcome) {
-    case 'promise_to_pay':
-      console.log(`[DB] Case -> promise_logged. Creating promise row. Scheduling exactly 1 bounded retry.`);
-      console.log(`[AUDIT] Promise to pay logged for ${payload.promise_date || 'future date'}.`);
-      break;
-    case 'link_requested':
-      console.log(`[DB] Queuing whatsapp_nudge intervention with payment link.`);
-      console.log(`[AUDIT] Customer requested payment link via WhatsApp.`);
-      break;
-    case 'do_not_contact':
-      console.log(`[DB] Customer -> do_not_contact=true. Case -> closed_optout. Canceling queued interventions.`);
-      console.log(`[AUDIT] Customer opted out of communications.`);
-      break;
-    case 'no_answer':
-      console.log(`[DB] Increment attempt count. If max -> escalate. Else queue permitted fallback.`);
-      console.log(`[AUDIT] Call resulted in no answer.`);
-      break;
-    case 'customer_refused':
-      console.log(`[DB] Case -> closed_lost.`);
-      console.log(`[AUDIT] Customer refused to pay.`);
-      break;
-    case 'failed':
-      console.log(`[DB] Queuing whatsapp fallback.`);
-      console.log(`[AUDIT] Sarvam call failed gracefully. WhatsApp queued.`);
-      break;
-    case 'unknown':
-    default:
-      console.log(`[AUDIT] Unknown outcome received.`);
-      break;
+  // 3. Process Outcomes
+  const sarvamEventMap: Record<string, string> = {
+    'promise_to_pay': 'sarvam.promise_to_pay',
+    'link_requested': 'sarvam.link_requested',
+    'do_not_contact': 'sarvam.do_not_contact',
+    'no_answer': 'sarvam.no_answer',
+    'customer_refused': 'sarvam.customer_refused',
+    'failed': 'sarvam.call_failed'
+  };
+
+  const internalEvent = sarvamEventMap[outcome] || 'sarvam.unknown';
+  
+  try {
+    RecoveryService.processEvent(recoveryCaseId, internalEvent, { callId, provider_payload: payload });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(`[PROCESS] Error processing Sarvam outcome: ${error.message}`);
+    }
+    return NextResponse.json({ error: 'Internal processing error' }, { status: 500 });
   }
 
   return NextResponse.json({ success: true, processed_outcome: outcome });

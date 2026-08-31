@@ -3,8 +3,14 @@
 import Link from "next/link";
 import { Play, ArrowRight, ShieldCheck, PhoneOff, ServerCrash, AlertCircle, WifiOff } from "lucide-react";
 
-const simulateDemo = (action: string) => {
-  alert(`Demo: Sent POST /api/demo/events/${action}`);
+const simulateDemo = async (action: string) => {
+  try {
+    const res = await fetch(`/api/demo/events/${action}`, { method: 'POST' });
+    const data = await res.json();
+    alert(`Demo: ${data.message || 'Action executed'}`);
+  } catch (err) {
+    alert(`Demo Error: failed to trigger action`);
+  }
 };
 
 const ScenarioCard = ({ 
@@ -71,9 +77,20 @@ export default function DemoLabPage() {
   return (
     <div className="max-w-[1400px] mx-auto flex flex-col gap-8 pb-12">
       <div className="flex flex-col gap-1">
+      <div className="flex justify-between items-center bg-surface border border-border p-4 mb-4">
         <h1 className="text-2xl lg:text-3xl font-bold tracking-tight text-text-primary uppercase">
-          DEMO LAB
+          DEMO SCENARIOS
         </h1>
+        <button 
+          onClick={async () => {
+            await fetch('/api/demo/reset', { method: 'POST' });
+            alert('Demo state reset successfully');
+          }}
+          className="btn-secondary py-1.5 text-xs font-mono"
+        >
+          Reset Demo State
+        </button>
+      </div>
         <div className="text-sm text-text-primary font-mono mt-1">
           Trigger a complete test-mode recovery workflow.
         </div>

@@ -1,10 +1,35 @@
+"use client";
+
 import Link from "next/link";
-import { metricsData, formatCurrency } from "@/lib/demo-data";
+import { useState, useEffect } from "react";
+import { formatCurrency, metricsData } from "@/lib/demo-data";
 import { MetricCard } from "@/components/metric-card";
 import { DiagnosisBreakdown } from "@/components/diagnosis-breakdown";
 import { FileText } from "lucide-react";
 
 export default function AnalyticsPage() {
+  const [metrics, setMetrics] = useState(metricsData);
+
+  const refreshState = async () => {
+    try {
+      const res = await fetch('/api/demo/state');
+      const data = await res.json();
+      setMetrics(data.metrics);
+    } catch(e) {}
+  };
+
+  useEffect(() => {
+    fetch('/api/demo/state').then(r => r.json()).then(data => {
+      setMetrics(data.metrics);
+    }).catch(() => {});
+    const interval = setInterval(() => {
+      fetch('/api/demo/state').then(r => r.json()).then(data => {
+        setMetrics(data.metrics);
+      }).catch(() => {});
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="flex flex-col h-full gap-8 max-w-[1400px] mx-auto pb-12">
       <div className="flex justify-between items-end">
@@ -22,9 +47,9 @@ export default function AnalyticsPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <MetricCard title="REVENUE AT RISK" value={formatCurrency(metricsData.amount_at_risk)} detail="100 failed payments" />
-        <MetricCard title="RECOVERED REVENUE" value={formatCurrency(metricsData.amount_recovered)} detail="from AI interventions" isPositive={true} />
-        <MetricCard title="RECOVERY RATE" value={`${(metricsData.cases_recovered / metricsData.cases_opened * 100).toFixed(1)}%`} detail={`${metricsData.cases_recovered} of ${metricsData.cases_opened} cases`} />
+        <MetricCard title="REVENUE AT RISK" value={formatCurrency(metrics.amount_at_risk)} detail="100 failed payments" />
+        <MetricCard title="RECOVERED REVENUE" value={formatCurrency(metrics.amount_recovered)} detail="from AI interventions" isPositive={true} />
+        <MetricCard title="RECOVERY RATE" value={`${(metrics.cases_recovered / metrics.cases_opened * 100).toFixed(1)}%`} detail={`${metrics.cases_recovered} of ${metrics.cases_opened} cases`} />
         <MetricCard title="CONTACTS AVOIDED" value="37" detail="Bank downtime detected" isWarning={true} />
       </div>
 
@@ -45,17 +70,17 @@ export default function AnalyticsPage() {
               <tr className="border-b border-border/50 hover:bg-neutral-bg transition-colors">
                 <td className="py-3 px-4 text-text-secondary">Recovery rate</td>
                 <td className="py-3 px-4">37.8%</td>
-                <td className="py-3 px-4 font-bold text-recovered">61.2%</td>
+                <td className="py-3 px-4 font-bold text-recovered">{((metrics.cases_recovered / metrics.cases_opened) * 100).toFixed(1)}%</td>
               </tr>
               <tr className="border-b border-border/50 hover:bg-neutral-bg transition-colors">
                 <td className="py-3 px-4 text-text-secondary">Recovered revenue</td>
                 <td className="py-3 px-4">₹29,800</td>
-                <td className="py-3 px-4 font-bold text-recovered">₹48,620</td>
+                <td className="py-3 px-4 font-bold text-recovered">{formatCurrency(metrics.amount_recovered)}</td>
               </tr>
               <tr className="border-b border-border/50 hover:bg-neutral-bg transition-colors">
                 <td className="py-3 px-4 text-text-secondary">Customer contacts</td>
                 <td className="py-3 px-4">100 (All cases)</td>
-                <td className="py-3 px-4 font-bold">63 (Bounded)</td>
+                <td className="py-3 px-4 font-bold">{metrics.cases_contacted} (Bounded)</td>
               </tr>
               <tr className="border-b border-border/50 hover:bg-neutral-bg transition-colors">
                 <td className="py-3 px-4 text-text-secondary">Contacts avoided</td>
@@ -70,7 +95,7 @@ export default function AnalyticsPage() {
               <tr className="hover:bg-neutral-bg transition-colors">
                 <td className="py-3 px-4 text-text-secondary">Unresolved cases</td>
                 <td className="py-3 px-4">62</td>
-                <td className="py-3 px-4 font-bold">39</td>
+                <td className="py-3 px-4 font-bold">{metrics.cases_opened - metrics.cases_recovered}</td>
               </tr>
             </tbody>
           </table>
@@ -86,15 +111,15 @@ export default function AnalyticsPage() {
             <div className="flex flex-col gap-6 font-mono text-sm">
               <div className="flex justify-between items-center">
                 <span className="text-text-primary uppercase">Detected</span>
-                <span className="font-bold">100</span>
+                <span className="font-bold">{metrics.cases_opened}</span>
               </div>
               <div className="flex justify-between items-center border-l-2 border-border pl-4 ml-2">
                 <span className="text-text-secondary uppercase">Diagnosed</span>
-                <span className="font-bold">100</span>
+                <span className="font-bold">{metrics.cases_opened}</span>
               </div>
               <div className="flex justify-between items-center border-l-2 border-border pl-4 ml-4">
                 <span className="text-text-secondary uppercase">Intervention Scheduled</span>
-                <span className="font-bold">100</span>
+                <span className="font-bold">{metrics.cases_opened}</span>
               </div>
               <div className="flex justify-between items-center border-l-2 border-active pl-4 ml-6">
                 <span className="text-active uppercase font-bold">Contacted</span>

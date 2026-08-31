@@ -180,7 +180,16 @@ export const metricsData = {
   amount_recovered: 4862000, // 48620 rupees
   calls_placed: 42,
   whatsapps_sent: 58,
-  optouts: 2
+  optouts: 2,
+  cases_contacted: 63,
+  contacts_avoided: 37,
+  recovered_revenue_paise: 4862000,
+  recovered_revenue_trend: 121,
+  recovery_rate: 61.2,
+  recovery_rate_trend: 23.4,
+  cost_per_recovery: 79,
+  revenue_at_risk_paise: 7942000,
+  revenue_at_risk_trend: 10
 };
 
 export const liveReceipts = mockCases.map(c => {
