@@ -74,3 +74,56 @@ body {
 .btn-secondary {
   @apply border border-border-strong text-text-primary px-4 py-2 font-medium hover:bg-neutral-bg transition-colors uppercase tracking-widest text-[11px];
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    @keyframes fade-in-up {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .scroll-animate {
+      animation: fade-in-up auto ease-out both;
+      animation-timeline: view();
+      animation-range: entry 5% cover 20%;
+    }
+    
+    .scroll-animate-stagger-1 {
+      animation: fade-in-up auto ease-out both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 25%;
+    }
+    
+    .scroll-animate-stagger-2 {
+      animation: fade-in-up auto ease-out both;
+      animation-timeline: view();
+      animation-range: entry 15% cover 30%;
+    }
+  }
+
+  @keyframes hero-fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .hero-animate {
+    opacity: 0;
+    animation: hero-fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  .delay-100 { animation-delay: 100ms; }
+  .delay-200 { animation-delay: 200ms; }
+  .delay-300 { animation-delay: 300ms; }
+  .delay-400 { animation-delay: 400ms; }
+}

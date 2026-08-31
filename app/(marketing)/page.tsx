@@ -9,13 +9,13 @@ export default function LandingPage() {
     <>
         {/* Hero Section */}
         <section className="px-6 lg:px-12 pt-16 pb-12 max-w-6xl mx-auto flex flex-col items-center text-center gap-6">
-          <h1 className="text-4xl lg:text-6xl font-bold tracking-tight text-text-primary max-w-4xl">
+          <h1 className="text-4xl lg:text-6xl font-bold tracking-tight text-text-primary max-w-4xl hero-animate">
             Recover the payments your checkout never got back.
           </h1>
-          <p className="text-lg text-text-secondary max-w-2xl">
+          <p className="text-lg text-text-secondary max-w-2xl hero-animate delay-100">
             Retry detects failed and abandoned payments, understands why they failed, and chooses the safest next action — wait, retry, message, or call. Built for Indian merchants and UPI-first payment flows.
           </p>
-          <div className="flex items-center gap-4 mt-2">
+          <div className="flex items-center gap-4 mt-2 hero-animate delay-200">
             <Link href="/signup" className="btn-primary text-base px-6 py-3">
               Start recovering revenue
             </Link>
@@ -25,7 +25,7 @@ export default function LandingPage() {
           </div>
           
           {/* Compact Product Preview */}
-          <div className="mt-8 font-mono text-xs text-text-muted flex items-center justify-center gap-2 bg-neutral-bg px-4 py-2 border border-border">
+          <div className="mt-8 font-mono text-xs text-text-muted flex items-center justify-center gap-2 bg-neutral-bg px-4 py-2 border border-border hero-animate delay-300">
             <span>payment.failed</span>
             <span>→</span>
             <span>cause diagnosed</span>
@@ -37,7 +37,7 @@ export default function LandingPage() {
         </section>
 
         {/* Evidence Section */}
-        <section className="bg-surface border-y border-border py-12">
+        <section className="bg-surface border-y border-border py-12 scroll-animate">
           <div className="max-w-6xl mx-auto px-6 lg:px-12">
             <div className="flex flex-col items-center gap-1 mb-8 text-center">
               <div className="text-[11px] font-medium tracking-[0.12em] uppercase text-text-secondary">
@@ -58,7 +58,7 @@ export default function LandingPage() {
         </section>
 
         {/* Receipt Feed Visual Preview */}
-        <section className="px-6 lg:px-12 py-16 w-full border-b border-border bg-neutral-bg">
+        <section className="px-6 lg:px-12 py-16 w-full border-b border-border bg-neutral-bg scroll-animate">
           <div className="max-w-[1040px] mx-auto">
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold tracking-tight mb-2">Evidence, not decoration.</h2>
@@ -81,7 +81,7 @@ export default function LandingPage() {
         <section className="max-w-4xl mx-auto px-6 py-16 flex flex-col gap-16">
           
           {/* Problem */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 scroll-animate">
             <h2 className="text-2xl font-bold tracking-tight">Payment failure is not always customer failure.</h2>
             <div className="text-text-secondary grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="sharp-card p-4">
@@ -104,7 +104,7 @@ export default function LandingPage() {
           </div>
 
           {/* How it works */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 scroll-animate">
             <h2 className="text-2xl font-bold tracking-tight">How it works</h2>
             <div className="flex items-center gap-2 overflow-x-auto font-mono text-sm border border-border p-4 bg-neutral-bg">
               <div className="px-3 py-1 bg-surface border border-border text-text-primary font-bold">Detect</div>
@@ -120,8 +120,8 @@ export default function LandingPage() {
           </div>
 
           {/* Features & India First */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="flex flex-col gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 scroll-animate">
+            <div className="flex flex-col gap-4 scroll-animate-stagger-1">
               <h2 className="text-2xl font-bold tracking-tight">Features</h2>
               <ul className="flex flex-col gap-2 text-sm text-text-secondary font-mono">
                 <li className="flex items-start gap-2"><span className="text-active">■</span> Razorpay webhook integration</li>
@@ -144,7 +144,7 @@ export default function LandingPage() {
           </div>
 
           {/* Safety */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 scroll-animate">
             <h2 className="text-2xl font-bold tracking-tight">Built-in safety guardrails</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 font-mono text-xs">
               <div className="sharp-card p-3 border-l-4 border-l-waiting">No contact during bank downtime</div>
@@ -157,7 +157,7 @@ export default function LandingPage() {
           </div>
 
           {/* Integration */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 scroll-animate">
             <h2 className="text-2xl font-bold tracking-tight">Integration</h2>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div className="flex flex-col gap-2">
@@ -187,7 +187,7 @@ export default function LandingPage() {
         </section>
 
         {/* Final CTA */}
-        <section className="border-t border-border bg-neutral-bg py-20 px-6 text-center flex flex-col items-center gap-6">
+        <section className="border-t border-border bg-neutral-bg py-20 px-6 text-center flex flex-col items-center gap-6 scroll-animate">
           <h2 className="text-3xl font-bold tracking-tight max-w-2xl text-text-primary">
             Give every failed payment one better next attempt.
           </h2>

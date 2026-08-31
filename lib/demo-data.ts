@@ -33,7 +33,7 @@ export interface AuditLog {
 export interface Intervention {
   id: string;
   recovery_case_id: string;
-  type: "smart_retry" | "whatsapp_nudge" | "payment_link_follow_up" | "email_nudge" | "human_escalation";
+  type: "smart_retry" | "whatsapp_nudge" | "payment_link_follow_up" | "email_nudge" | "human_escalation" | "voice_call";
   status: 'queued' | 'sent' | 'delivered' | 'answered' | 'completed' | 'failed' | 'skipped';
   scheduled_for: string;
   executed_at: string | null;
