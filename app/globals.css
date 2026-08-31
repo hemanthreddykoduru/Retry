@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+:root {
+  --background: #fafafa;
+  --surface: #ffffff;
+  /* Stronger borders for grid layout */
+  --border: #e4e4e7;
+  --border-strong: #d4d4d8;
+  --text-primary: #18181b;
+  --text-secondary: #71717a;
+  --text-muted: #a1a1aa;
+
+  --recovered: #059669;
+  --recovered-bg: #ecfdf5;
+  --waiting: #d97706;
+  --waiting-bg: #fffbeb;
+  --active: #2563eb;
+  --active-bg: #eff6ff;
+  --lost: #dc2626;
+  --lost-bg: #fef2f2;
+  --neutral: #52525b;
+  --neutral-bg: #f4f4f5;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  
+  --color-recovered: var(--recovered);
+  --color-recovered-bg: var(--recovered-bg);
+  --color-waiting: var(--waiting);
+  --color-waiting-bg: var(--waiting-bg);
+  --color-active: var(--active);
+  --color-active-bg: var(--active-bg);
+  --color-lost: var(--lost);
+  --color-lost-bg: var(--lost-bg);
+  --color-neutral: var(--neutral);
+  --color-neutral-bg: var(--neutral-bg);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--text-primary);
+  font-family: var(--font-sans), sans-serif;
+}
+
+/* Reticle-style grid lines */
+.grid-lines-bg {
+  background-image: linear-gradient(to right, var(--border) 1px, transparent 1px),
+                    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Sharp elements */
+.sharp-card {
+  border: 1px solid var(--border-strong);
+  border-radius: 0;
+  background-color: var(--surface);
+}
+
+/* Button style */
+.btn-primary {
+  @apply bg-text-primary text-surface px-4 py-2 font-medium hover:bg-text-primary/90 transition-colors uppercase tracking-widest text-[11px];
+}
+.btn-secondary {
+  @apply border border-border-strong text-text-primary px-4 py-2 font-medium hover:bg-neutral-bg transition-colors uppercase tracking-widest text-[11px];
+}

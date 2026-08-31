@@ -1,0 +1,393 @@
+{
+  "generatedAt": "2026-08-30T12:54:01.522Z",
+  "simulated": true,
+  "seed": 20260830,
+  "batch": 105,
+  "diagnosisAccuracy": 0.9047619047619048,
+  "contactsAvoided": 34,
+  "lift": 1.5222824328696214,
+  "arms": {
+    "baseline": {
+      "arm": "baseline",
+      "atRisk": 20176500,
+      "recovered": 34,
+      "recoveredAmount": 7418400,
+      "cases": 105,
+      "contacts": 0,
+      "costPaise": 0,
+      "optouts": 0,
+      "promisesGiven": 0,
+      "promisesKept": 0,
+      "byCause": {
+        "auth_failure": {
+          "total": 32,
+          "recovered": 6,
+          "amount": 6614600,
+          "recoveredAmount": 1120500
+        },
+        "network_drop": {
+          "total": 13,
+          "recovered": 4,
+          "amount": 3047500,
+          "recoveredAmount": 1188400
+        },
+        "bank_downtime": {
+          "total": 38,
+          "recovered": 18,
+          "amount": 6925900,
+          "recoveredAmount": 4424500
+        },
+        "unknown": {
+          "total": 5,
+          "recovered": 1,
+          "amount": 997100,
+          "recoveredAmount": 107800
+        },
+        "insufficient_funds": {
+          "total": 17,
+          "recovered": 5,
+          "amount": 2591400,
+          "recoveredAmount": 577200
+        }
+      },
+      "exceptions": []
+    },
+    "naive_dunning": {
+      "arm": "naive_dunning",
+      "atRisk": 20176500,
+      "recovered": 45,
+      "recoveredAmount": 9320100,
+      "cases": 105,
+      "contacts": 105,
+      "costPaise": 3675,
+      "optouts": 5,
+      "promisesGiven": 0,
+      "promisesKept": 0,
+      "byCause": {
+        "auth_failure": {
+          "total": 32,
+          "recovered": 10,
+          "amount": 6614600,
+          "recoveredAmount": 1746900
+        },
+        "network_drop": {
+          "total": 13,
+          "recovered": 6,
+          "amount": 3047500,
+          "recoveredAmount": 1837300
+        },
+        "bank_downtime": {
+          "total": 38,
+          "recovered": 18,
+          "amount": 6925900,
+          "recoveredAmount": 4531200
+        },
+        "unknown": {
+          "total": 5,
+          "recovered": 2,
+          "amount": 997100,
+          "recoveredAmount": 256600
+        },
+        "insufficient_funds": {
+          "total": 17,
+          "recovered": 9,
+          "amount": 2591400,
+          "recoveredAmount": 948100
+        }
+      },
+      "exceptions": []
+    },
+    "retry": {
+      "arm": "retry",
+      "atRisk": 20176500,
+      "recovered": 64,
+      "recoveredAmount": 11292900,
+      "cases": 105,
+      "contacts": 71,
+      "costPaise": 8315,
+      "optouts": 1,
+      "promisesGiven": 14,
+      "promisesKept": 10,
+      "byCause": {
+        "auth_failure": {
+          "total": 32,
+          "recovered": 18,
+          "amount": 6614600,
+          "recoveredAmount": 3515400
+        },
+        "network_drop": {
+          "total": 13,
+          "recovered": 6,
+          "amount": 3047500,
+          "recoveredAmount": 1581800
+        },
+        "bank_downtime": {
+          "total": 38,
+          "recovered": 27,
+          "amount": 6925900,
+          "recoveredAmount": 5098800
+        },
+        "unknown": {
+          "total": 5,
+          "recovered": 3,
+          "amount": 997100,
+          "recoveredAmount": 289500
+        },
+        "insufficient_funds": {
+          "total": 17,
+          "recovered": 10,
+          "amount": 2591400,
+          "recoveredAmount": 807400
+        }
+      },
+      "exceptions": [
+        {
+          "id": "case_1_0",
+          "cause": "auth_failure",
+          "amount": 131800,
+          "status": "closed_optout"
+        },
+        {
+          "id": "case_1_2",
+          "cause": "auth_failure",
+          "amount": 31300,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_2_1",
+          "cause": "network_drop",
+          "amount": 12400,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_2_2",
+          "cause": "auth_failure",
+          "amount": 187200,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_2_4",
+          "cause": "bank_downtime",
+          "amount": 90900,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_3_1",
+          "cause": "insufficient_funds",
+          "amount": 612300,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_3_2",
+          "cause": "bank_downtime",
+          "amount": 34100,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_3_3",
+          "cause": "bank_downtime",
+          "amount": 22000,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_3_4",
+          "cause": "bank_downtime",
+          "amount": 316500,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_3_6",
+          "cause": "insufficient_funds",
+          "amount": 81200,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_4_1",
+          "cause": "auth_failure",
+          "amount": 26900,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_4_4",
+          "cause": "auth_failure",
+          "amount": 53800,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_4_5",
+          "cause": "auth_failure",
+          "amount": 618500,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_5_0",
+          "cause": "network_drop",
+          "amount": 490700,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_5_1",
+          "cause": "auth_failure",
+          "amount": 290100,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_5_4",
+          "cause": "insufficient_funds",
+          "amount": 256000,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_6_1",
+          "cause": "bank_downtime",
+          "amount": 330900,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_8_0",
+          "cause": "bank_downtime",
+          "amount": 135800,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_8_1",
+          "cause": "insufficient_funds",
+          "amount": 70800,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_8_4",
+          "cause": "auth_failure",
+          "amount": 208000,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_8_6",
+          "cause": "insufficient_funds",
+          "amount": 193300,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_9_1",
+          "cause": "bank_downtime",
+          "amount": 51900,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_10_0",
+          "cause": "auth_failure",
+          "amount": 275100,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_10_2",
+          "cause": "auth_failure",
+          "amount": 34300,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_10_5",
+          "cause": "network_drop",
+          "amount": 133100,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_11_0",
+          "cause": "unknown",
+          "amount": 318900,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_11_2",
+          "cause": "bank_downtime",
+          "amount": 164300,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_11_4",
+          "cause": "network_drop",
+          "amount": 339100,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_11_6",
+          "cause": "bank_downtime",
+          "amount": 504900,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_12_0",
+          "cause": "auth_failure",
+          "amount": 389800,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_12_3",
+          "cause": "bank_downtime",
+          "amount": 109000,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_12_4",
+          "cause": "insufficient_funds",
+          "amount": 555600,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_13_0",
+          "cause": "auth_failure",
+          "amount": 270900,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_13_2",
+          "cause": "insufficient_funds",
+          "amount": 14800,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_14_1",
+          "cause": "auth_failure",
+          "amount": 531800,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_14_3",
+          "cause": "network_drop",
+          "amount": 208300,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_14_4",
+          "cause": "unknown",
+          "amount": 388700,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_15_0",
+          "cause": "auth_failure",
+          "amount": 49700,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_15_3",
+          "cause": "network_drop",
+          "amount": 263500,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_15_4",
+          "cause": "bank_downtime",
+          "amount": 66800,
+          "status": "closed_lost"
+        },
+        {
+          "id": "case_15_5",
+          "cause": "network_drop",
+          "amount": 18600,
+          "status": "closed_lost"
+        }
+      ]
+    }
+  }
+}
