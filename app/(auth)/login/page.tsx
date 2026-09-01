@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { FormField } from "@/components/form-field";
-import { Google, GitHub } from "lucide-react";
+import { FaGoogle, FaGithub } from "react-icons/fa";
 
 export default function LoginPage() {
   return (
@@ -57,8 +57,8 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <Link href="/api/auth/google" className="w-full border border-border bg-surface text-text-primary py-2 rounded-md font-medium text-sm flex items-center justify-center gap-2 hover:bg-neutral-bg transition-colors"><Google size={16} className="mr-2"/> Sign in with Google</Link>
-        <Link href="/api/auth/github" className="w-full border border-border bg-surface text-text-primary py-2 rounded-md font-medium text-sm flex items-center justify-center gap-2 hover:bg-neutral-bg transition-colors mt-2"><GitHub size={16} className="mr-2"/> Sign in with GitHub</Link>
+        <Link href="/api/auth/google" className="w-full border border-border bg-surface text-text-primary py-2 rounded-md font-medium text-sm flex items-center justify-center gap-2 hover:bg-neutral-bg transition-colors"><FaGoogle size={16} className="mr-2"/> Sign in with Google</Link>
+        <Link href="/api/auth/github" className="w-full border border-border bg-surface text-text-primary py-2 rounded-md font-medium text-sm flex items-center justify-center gap-2 hover:bg-neutral-bg transition-colors mt-2"><FaGithub size={16} className="mr-2"/> Sign in with GitHub</Link>
         
         {/* TODO: Add actual OAuth handler */}
         <Link href="/dashboard" className="w-full border border-border bg-surface text-text-primary py-2 rounded-md font-medium text-sm flex items-center justify-center gap-2 hover:bg-neutral-bg transition-colors">
