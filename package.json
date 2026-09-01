@@ -9,11 +9,15 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@insforge/sdk": "^1.5.2",
+    "dotenv": "^17.4.2",
     "lucide-react": "^1.38.0",
     "next": "16.3.3",
+    "postgres": "^3.4.9",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "server-only": "^0.0.1"
+    "server-only": "^0.0.1",
+    "tsx": "^4.23.13"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

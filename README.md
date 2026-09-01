@@ -219,3 +219,9 @@ Before deploying to Vercel or your preferred host, ensure the following steps ar
 5. **Limitations:**
    - WhatsApp is intentionally omitted in this build.
    - Do not use for non-INR currencies without modifying the `formatCurrency` logic.
+
+## Known limitations
+- **Razorpay test mode only**: Production credentials are not supported without explicit webhook configuration.
+- **Sarvam mock mode by default**: Outbound-call provider values require manual dashboard configuration to execute live HTTP requests.
+- **No WhatsApp/SMS integration yet**: The `payment_link_follow_up` intervention serves as the baseline alternative to messaging.
+- **Synthetic evaluation data**: The workspace is preloaded with 100 deterministic mock cases, not production merchant results.
