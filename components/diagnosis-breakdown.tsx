@@ -8,7 +8,7 @@ export function DiagnosisBreakdown() {
       <div className="flex justify-between items-end mb-2">
         <div>
           <h2 className="text-[11px] font-medium tracking-[0.12em] uppercase text-text-secondary">Failure Diagnosis</h2>
-          <div className="text-sm text-text-muted mt-1 font-mono">100 cases · ₹83,600 at risk</div>
+          <div className="text-sm text-text-muted mt-1 font-mono">Real-time cause attribution</div>
         </div>
       </div>
       
@@ -25,7 +25,7 @@ export function DiagnosisBreakdown() {
             <div className="h-1.5 w-full bg-neutral-bg rounded-full overflow-hidden flex">
               <div 
                 className={`h-full ${item.label === 'Bank downtime' ? 'bg-waiting' : item.label.includes('network') || item.label.includes('PIN') ? 'bg-active' : 'bg-neutral'}`}
-                style={{ width: `${(item.amount / maxAmount) * 100}%` }}
+                style={{ width: maxAmount > 0 ? `${(item.amount / maxAmount) * 100}%` : '0%' }}
               ></div>
             </div>
           </div>

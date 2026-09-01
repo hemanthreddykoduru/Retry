@@ -70,91 +70,7 @@ export const mockCustomers: Customer[] = [
   { id: "cus_3", merchant_id: "m_1", name: "Kiran V.", phone: "+919876543212", preferred_language: "te", do_not_contact: false, created_at: "2026-08-30T12:00:00Z" }
 ];
 
-export const mockCases: RecoveryCase[] = [
-  {
-    id: "rc_1a2b3c",
-    merchant_id: "m_1",
-    customer_id: "cus_1",
-    checkout_session_id: "cs_1",
-    trigger_source: "payment_failed_webhook",
-    failure_code: "BAD_REQUEST_ERROR",
-    failure_reason: "Issuer bank is down",
-    root_cause: "bank_downtime",
-    amount: 149900,
-    status: "recovered",
-    attempt_count: 1,
-    max_attempts: 3,
-    razorpay_payment_link_id: null,
-    recovered_amount: 149900,
-    opened_at: "2026-08-31T10:42:18Z",
-    closed_at: "2026-08-31T11:06:11Z",
-    customer: mockCustomers[0],
-    audit_logs: [
-      { id: 1, recovery_case_id: "rc_1a2b3c", actor: "system", action: "payment.failed", reasoning: "Webhook received from Razorpay: BAD_REQUEST_ERROR", metadata: {}, created_at: "2026-08-31T10:42:18Z" },
-      { id: 2, recovery_case_id: "rc_1a2b3c", actor: "agent", action: "guardrail.checked", reasoning: "Detected active downtime for issuer bank (HDFC). Action suppressed to avoid customer frustration.", metadata: {}, created_at: "2026-08-31T10:42:19Z" },
-      { id: 3, recovery_case_id: "rc_1a2b3c", actor: "system", action: "downtime.resolved", reasoning: "Bank downtime resolved. Scheduled smart retry.", metadata: {}, created_at: "2026-08-31T10:57:04Z" },
-      { id: 4, recovery_case_id: "rc_1a2b3c", actor: "agent", action: "payment.captured", reasoning: "Payment successfully captured in the background. Revenue recovered without human contact.", metadata: {}, created_at: "2026-08-31T11:06:11Z" }
-    ],
-    interventions: [
-      { id: "int_1", recovery_case_id: "rc_1a2b3c", type: "smart_retry", status: "completed", scheduled_for: "2026-08-31T11:05:00Z", executed_at: "2026-08-31T11:05:30Z", outcome: "captured" }
-    ]
-  },
-  {
-    id: "rc_2d3e4f",
-    merchant_id: "m_1",
-    customer_id: "cus_2",
-    checkout_session_id: "cs_2",
-    trigger_source: "snippet_timeout",
-    failure_code: null,
-    failure_reason: null,
-    root_cause: "network_drop",
-    amount: 89900,
-    status: "contacting",
-    attempt_count: 1,
-    max_attempts: 3,
-    razorpay_payment_link_id: "plink_123",
-    recovered_amount: null,
-    opened_at: "2026-08-31T14:21:08Z",
-    closed_at: null,
-    customer: mockCustomers[1],
-    audit_logs: [
-      { id: 5, recovery_case_id: "rc_2d3e4f", actor: "system", action: "checkout.abandoned", reasoning: "No heartbeat for 10m", metadata: {}, created_at: "2026-08-31T14:21:08Z" },
-      { id: 6, recovery_case_id: "rc_2d3e4f", actor: "agent", action: "policy.decided", reasoning: "Network drop detected. Selected WhatsApp nudge since intent is still fresh.", metadata: {}, created_at: "2026-08-31T14:21:09Z" },
-      { id: 7, recovery_case_id: "rc_2d3e4f", actor: "system", action: "payment_link.created", reasoning: "Created Razorpay payment link", metadata: { link: "plink_123" }, created_at: "2026-08-31T14:21:10Z" }
-    ],
-    interventions: [
-      { id: "int_2", recovery_case_id: "rc_2d3e4f", type: "payment_link_follow_up", status: "delivered", scheduled_for: "2026-08-31T14:21:10Z", executed_at: "2026-08-31T14:21:12Z", outcome: null }
-    ]
-  },
-  {
-    id: "rc_c931",
-    merchant_id: "m_1",
-    customer_id: "cus_3",
-    checkout_session_id: "cs_3",
-    trigger_source: "payment_failed_webhook",
-    failure_code: "INSUFFICIENT_FUNDS",
-    failure_reason: "Insufficient balance",
-    root_cause: "insufficient_funds",
-    amount: 199900,
-    status: "promise_logged",
-    attempt_count: 1,
-    max_attempts: 3,
-    razorpay_payment_link_id: null,
-    recovered_amount: null,
-    opened_at: "2026-08-31T15:11:22Z",
-    closed_at: null,
-    customer: { ...mockCustomers[2], name: "Srilatha P.", phone: "+919876541207" },
-    audit_logs: [
-      { id: 8, recovery_case_id: "rc_c931", actor: "system", action: "payment.failed", reasoning: "Webhook received: INSUFFICIENT_FUNDS", metadata: {}, created_at: "2026-08-31T15:11:22Z" },
-      { id: 9, recovery_case_id: "rc_c931", actor: "agent", action: "policy.decided", reasoning: "Telugu voice call selected because cart is ≥ ₹500.", metadata: {}, created_at: "2026-08-31T15:11:23Z" },
-      { id: 10, recovery_case_id: "rc_c931", actor: "agent", action: "guardrail.checked", reasoning: "Passed constraints: 09:00-21:00 IST, threshold ₹500 met, not DND.", metadata: {}, created_at: "2026-08-31T15:11:24Z" },
-      { id: 11, recovery_case_id: "rc_c931", actor: "system", action: "sarvam.outcome", reasoning: "Call completed. Customer promised to pay.", metadata: { promise_date: "2026-09-02" }, created_at: "2026-08-31T15:12:47Z" }
-    ],
-    interventions: [
-      { id: "int_3", recovery_case_id: "rc_c931", type: "voice_call", status: "completed", scheduled_for: "2026-08-31T15:11:30Z", executed_at: "2026-08-31T15:11:45Z", outcome: "promise_to_pay" }
-    ]
-  }
-];
+export const mockCases: RecoveryCase[] = [];
 
 export const formatCurrency = (paise: number) => {
   return new Intl.NumberFormat('en-IN', {
@@ -165,31 +81,31 @@ export const formatCurrency = (paise: number) => {
 };
 
 export const diagnosisData = [
-  { label: "Bank downtime", cases: 35, amount: 3124000, percentage: 35 },
-  { label: "Insufficient funds", cases: 25, amount: 2210000, percentage: 25 },
-  { label: "PIN / OTP failure", cases: 20, amount: 1482000, percentage: 20 },
-  { label: "Silent network drop-off", cases: 15, amount: 1134000, percentage: 15 },
-  { label: "Unknown / other", cases: 5, amount: 410000, percentage: 5 },
+  { label: "Bank downtime", cases: 0, amount: 0, percentage: 0 },
+  { label: "Insufficient funds", cases: 0, amount: 0, percentage: 0 },
+  { label: "PIN / OTP failure", cases: 0, amount: 0, percentage: 0 },
+  { label: "Silent network drop-off", cases: 0, amount: 0, percentage: 0 },
+  { label: "Unknown / other", cases: 0, amount: 0, percentage: 0 },
 ];
 
 export const metricsData = {
-  failures_detected: 100,
-  cases_opened: 100,
-  cases_recovered: 61,
-  amount_at_risk: 7942000,
-  amount_recovered: 4862000, // 48620 rupees
-  calls_placed: 42,
-  whatsapps_sent: 58,
-  optouts: 2,
-  cases_contacted: 63,
-  contacts_avoided: 37,
-  recovered_revenue_paise: 4862000,
-  recovered_revenue_trend: 121,
-  recovery_rate: 61.2,
-  recovery_rate_trend: 23.4,
-  cost_per_recovery: 79,
-  revenue_at_risk_paise: 7942000,
-  revenue_at_risk_trend: 10
+  failures_detected: 0,
+  cases_opened: 0,
+  cases_recovered: 0,
+  amount_at_risk: 0,
+  amount_recovered: 0,
+  calls_placed: 0,
+  whatsapps_sent: 0,
+  optouts: 0,
+  cases_contacted: 0,
+  contacts_avoided: 0,
+  recovered_revenue_paise: 0,
+  recovered_revenue_trend: 0,
+  recovery_rate: 0,
+  recovery_rate_trend: 0,
+  cost_per_recovery: 0,
+  revenue_at_risk_paise: 0,
+  revenue_at_risk_trend: 0
 };
 
 export const liveReceipts = mockCases.map(c => {
