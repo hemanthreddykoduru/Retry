@@ -6,15 +6,16 @@ import { PaymentEventsRepository } from '@/lib/repositories/payment-events';
 export async function POST(request: Request) {
   try {
     const signature = request.headers.get('x-razorpay-signature');
-    const rawBody = await request.text();
-
     if (!signature) {
-      console.log('Webhook error: Missing signature');
+      console.warn('razorpay_webhook_rejected: signature_missing');
       return NextResponse.json({ error: 'Missing signature' }, { status: 400 });
     }
 
+    const rawBody = await request.text();
+
     const secret = process.env.RAZORPAY_WEBHOOK_SECRET;
     if (!secret) {
+      console.error('razorpay_webhook_configuration_error: secret_missing');
       return NextResponse.json({ error: 'Server misconfiguration' }, { status: 500 });
     }
 
@@ -31,15 +32,15 @@ export async function POST(request: Request) {
       );
 
     if (!valid) {
-      console.log(`Webhook error: Invalid signature. Expected ${expectedSignature}, got ${signature}`);
-      return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
+      console.warn('razorpay_webhook_rejected: signature_invalid');
+      return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
     }
 
     let payload;
     try {
       payload = JSON.parse(rawBody);
     } catch (e) {
-      console.log('Webhook error: Invalid JSON body', rawBody);
+      console.warn('razorpay_webhook_rejected: payload_malformed');
       return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
     }
 
@@ -49,7 +50,7 @@ export async function POST(request: Request) {
                    payload.payload?.order?.entity?.id;
                    
     if (!eventId) {
-      console.log('Webhook error: Missing event id in payload or headers', payload);
+      console.warn('razorpay_webhook_rejected: missing_event_id');
       return NextResponse.json({ error: 'Missing event id' }, { status: 400 });
     }
 
@@ -63,6 +64,7 @@ export async function POST(request: Request) {
     });
 
     if (!inserted) {
+      console.info('razorpay_webhook_duplicate_ignored');
       return NextResponse.json({ ok: true, duplicate: true });
     }
 
@@ -76,9 +78,10 @@ export async function POST(request: Request) {
     
     await PaymentEventsRepository.markProcessed(inserted.id);
     
+    console.info(`razorpay_webhook_processed: ${event}`);
     return NextResponse.json({ ok: true, event });
   } catch (error: unknown) {
-    console.error('Razorpay Webhook Error:', error);
+    console.error('razorpay_webhook_processing_error');
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
