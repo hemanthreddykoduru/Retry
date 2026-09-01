@@ -125,7 +125,7 @@ export function Sidebar() {
       )}
 
       {/* Desktop Sidebar */}
-      <aside className="w-[220px] shrink-0 min-h-screen hidden md:flex flex-col">
+      <aside className="w-[220px] shrink-0 h-full hidden md:flex flex-col">
         <SidebarContent navClass={navClass} />
       </aside>
     </>
