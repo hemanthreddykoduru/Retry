@@ -7,6 +7,7 @@ export default async function IntegrationPage() {
 
   // If no merchant is found, fallback to the demo key for safety
   const apiKey = merchant?.api_key || 'm_demo_123';
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
-  return <IntegrationClient apiKey={apiKey} />;
+  return <IntegrationClient apiKey={apiKey} appUrl={appUrl} />;
 }

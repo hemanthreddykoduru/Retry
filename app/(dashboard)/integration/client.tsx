@@ -2,7 +2,7 @@
 
 import { Copy, AlertTriangle, ShieldCheck, CheckCircle2, ServerCrash, XCircle } from "lucide-react";
 
-export default function IntegrationClient({ apiKey }: { apiKey: string }) {
+export default function IntegrationClient({ apiKey, appUrl }: { apiKey: string, appUrl: string }) {
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     alert('Copied to clipboard');
@@ -31,10 +31,10 @@ export default function IntegrationClient({ apiKey }: { apiKey: string }) {
                 <div className="text-xs font-mono text-text-secondary uppercase tracking-widest mb-2">Endpoint URL</div>
                 <div className="flex items-center">
                   <div className="bg-neutral-bg border border-border p-3 font-mono text-sm flex-1 truncate">
-                    https://retry-app.demo/api/webhooks/razorpay
+                    {appUrl}/api/webhooks/razorpay
                   </div>
                   <button 
-                    onClick={() => copyToClipboard('https://retry-app.demo/api/webhooks/razorpay')}
+                    onClick={() => copyToClipboard(`${appUrl}/api/webhooks/razorpay`)}
                     className="p-3 border border-l-0 border-border bg-surface hover:bg-neutral-bg transition-colors"
                   >
                     <Copy size={18} />
@@ -109,14 +109,14 @@ export default function IntegrationClient({ apiKey }: { apiKey: string }) {
               <div className="relative">
                 <div className="absolute top-2 right-2 flex gap-2">
                   <button 
-                    onClick={() => copyToClipboard(`<script src="https://js.retry-app.demo/retry-snippet.js" data-retry-key="${apiKey}"></script>`)}
+                    onClick={() => copyToClipboard(`<script src="${appUrl}/retry-snippet.js" data-retry-key="${apiKey}"></script>`)}
                     className="p-1.5 bg-surface border border-border hover:bg-neutral-bg transition-colors"
                   >
                     <Copy size={14} className="text-text-secondary" />
                   </button>
                 </div>
                 <pre className="bg-neutral-bg border border-border p-4 text-xs font-mono text-text-primary overflow-x-auto whitespace-pre-wrap">
-                  {`<script\n  src="https://js.retry-app.demo/retry-snippet.js"\n  data-retry-key="${apiKey}"\n></script>`}
+                  {`<script\n  src="${appUrl}/retry-snippet.js"\n  data-retry-key="${apiKey}"\n></script>`}
                 </pre>
               </div>
 
