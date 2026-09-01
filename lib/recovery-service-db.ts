@@ -18,6 +18,10 @@ export const RecoveryServiceDB = {
         let isRecoveredNow = false;
 
         if (event === 'payment.failed') {
+          if (currentStatus !== 'open') {
+            console.info(`payment.failed gracefully ignored because case is already in ${currentStatus}`);
+            return;
+          }
           nextStatus = transitionState(currentStatus, 'diagnosing');
           auditAction = 'diagnose_started';
           auditReasoning = 'Payment failure detected, diagnosing root cause';
