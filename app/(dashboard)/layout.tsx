@@ -7,7 +7,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col min-h-screen bg-background text-text-primary">
+    <div className="flex flex-col h-screen overflow-hidden bg-background text-text-primary">
       <div className="bg-neutral-bg border-b border-border py-1.5 px-4 flex flex-wrap items-center justify-between text-[10px] font-mono uppercase tracking-widest text-text-secondary gap-4 z-20">
         <div className="flex items-center gap-4">
           <span className="flex items-center gap-1 text-active font-bold"><span className="w-1.5 h-1.5 rounded-full bg-active animate-pulse"></span> DEMO MODE</span>
