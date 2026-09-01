@@ -39,6 +39,17 @@ async function getOrCreateRecoveryCase(payload: any) {
     RETURNING id
   `;
   
+  const date = new Date().toISOString().split('T')[0];
+  await sql`
+    INSERT INTO daily_metrics (merchant_id, date, failures_detected, cases_opened, amount_at_risk, cases_recovered, amount_recovered, calls_placed, whatsapps_sent, optouts)
+    VALUES (${merchantId}, ${date}::date, 1, 1, ${payment.amount || 0}, 0, 0, 0, 0, 0)
+    ON CONFLICT (merchant_id, date)
+    DO UPDATE SET 
+      failures_detected = daily_metrics.failures_detected + 1,
+      cases_opened = daily_metrics.cases_opened + 1,
+      amount_at_risk = daily_metrics.amount_at_risk + EXCLUDED.amount_at_risk
+  `;
+  
   return insertedCase[0].id;
 }
 
