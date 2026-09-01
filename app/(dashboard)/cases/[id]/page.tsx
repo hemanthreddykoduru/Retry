@@ -35,6 +35,20 @@ export default function CaseDetailPage() {
   }, [id]);
 
   const [webhookOpen, setWebhookOpen] = useState(false);
+  const [rawPayload, setRawPayload] = useState<any>(null);
+
+  const toggleWebhook = async () => {
+    if (!webhookOpen && !rawPayload) {
+      try {
+        const res = await fetch(`/api/recovery-cases/${c.id}/payload`);
+        const data = await res.json();
+        setRawPayload(data.payload);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    setWebhookOpen(!webhookOpen);
+  };
 
   if (!c) return <div className="p-8">Loading...</div>;
 
@@ -343,7 +357,7 @@ export default function CaseDetailPage() {
       <div className="sharp-card">
         <button 
           className="w-full flex justify-between items-center p-4 text-sm font-mono hover:bg-neutral-bg transition-colors"
-          onClick={() => setWebhookOpen(!webhookOpen)}
+          onClick={toggleWebhook}
         >
           <span className="font-bold text-text-secondary uppercase">Raw Webhook Payload</span>
           {webhookOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
@@ -351,25 +365,7 @@ export default function CaseDetailPage() {
         {webhookOpen && (
           <div className="p-4 border-t border-border bg-background">
             <pre className="text-xs font-mono text-text-muted overflow-x-auto">
-{JSON.stringify({
-  "entity": "event",
-  "account_id": "acc_123456",
-  "event": "payment.failed",
-  "contains": ["payment"],
-  "payload": {
-    "payment": {
-      "entity": {
-        "id": "pay_123456",
-        "amount": c.amount,
-        "currency": "INR",
-        "status": "failed",
-        "error_code": c.failure_code,
-        "error_description": c.failure_reason
-      }
-    }
-  },
-  "created_at": Math.floor(new Date(c.opened_at).getTime() / 1000)
-}, null, 2)}
+{rawPayload ? JSON.stringify(rawPayload, null, 2) : "Loading or not available..."}
             </pre>
           </div>
         )}
