@@ -2,6 +2,45 @@ import { NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { RecoveryServiceDB } from '@/lib/recovery-service-db';
 import { PaymentEventsRepository } from '@/lib/repositories/payment-events';
+import { sql } from '@/lib/db';
+
+async function getOrCreateRecoveryCase(payload: any) {
+  const notesId = payload.payload?.payment?.entity?.notes?.recovery_case_id || 
+                  payload.payload?.payment_link?.entity?.notes?.recovery_case_id;
+  if (notesId) return notesId;
+  
+  const payment = payload.payload?.payment?.entity;
+  if (!payment || !payment.contact) {
+     return '20000000-0000-0000-0000-000000000003';
+  }
+  
+  const merchantId = '00000000-0000-0000-0000-000000000001';
+  let phone = payment.contact;
+  if (!phone.startsWith('+')) {
+    phone = '+' + phone;
+  }
+  
+  const existingCustomers = await sql`SELECT id FROM customers WHERE phone = ${phone} AND merchant_id = ${merchantId}`;
+  let customerId;
+  if (existingCustomers.length > 0) {
+    customerId = existingCustomers[0].id;
+  } else {
+    const inserted = await sql`
+      INSERT INTO customers (merchant_id, name, phone, preferred_language, do_not_contact)
+      VALUES (${merchantId}, ${payment.email || 'Unknown User'}, ${phone}, 'en', false)
+      RETURNING id
+    `;
+    customerId = inserted[0].id;
+  }
+  
+  const insertedCase = await sql`
+    INSERT INTO recovery_cases (merchant_id, customer_id, amount, trigger_source, root_cause, status)
+    VALUES (${merchantId}, ${customerId}, ${payment.amount || 0}, 'payment_failed_webhook', 'insufficient_funds', 'open')
+    RETURNING id
+  `;
+  
+  return insertedCase[0].id;
+}
 
 export async function POST(request: Request) {
   try {
@@ -68,11 +107,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: true, duplicate: true });
     }
 
-    // In a real system, we'd map razorpay order_id/payment_id to internal case_id.
-    // For demo, we just extract it from notes or use a default test case.
-    const caseId = payload.payload?.payment?.entity?.notes?.recovery_case_id || 
-                   payload.payload?.payment_link?.entity?.notes?.recovery_case_id ||
-                   '20000000-0000-0000-0000-000000000003'; // Fallback to main demo case (uuid instead of rc_c931)
+    // Generate or fetch the case dynamically from the webhook payload
+    const caseId = await getOrCreateRecoveryCase(payload);
 
     await RecoveryServiceDB.processEvent(caseId, event, { eventId });
     
