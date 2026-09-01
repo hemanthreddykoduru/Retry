@@ -52,7 +52,7 @@ export default function LandingPage() {
               <MetricCard title="RECOVERED REVENUE" value="₹48,620" detail="+121% vs baseline" isPositive={true} />
               <MetricCard title="RECOVERY RATE" value="61.2%" detail="+23.4 pts baseline" />
               <MetricCard title="CONTACTS AVOIDED" value="37" detail="Bank downtime cases" isWarning={true} />
-              <MetricCard title="COST / RECOVERY" value="₹79" detail="Voice + WhatsApp" />
+              <MetricCard title="COST / RECOVERY" value="₹79" detail="Voice recovery" />
             </div>
           </div>
         </section>
@@ -90,7 +90,7 @@ export default function LandingPage() {
               </div>
               <div className="sharp-card p-4">
                 <div className="font-bold text-text-primary mb-1 text-sm uppercase tracking-widest">Insufficient Balance</div>
-                <div className="text-sm">Often temporary. A polite, perfectly-timed WhatsApp link recovers the intent later.</div>
+                <div className="text-sm">Often temporary. A polite, perfectly-timed payment-link follow-up recovers the intent later.</div>
               </div>
               <div className="sharp-card p-4">
                 <div className="font-bold text-text-primary mb-1 text-sm uppercase tracking-widest">OTP/PIN Errors</div>
@@ -128,7 +128,7 @@ export default function LandingPage() {
                 <li className="flex items-start gap-2"><span className="text-active">■</span> Silent checkout-drop detection</li>
                 <li className="flex items-start gap-2"><span className="text-active">■</span> Downtime-aware decisions</li>
                 <li className="flex items-start gap-2"><span className="text-active">■</span> Smart retry scheduling</li>
-                <li className="flex items-start gap-2"><span className="text-active">■</span> WhatsApp payment links</li>
+                <li className="flex items-start gap-2"><span className="text-active">■</span> Manual payment-link follow-ups</li>
                 <li className="flex items-start gap-2"><span className="text-active">■</span> Telugu/Hindi/English voice recovery</li>
                 <li className="flex items-start gap-2"><span className="text-active">■</span> Audit receipts</li>
                 <li className="flex items-start gap-2"><span className="text-active">■</span> Customer safety guardrails</li>

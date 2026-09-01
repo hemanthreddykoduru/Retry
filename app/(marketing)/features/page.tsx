@@ -4,7 +4,7 @@ export default function FeaturesPage() {
       <div className="flex flex-col gap-4 text-center items-center">
         <h1 className="text-4xl md:text-5xl font-bold tracking-tighter">Everything you need to recover lost revenue.</h1>
         <p className="text-lg text-text-secondary max-w-2xl">
-          Automated voice concierges, WhatsApp nudges, and intelligent guardrails designed specifically for the Indian payments ecosystem.
+          Automated voice concierges and intelligent guardrails designed specifically for the Indian payments ecosystem.
         </p>
       </div>
 
@@ -25,10 +25,10 @@ export default function FeaturesPage() {
         
         <div className="sharp-card p-8">
           <div className="text-[11px] font-bold tracking-[0.12em] uppercase text-text-secondary mb-4 border-b border-border pb-2">
-            WhatsApp Payment Nudges
+            Payment-Link Follow-Ups
           </div>
           <p className="text-text-primary mb-4">
-            Fallback seamlessly to verified WhatsApp business messages with fresh Razorpay payment links.
+            Fallback seamlessly to manual follow-ups with fresh Razorpay payment links.
           </p>
           <ul className="list-disc list-inside text-sm text-text-secondary space-y-2">
             <li>Dynamic payment link generation</li>

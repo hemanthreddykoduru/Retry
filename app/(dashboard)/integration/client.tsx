@@ -8,6 +8,7 @@ export default function IntegrationClient({ apiKey, appUrl: serverAppUrl }: { ap
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setAppUrl(window.location.origin);
     }
   }, []);
@@ -116,8 +117,8 @@ export default function IntegrationClient({ apiKey, appUrl: serverAppUrl }: { ap
                 <span className="bg-active-bg border border-active text-active px-2 py-1 text-[10px] uppercase tracking-widest font-bold">TEST MODE</span>
               </div>
               <div className="flex justify-between items-center p-3 border border-border bg-surface opacity-60">
-                <span className="font-bold flex items-center gap-2">WhatsApp / SMS <span className="text-[10px] tracking-widest font-mono bg-neutral-bg px-1.5 py-0.5 border border-border">ROADMAP</span></span>
-                <span className="text-text-secondary px-2 py-1 text-[10px] uppercase tracking-widest font-bold">NOT CONFIGURED</span>
+                <span className="font-bold flex items-center gap-2">WhatsApp Business payment-link follow-up <span className="text-[10px] tracking-widest font-mono bg-neutral-bg px-1.5 py-0.5 border border-border">ROADMAP</span></span>
+                <span className="text-text-secondary px-2 py-1 text-[10px] uppercase tracking-widest font-bold">COMING SOON</span>
               </div>
             </div>
           </div>

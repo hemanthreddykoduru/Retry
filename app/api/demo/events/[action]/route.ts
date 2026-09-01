@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { RecoveryService } from '@/lib/recovery-service';
+import { RecoveryServiceDB } from '@/lib/recovery-service-db';
 
 export async function POST(
   request: Request,
@@ -10,37 +10,31 @@ export async function POST(
   try {
     let message = '';
     
-    // Use the fixed demo case IDs for specific scenarios
     switch (action) {
-      case 'payment-failed':
-        // rc_8f21: Ananya R. issuer-bank downtime
-        RecoveryService.processEvent('rc_8f21', 'payment.failed', { synthetic: true });
-        RecoveryService.processEvent('rc_8f21', 'downtime.started', { synthetic: true });
-        message = 'Triggered payment.failed and downtime.started for Ananya R. (rc_8f21)';
+      case 'insufficient_funds':
+        await RecoveryServiceDB.processEvent('20000000-0000-0000-0000-000000000003', 'payment.failed', { synthetic: true });
+        await RecoveryServiceDB.processEvent('20000000-0000-0000-0000-000000000003', 'sarvam.promise_to_pay', { synthetic: true });
+        message = 'Triggered payment.failed and sarvam.promise_to_pay';
         break;
-      case 'downtime-resolved':
-        RecoveryService.processEvent('rc_8f21', 'downtime.resolved', { synthetic: true });
-        message = 'Triggered downtime.resolved for Ananya R. (rc_8f21)';
+      case 'bank_downtime':
+        await RecoveryServiceDB.processEvent('20000000-0000-0000-0000-000000000001', 'payment.failed', { synthetic: true });
+        await RecoveryServiceDB.processEvent('20000000-0000-0000-0000-000000000001', 'downtime.started', { synthetic: true });
+        message = 'Triggered payment.failed and downtime.started';
         break;
-      case 'checkout-abandoned':
-        // rc_b182: Ravi K. silent network drop-off
-        RecoveryService.processEvent('rc_b182', 'payment.failed', { synthetic: true });
-        message = 'Triggered checkout abandoned / payment.failed for Ravi K. (rc_b182)';
+      case 'no_answer':
+        await RecoveryServiceDB.processEvent('20000000-0000-0000-0000-000000000002', 'payment.failed', { synthetic: true });
+        await RecoveryServiceDB.processEvent('20000000-0000-0000-0000-000000000002', 'sarvam.no_answer', { synthetic: true });
+        message = 'Triggered sarvam.no_answer, scheduled second attempt';
         break;
-      case 'payment-link-paid':
-        // rc_c931: Srilatha P.
-        RecoveryService.processEvent('rc_c931', 'payment_link.paid', { synthetic: true });
-        message = 'Triggered payment_link.paid for Srilatha P. (rc_c931)';
+      case 'opt_out':
+        await RecoveryServiceDB.processEvent('20000000-0000-0000-0000-000000000004', 'payment.failed', { synthetic: true });
+        await RecoveryServiceDB.processEvent('20000000-0000-0000-0000-000000000004', 'sarvam.do_not_contact', { synthetic: true });
+        message = 'Triggered sarvam.do_not_contact / customer opt-out';
         break;
-      case 'customer-opt-out':
-        // rc_a744: Kiran M.
-        RecoveryService.processEvent('rc_a744', 'customer.opt_out', { synthetic: true });
-        message = 'Triggered customer opt-out for Kiran M. (rc_a744)';
-        break;
-      case 'sarvam-failed':
-        // rc_6e02: Nikhil S.
-        RecoveryService.processEvent('rc_6e02', 'sarvam.call_failed', { synthetic: true });
-        message = 'Triggered sarvam.call_failed for Nikhil S. (rc_6e02)';
+      case 'sarvam_failure':
+        await RecoveryServiceDB.processEvent('20000000-0000-0000-0000-000000000005', 'payment.failed', { synthetic: true });
+        await RecoveryServiceDB.processEvent('20000000-0000-0000-0000-000000000005', 'sarvam.call_failed', { synthetic: true });
+        message = 'Triggered sarvam.call_failed';
         break;
       default:
         return NextResponse.json({ error: 'Unknown demo action' }, { status: 400 });

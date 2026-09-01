@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import { checkVoiceGuardrails } from '@/lib/guardrails';
 import { triggerSarvamOutboundCall } from '@/lib/sarvam';
-import { mockCases, mockCustomers } from '@/lib/demo-data';
+import { sql } from '@/lib/db';
+import { RecoveryCase, Customer } from '@/lib/demo-data';
 
 export async function POST(
   request: Request,
@@ -9,18 +10,22 @@ export async function POST(
 ) {
   const { id } = await params;
   
-  // MOCK DATA LOAD
-  const recoveryCase = mockCases.find(c => c.id === id);
-  if (!recoveryCase) {
+  // Real DB LOAD
+  const cases = await sql`SELECT * FROM recovery_cases WHERE id = ${id}`;
+  if (cases.length === 0) {
     return NextResponse.json({ error: 'Case not found' }, { status: 404 });
   }
-  const customer = mockCustomers.find(c => c.id === recoveryCase.customer_id);
-  if (!customer) {
+  const recoveryCase = cases[0] as unknown as RecoveryCase;
+
+  const customers = await sql`SELECT * FROM customers WHERE id = ${recoveryCase.customer_id}`;
+  if (customers.length === 0) {
     return NextResponse.json({ error: 'Customer not found' }, { status: 404 });
   }
+  const customer = customers[0] as unknown as Customer;
 
-  // Count current voice calls (mock logic)
-  const voiceCallInterventions = (recoveryCase.interventions || []).filter(i => i.type === 'voice_call');
+  // Count current voice calls
+  const interventions = await sql`SELECT * FROM interventions WHERE recovery_case_id = ${id}`;
+  const voiceCallInterventions = interventions.filter(i => i.type === 'voice_call');
   const currentInterventionCount = voiceCallInterventions.length;
 
   // 1. Guardrails Check
@@ -35,8 +40,13 @@ export async function POST(
     }, { status: 409 });
   }
 
-  // 2. Queue Intervention (Mocking DB insert)
+  // 2. Queue Intervention
   console.log(`[DB] Queuing voice_call intervention for case ${id}`);
+  
+  await sql`
+    INSERT INTO interventions (recovery_case_id, type, status, scheduled_for)
+    VALUES (${id}, 'voice_call', 'pending', ${new Date().toISOString()})
+  `;
 
   // 3. Trigger Sarvam
   try {
@@ -62,12 +72,23 @@ export async function POST(
     });
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    console.error(`[AUDIT] sarvam.call_failed -> fallback.whatsapp_queued. Error: ${errorMessage}`);
-    // Queue whatsapp fallback (Mocking DB insert)
+    console.error(`[AUDIT] sarvam.call_failed -> manual_payment_link_follow_up_required. Error: ${errorMessage}`);
+    
+    await sql`
+      INSERT INTO interventions (recovery_case_id, type, status, scheduled_for, metadata)
+      VALUES (
+        ${id}, 
+        'payment_link_follow_up', 
+        'pending', 
+        ${new Date().toISOString()}, 
+        ${sql.json({ reason: 'sarvam.call_failed', fallback_triggered: 'payment_link_follow_up' })}
+      )
+    `;
+    
     return NextResponse.json({
       success: false,
       error: 'Provider failure',
-      fallback_triggered: 'whatsapp_nudge'
+      fallback_triggered: 'payment_link_follow_up'
     }, { status: 502 });
   }
 }

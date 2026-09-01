@@ -37,7 +37,7 @@ export default function HowItWorksPage() {
             <h3 className="font-bold tracking-tight mb-2 uppercase">Automated Intervention</h3>
             <p className="text-text-secondary">
               Our Sarvam Voice Agent calls the customer in their native language (Telugu/Hindi). 
-              The agent gently asks if they need help and sends a fresh payment link to their WhatsApp.
+              The agent gently asks if they need help and secures a promise to pay.
             </p>
           </div>
         </div>
@@ -47,7 +47,7 @@ export default function HowItWorksPage() {
           <div className="sharp-card p-6 flex-1 border-l-4 border-l-recovered bg-recovered-bg">
             <h3 className="font-bold tracking-tight mb-2 uppercase text-recovered">Revenue Recovered</h3>
             <p className="text-text-primary">
-              The customer clicks the WhatsApp link, completes the UPI payment, and the case is closed automatically.
+              The customer completes the UPI payment, and the case is closed automatically.
             </p>
           </div>
         </div>

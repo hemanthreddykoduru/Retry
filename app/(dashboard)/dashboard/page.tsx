@@ -76,7 +76,7 @@ export default function Dashboard() {
         <MetricCard
           title="COST / RECOVERY"
           value={`₹${metrics.cost_per_recovery}`}
-          detail="Voice + WhatsApp"
+          detail="Voice recovery"
         />
       </div>
 

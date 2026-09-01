@@ -110,63 +110,53 @@ export default function DemoLabPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <ScenarioCard
+          title="Insufficient Funds (Voice Call)"
+          icon={PhoneOff}
+          description="A high-value cart fails. The agent calls in Telugu via Sarvam AI, secures a promise to pay, and marks the case for follow-up."
+          flow={['failed', 'Telugu Call', 'promise', 'case updated']}
+          expected="Agent calls customer, records promise, and updates recovery status."
+          action="insufficient_funds"
+          caseId="20000000-0000-0000-0000-000000000003"
+        />
+
+        <ScenarioCard
           title="Bank Downtime"
           icon={ShieldCheck}
           description="A payment fails due to issuer bank downtime. The agent identifies this and suppresses all customer contact to avoid frustration."
-          flow={['payment.failed', 'downtime matched', 'suppressed', 'resolved', 'retry', 'recovered']}
-          expected="Case opens but no call/message is sent. Background retry succeeds after downtime."
+          flow={['payment.failed', 'downtime matched', 'contact suppressed']}
+          expected="Case opens but no call is sent. Awaits background resolution."
           action="bank_downtime"
-          caseId="rc_1a2b3c"
+          caseId="20000000-0000-0000-0000-000000000001"
         />
 
         <ScenarioCard
-          title="Insufficient Funds (Voice Call)"
+          title="No Answer / Escalation"
           icon={PhoneOff}
-          description="A high-value cart (₹1,999) fails. The agent calls in Telugu via Sarvam AI, secures a promise, and sends a WhatsApp link."
-          flow={['failed', 'Telugu Call', 'promise', 'payment link', 'recovered']}
-          expected="Agent calls customer, records promise, queues WhatsApp link, and tracks payment."
-          action="insufficient_funds"
-          caseId="rc_c931"
+          description="Customer does not answer the Sarvam call. System increments attempt counter and queues second attempt or escalation."
+          flow={['call no_answer', 'increment attempt', 'escalate']}
+          expected="Second failed attempt triggers human escalation."
+          action="no_answer"
+          caseId="20000000-0000-0000-0000-000000000002"
         />
 
         <ScenarioCard
-          title="Silent Network Drop"
-          icon={WifiOff}
-          description="Customer closes the checkout tab or loses network. Heartbeat times out before reaching Razorpay."
-          flow={['heartbeat timeout', 'WhatsApp link', 'recovered']}
-          expected="Snippet timeout creates a case. WhatsApp nudge is sent since no Razorpay event fired."
-          action="network_drop"
-          caseId="rc_2d3e4f"
-        />
-
-        <ScenarioCard
-          title="OTP/PIN Problem"
-          icon={AlertCircle}
-          description="Customer enters the wrong PIN. The agent sends a gentle WhatsApp message with a fresh link."
-          flow={['failed', 'WhatsApp message', 'payment link', 'recovered']}
-          expected="Immediate WhatsApp nudge sent with a fresh UPI link."
-          action="otp_error"
-          caseId="rc_otp123"
-        />
-
-        <ScenarioCard
-          title="Customer Opt-out"
+          title="Customer Opt-out (DND)"
           icon={ShieldCheck}
-          description="During an intervention, the customer says 'Do not contact me'. Automation halts immediately."
+          description="During a voice call, the customer says 'Do not contact me'. Automation halts immediately."
           flow={['contact', 'DND recorded', 'blocked']}
-          expected="Customer marked DND. Status set to closed_optout. All queued interventions cancelled."
+          expected="Customer marked DND. Status set to closed_optout. All queued calls cancelled."
           action="opt_out"
-          caseId="rc_optout123"
+          caseId="20000000-0000-0000-0000-000000000004"
         />
 
         <ScenarioCard
           title="Sarvam Provider Failure"
           icon={ServerCrash}
-          description="The Sarvam AI API times out or fails. The system gracefully falls back to a WhatsApp nudge."
-          flow={['voice fails', 'audit error', 'WhatsApp fallback']}
-          expected="Voice call marked failed. WhatsApp intervention queued immediately. Case continues."
+          description="The Sarvam AI API times out or fails. The system gracefully requests manual payment-link follow-up."
+          flow={['voice fails', 'audit error', 'manual link required']}
+          expected="Voice call marked failed. Manual payment-link follow-up required."
           action="sarvam_failure"
-          caseId="rc_sarvamfail"
+          caseId="20000000-0000-0000-0000-000000000005"
         />
       </div>
     </div>

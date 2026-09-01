@@ -9,6 +9,7 @@ export async function POST(request: Request) {
     const rawBody = await request.text();
 
     if (!signature) {
+      console.log('Webhook error: Missing signature');
       return NextResponse.json({ error: 'Missing signature' }, { status: 400 });
     }
 
@@ -30,18 +31,25 @@ export async function POST(request: Request) {
       );
 
     if (!valid) {
+      console.log(`Webhook error: Invalid signature. Expected ${expectedSignature}, got ${signature}`);
       return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
     }
 
     let payload;
     try {
       payload = JSON.parse(rawBody);
-    } catch {
+    } catch (e) {
+      console.log('Webhook error: Invalid JSON body', rawBody);
       return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
     }
 
-    const eventId = payload.id;
+    // Razorpay sends event ID in headers, or we can fallback to the payment/order ID for idempotency
+    const eventId = request.headers.get('x-razorpay-event-id') || 
+                   payload.payload?.payment?.entity?.id || 
+                   payload.payload?.order?.entity?.id;
+                   
     if (!eventId) {
+      console.log('Webhook error: Missing event id in payload or headers', payload);
       return NextResponse.json({ error: 'Missing event id' }, { status: 400 });
     }
 

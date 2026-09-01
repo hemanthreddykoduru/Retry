@@ -19,7 +19,7 @@ export default function PricingPage() {
 
           <ul className="flex flex-col gap-3 text-sm text-text-primary mb-8 flex-1 font-mono">
             <li className="flex items-center gap-2">✓ Unlimited Sarvam Voice Calls</li>
-            <li className="flex items-center gap-2">✓ Unlimited WhatsApp Nudges</li>
+            <li className="flex items-center gap-2">✓ Unlimited Payment-link Follow-ups</li>
             <li className="flex items-center gap-2">✓ Full guardrail control</li>
             <li className="flex items-center gap-2">✓ Analytics & reporting</li>
           </ul>
