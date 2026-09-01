@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ShieldCheck, Check, RotateCcw, Save } from "lucide-react";
 
 const SettingRow = ({ label, description, children }: { label: string, description: string, children: React.ReactNode }) => (
@@ -39,21 +39,46 @@ export default function GuardrailsPage() {
 
   const [state, setState] = useState(defaultState);
   const [isSaved, setIsSaved] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/settings')
+      .then(r => r.json())
+      .then(data => {
+        if (!data.error) setState(data);
+        setIsLoading(false);
+      })
+      .catch(() => setIsLoading(false));
+  }, []);
 
   const handleChange = (key: string, value: string | boolean) => {
     setState(prev => ({ ...prev, [key]: value }));
     setIsSaved(false);
   };
 
-  const handleSave = () => {
-    setIsSaved(true);
-    alert('Demo: Settings saved successfully.');
+  const handleSave = async () => {
+    try {
+      await fetch('/api/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(state)
+      });
+      setIsSaved(true);
+    } catch (e) {
+      alert('Failed to save settings');
+    }
   };
 
   const handleReset = () => {
-    setState(defaultState);
-    setIsSaved(false);
+    fetch('/api/settings')
+      .then(r => r.json())
+      .then(data => {
+        if (!data.error) setState(data);
+        setIsSaved(true);
+      });
   };
+
+  if (isLoading) return <div className="p-8">Loading settings...</div>;
 
   return (
     <div className="max-w-[1000px] flex flex-col gap-8 pb-12">
