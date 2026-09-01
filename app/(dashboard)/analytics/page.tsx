@@ -34,23 +34,23 @@ export default function AnalyticsPage() {
     <div className="flex flex-col h-full gap-8 max-w-[1400px] mx-auto pb-12">
       <div className="flex justify-between items-end">
         <div className="flex flex-col gap-1">
-          <h1 className="text-2xl lg:text-3xl font-bold tracking-tight text-text-primary uppercase">
-            ANALYTICS
-          </h1>
-          <div className="text-sm text-text-primary font-mono mt-1">
-            Recovery performance across the current test-mode simulation.
+          <div className="text-[11px] font-bold tracking-[0.12em] uppercase text-text-secondary">
+            Analytics
           </div>
+          <h1 className="text-2xl lg:text-3xl font-bold tracking-tight text-text-primary">
+            Revenue recovery, measured and attributable.
+          </h1>
           <div className="text-[10px] uppercase tracking-widest font-bold text-active bg-active-bg px-2 py-1 mt-2 inline-block self-start border border-active">
-            Demo workspace · 100 synthetic cases · Test-mode simulation
+            Razorpay Live Webhooks
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <MetricCard title="REVENUE AT RISK" value={formatCurrency(metrics.amount_at_risk)} detail="100 failed payments" />
-        <MetricCard title="RECOVERED REVENUE" value={formatCurrency(metrics.amount_recovered)} detail="from AI interventions" isPositive={true} />
-        <MetricCard title="RECOVERY RATE" value={`${(metrics.cases_recovered / metrics.cases_opened * 100).toFixed(1)}%`} detail={`${metrics.cases_recovered} of ${metrics.cases_opened} cases`} />
-        <MetricCard title="CONTACTS AVOIDED" value="37" detail="Bank downtime detected" isWarning={true} />
+        <MetricCard title="REVENUE AT RISK" value={`₹${formatCurrency(metrics.revenue_at_risk_paise || 0)}`} detail={`${metrics.cases_opened || 0} failed payments`} />
+        <MetricCard title="RECOVERED REVENUE" value={`₹${formatCurrency(metrics.recovered_revenue_paise || 0)}`} detail="from AI interventions" isPositive={true} />
+        <MetricCard title="RECOVERY RATE" value={`${metrics.recovery_rate || 0}%`} detail={`${metrics.cases_recovered || 0} of ${metrics.cases_opened || 0} cases`} />
+        <MetricCard title="CONTACTS AVOIDED" value={(metrics.contacts_avoided || 0).toString()} detail="Bank downtime detected" isWarning={true} />
       </div>
 
       <div className="sharp-card p-6 border-l-4 border-l-active">
@@ -70,32 +70,32 @@ export default function AnalyticsPage() {
               <tr className="border-b border-border/50 hover:bg-neutral-bg transition-colors">
                 <td className="py-3 px-4 text-text-secondary">Recovery rate</td>
                 <td className="py-3 px-4">37.8%</td>
-                <td className="py-3 px-4 font-bold text-recovered">{((metrics.cases_recovered / metrics.cases_opened) * 100).toFixed(1)}%</td>
+                <td className="py-3 px-4 font-bold text-recovered">{metrics.recovery_rate || 0}%</td>
               </tr>
               <tr className="border-b border-border/50 hover:bg-neutral-bg transition-colors">
                 <td className="py-3 px-4 text-text-secondary">Recovered revenue</td>
-                <td className="py-3 px-4">₹29,800</td>
-                <td className="py-3 px-4 font-bold text-recovered">{formatCurrency(metrics.amount_recovered)}</td>
+                <td className="py-3 px-4">₹0</td>
+                <td className="py-3 px-4 font-bold text-recovered">₹{formatCurrency(metrics.recovered_revenue_paise || 0)}</td>
               </tr>
               <tr className="border-b border-border/50 hover:bg-neutral-bg transition-colors">
                 <td className="py-3 px-4 text-text-secondary">Customer contacts</td>
-                <td className="py-3 px-4">100 (All cases)</td>
-                <td className="py-3 px-4 font-bold">{metrics.cases_contacted} (Bounded)</td>
+                <td className="py-3 px-4">{metrics.cases_opened || 0} (All cases)</td>
+                <td className="py-3 px-4 font-bold">{(metrics.calls_placed || 0) + (metrics.whatsapps_sent || 0)} (Bounded)</td>
               </tr>
               <tr className="border-b border-border/50 hover:bg-neutral-bg transition-colors">
                 <td className="py-3 px-4 text-text-secondary">Contacts avoided</td>
                 <td className="py-3 px-4 text-lost">0</td>
-                <td className="py-3 px-4 font-bold text-waiting">37 (Downtime)</td>
+                <td className="py-3 px-4 font-bold text-waiting">{metrics.contacts_avoided || 0} (Downtime)</td>
               </tr>
               <tr className="border-b border-border/50 hover:bg-neutral-bg transition-colors">
                 <td className="py-3 px-4 text-text-secondary">Cost per recovery</td>
                 <td className="py-3 px-4">₹0</td>
-                <td className="py-3 px-4 font-bold">₹79</td>
+                <td className="py-3 px-4 font-bold">₹{metrics.cost_per_recovery || 0}</td>
               </tr>
               <tr className="hover:bg-neutral-bg transition-colors">
                 <td className="py-3 px-4 text-text-secondary">Unresolved cases</td>
-                <td className="py-3 px-4">62</td>
-                <td className="py-3 px-4 font-bold">{metrics.cases_opened - metrics.cases_recovered}</td>
+                <td className="py-3 px-4">{metrics.cases_opened || 0}</td>
+                <td className="py-3 px-4 font-bold">{(metrics.cases_opened || 0) - (metrics.cases_recovered || 0)}</td>
               </tr>
             </tbody>
           </table>
@@ -111,23 +111,23 @@ export default function AnalyticsPage() {
             <div className="flex flex-col gap-6 font-mono text-sm">
               <div className="flex justify-between items-center">
                 <span className="text-text-primary uppercase">Detected</span>
-                <span className="font-bold">{metrics.cases_opened}</span>
+                <span className="font-bold">{metrics.cases_opened || 0}</span>
               </div>
               <div className="flex justify-between items-center border-l-2 border-border pl-4 ml-2">
                 <span className="text-text-secondary uppercase">Diagnosed</span>
-                <span className="font-bold">{metrics.cases_opened}</span>
+                <span className="font-bold">{metrics.cases_opened || 0}</span>
               </div>
               <div className="flex justify-between items-center border-l-2 border-border pl-4 ml-4">
                 <span className="text-text-secondary uppercase">Intervention Scheduled</span>
-                <span className="font-bold">{metrics.cases_opened}</span>
+                <span className="font-bold">{metrics.cases_opened || 0}</span>
               </div>
               <div className="flex justify-between items-center border-l-2 border-active pl-4 ml-6">
                 <span className="text-active uppercase font-bold">Contacted</span>
-                <span className="font-bold">63</span>
+                <span className="font-bold">{(metrics.calls_placed || 0) + (metrics.whatsapps_sent || 0)}</span>
               </div>
               <div className="flex justify-between items-center border-l-2 border-recovered pl-4 ml-8 bg-recovered-bg p-2">
                 <span className="text-recovered font-bold uppercase">Recovered</span>
-                <span className="font-bold text-recovered">61</span>
+                <span className="font-bold text-recovered">{metrics.cases_recovered || 0}</span>
               </div>
             </div>
           </div>
@@ -169,7 +169,7 @@ export default function AnalyticsPage() {
             <div className="w-full bg-neutral-bg h-1.5"><div className="bg-recovered h-full" style={{ width: '7%' }}></div></div>
             
             <div className="mt-4 p-3 bg-waiting-bg border-l-2 border-waiting text-waiting text-xs">
-              37 cases were actively suppressed during downtime and recovered via Smart Retry without any customer friction.
+              {metrics.contacts_avoided || 0} cases were actively suppressed during downtime and recovered via Smart Retry without any customer friction.
             </div>
           </div>
         </div>
