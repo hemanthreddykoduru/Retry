@@ -21,8 +21,31 @@ export default function IntegrationClient({ apiKey, appUrl }: { apiKey: string, 
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="flex flex-col gap-6">
-          {/* Razorpay Webhooks */}
+          {/* Merchant Connection */}
           <div className="sharp-card p-6 border-l-4 border-l-active">
+            <h2 className="text-[11px] font-bold tracking-[0.12em] uppercase text-text-secondary mb-6 border-b border-border pb-2">
+              Merchant Account
+            </h2>
+            <div className="flex flex-col gap-4">
+              <div className="flex justify-between items-center">
+                <span className="font-bold text-lg">NotesBay</span>
+                <span className="bg-active-bg border border-active text-active px-2 py-1 text-[10px] uppercase tracking-widest font-bold">RAZORPAY TEST MODE</span>
+              </div>
+              <div className="bg-neutral-bg border border-border p-3 text-sm text-text-secondary font-mono">
+                Production merchant onboarding: Razorpay authorization; secrets are never requested or displayed.
+              </div>
+              <div className="bg-waiting-bg border border-waiting p-3 text-sm text-waiting font-mono flex items-center gap-2">
+                <ShieldCheck size={16} className="shrink-0" />
+                Retry never asks merchants to share a Razorpay Key Secret.
+              </div>
+              <button disabled className="btn-primary opacity-50 cursor-not-allowed uppercase tracking-widest text-xs mt-2">
+                Connect Razorpay — Coming Soon
+              </button>
+            </div>
+          </div>
+
+          {/* Razorpay Webhooks */}
+          <div className="sharp-card p-6">
             <h2 className="text-[11px] font-bold tracking-[0.12em] uppercase text-text-secondary mb-6 border-b border-border pb-2">
               1. Razorpay Webhooks
             </h2>
