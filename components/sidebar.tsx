@@ -76,9 +76,9 @@ const SidebarContent = ({ navClass }: { navClass: (path: string) => string }) =>
       <div className="flex flex-col gap-1">
         <div className="text-sm font-bold truncate">Hemanth R.</div>
         <div className="text-xs text-text-secondary truncate mb-2">NammaMart Demo Store</div>
-        <button className="flex items-center gap-2 text-xs text-text-secondary hover:text-text-primary transition-colors">
+        <Link href="/login" className="flex items-center gap-2 text-xs text-text-secondary hover:text-text-primary transition-colors">
           <LogOut size={12} /> Log out
-        </button>
+        </Link>
       </div>
     </div>
   </div>
