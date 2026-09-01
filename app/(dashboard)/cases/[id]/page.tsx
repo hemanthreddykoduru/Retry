@@ -40,7 +40,7 @@ export default function CaseDetailPage() {
   const toggleWebhook = async () => {
     if (!webhookOpen && !rawPayload) {
       try {
-        const res = await fetch(`/api/recovery-cases/${c.id}/payload`);
+        const res = await fetch(`/api/recovery-cases/${c?.id}/payload`);
         const data = await res.json();
         setRawPayload(data.payload);
       } catch (e) {
