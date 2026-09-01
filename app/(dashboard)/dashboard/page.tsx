@@ -4,7 +4,7 @@ import { MetricCard } from "@/components/metric-card";
 import { ReceiptRow } from "@/components/receipt-row";
 import { DiagnosisBreakdown } from "@/components/diagnosis-breakdown";
 import { useState, useEffect } from "react";
-import { formatCurrency, metricsData, RecoveryCase, mockCases, ReceiptEvent } from "@/lib/demo-data";
+import { formatCurrency, metricsData, RecoveryCase, ReceiptEvent } from "@/lib/demo-data";
 import { StatusBadge } from "@/components/status-badge";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 
@@ -37,7 +37,7 @@ export default function Dashboard() {
     return () => clearInterval(interval);
   }, []);
 
-  const liveFeed = feed.length > 0 ? feed : mockCases.filter(c => c.status === "recovered").slice(0, 5);
+  const liveFeed = feed;
 
   return (
     <div className="max-w-[1400px] mx-auto flex flex-col gap-8 pb-10">
@@ -95,8 +95,13 @@ export default function Dashboard() {
           </div>
           
           <div className="flex flex-col">
-            {liveFeed.map((receipt, idx) => {
-              const mapped = {
+            {liveFeed.length === 0 ? (
+              <div className="p-8 text-center text-sm font-mono text-text-secondary border-b border-border">
+                No recent live recoveries yet. Awaiting webhooks.
+              </div>
+            ) : (
+              liveFeed.map((receipt, idx) => {
+                const mapped = {
                 id: receipt.id,
                 time: "Just now",
                 event: receipt.status === 'recovered' ? 'Recovered via Smart Retry' : 'Case updated',
@@ -105,8 +110,9 @@ export default function Dashboard() {
                 detail: receipt.failure_reason,
                 state: receipt.status
               };
-              return <ReceiptRow key={receipt.id + idx} event={mapped as unknown as ReceiptEvent} />;
-            })}
+                return <ReceiptRow key={receipt.id + idx} event={mapped as unknown as ReceiptEvent} />;
+              })
+            )}
           </div>
           
           <div className="p-4 bg-neutral-bg border-t border-border flex justify-between items-center text-xs font-mono uppercase tracking-widest text-text-secondary">

@@ -10,27 +10,27 @@ export default function CasesPage() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [causeFilter, setCauseFilter] = useState("all");
-  const [mockCases, setMockCases] = useState<RecoveryCase[]>([]);
+  const [cases, setCases] = useState<RecoveryCase[]>([]);
 
   const refreshState = async () => {
     const res = await fetch('/api/demo/state');
     const data = await res.json();
-    setMockCases(data.cases);
+    setCases(data.cases);
   };
 
   useEffect(() => {
     fetch('/api/demo/state').then(r => r.json()).then(data => {
-      setMockCases(data.cases);
+      setCases(data.cases);
     });
     const interval = setInterval(() => {
       fetch('/api/demo/state').then(r => r.json()).then(data => {
-        setMockCases(data.cases);
+        setCases(data.cases);
       });
     }, 2000);
     return () => clearInterval(interval);
   }, []);
 
-  const filteredCases = mockCases.filter(c => {
+  const filteredCases = cases.filter(c => {
     if (statusFilter !== "all" && c.status !== statusFilter) return false;
     if (causeFilter !== "all" && c.root_cause !== causeFilter) return false;
     if (search) {
@@ -89,7 +89,7 @@ export default function CasesPage() {
             RECOVERY CASES
           </h1>
           <div className="text-xs font-mono tracking-widest uppercase text-text-secondary">
-            112 cases detected · ₹83,600 revenue at risk
+            {cases.length} cases detected · ₹{formatCurrency(cases.reduce((sum, c) => sum + c.amount, 0))} revenue at risk
           </div>
         </div>
         
