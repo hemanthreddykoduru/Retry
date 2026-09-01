@@ -11,8 +11,14 @@ export async function POST(request: Request) {
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
-    // Return token and user info
-    return NextResponse.json({ user: data.user, token: data.session?.access_token }, { status: 200 });
+    if (!data) {
+      return NextResponse.json({ error: 'Authentication failed' }, { status: 500 });
+    }
+    // Return token and user info safely
+    return NextResponse.json({
+      user: data.user,
+      token: data.accessToken ?? null,
+    }, { status: 200 });
   } catch (e: any) {
     return NextResponse.json({ error: e.message || 'Server error' }, { status: 500 });
   }
