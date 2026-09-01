@@ -58,7 +58,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <MetricCard
           title="RECOVERED REVENUE"
-          value={`₹${formatCurrency(metrics.recovered_revenue_paise)}`}
+          value={formatCurrency(metrics.recovered_revenue_paise || 0)}
           detail={`+${metrics.recovered_revenue_trend}% vs baseline`}
           isPositive={true}
         />

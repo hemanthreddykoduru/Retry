@@ -47,8 +47,8 @@ export default function AnalyticsPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <MetricCard title="REVENUE AT RISK" value={`₹${formatCurrency(metrics.revenue_at_risk_paise || 0)}`} detail={`${metrics.cases_opened || 0} failed payments`} />
-        <MetricCard title="RECOVERED REVENUE" value={`₹${formatCurrency(metrics.recovered_revenue_paise || 0)}`} detail="from AI interventions" isPositive={true} />
+        <MetricCard title="REVENUE AT RISK" value={formatCurrency(metrics.revenue_at_risk_paise || 0)} detail={`${metrics.cases_opened || 0} failed payments`} />
+        <MetricCard title="RECOVERED REVENUE" value={formatCurrency(metrics.recovered_revenue_paise || 0)} detail="from AI interventions" isPositive={true} />
         <MetricCard title="RECOVERY RATE" value={`${metrics.recovery_rate || 0}%`} detail={`${metrics.cases_recovered || 0} of ${metrics.cases_opened || 0} cases`} />
         <MetricCard title="CONTACTS AVOIDED" value={(metrics.contacts_avoided || 0).toString()} detail="Bank downtime detected" isWarning={true} />
       </div>
@@ -75,7 +75,7 @@ export default function AnalyticsPage() {
               <tr className="border-b border-border/50 hover:bg-neutral-bg transition-colors">
                 <td className="py-3 px-4 text-text-secondary">Recovered revenue</td>
                 <td className="py-3 px-4">₹0</td>
-                <td className="py-3 px-4 font-bold text-recovered">₹{formatCurrency(metrics.recovered_revenue_paise || 0)}</td>
+                <td className="py-3 px-4 font-bold text-recovered">{formatCurrency(metrics.recovered_revenue_paise || 0)}</td>
               </tr>
               <tr className="border-b border-border/50 hover:bg-neutral-bg transition-colors">
                 <td className="py-3 px-4 text-text-secondary">Customer contacts</td>
