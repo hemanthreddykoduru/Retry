@@ -44,7 +44,7 @@ export async function POST(request: Request) {
 
     await sql`
       UPDATE merchants 
-      SET voice_call_threshold = ${thresholdPaise}, policies = ${policies}
+      SET voice_call_threshold = ${thresholdPaise}, policies = ${sql.json(policies as any)}
       WHERE id = ${MERCHANT_ID}
     `;
 
