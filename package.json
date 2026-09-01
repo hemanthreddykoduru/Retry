@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "seed": "tsx scripts/seed-insforge.ts",
-    "verify:db": "tsx scripts/verify-insforge.ts"
+    "verify:db": "tsx scripts/verify-insforge.ts",
+    "test:webhook": "tsx scripts/test-razorpay-webhook.ts"
   },
   "dependencies": {
     "@insforge/sdk": "^1.5.2",

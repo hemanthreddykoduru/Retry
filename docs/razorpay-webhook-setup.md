@@ -1,18 +1,27 @@
-# Razorpay Webhook Setup
+# Manual Razorpay Dashboard Setup
 
-To connect Retry to a live Razorpay test-mode account:
-
-1. Log in to your [Razorpay Dashboard](https://dashboard.razorpay.com/).
-2. Ensure you are in **Test Mode**.
-3. Navigate to **Account & Settings** > **Webhooks**.
-4. Click **Add New Webhook**.
-5. Set the **Webhook URL** to your hosted production domain or ngrok tunnel: `https://your-domain.com/api/webhooks/razorpay`
-6. Enter a strong **Secret** (e.g., `whsec_test_...`) and save it in your `.env.local` as `RAZORPAY_WEBHOOK_SECRET`.
-7. **Select Events:**
+1. Open Razorpay Dashboard.
+2. Switch to **Test Mode**.
+3. Go to **Settings → Webhooks → Add New Webhook**.
+4. Set URL:
+   `https://retry-buildathon.vercel.app/api/webhooks/razorpay`
+5. Create a dedicated strong webhook secret.
+6. Save the same secret only as `RAZORPAY_WEBHOOK_SECRET` in Retry’s Vercel environment variables.
+7. Redeploy Retry after environment variable changes.
+8. Select:
    - `payment.failed`
-   - `payment.authorized`
    - `payment.captured`
+   - `order.paid`
    - `payment_link.paid`
-8. Click **Save Webhook**.
+   - `payment_link.expired`
+   - `payment.downtime.started`
+   - `payment.downtime.updated`
+   - `payment.downtime.resolved`
+9. Use Razorpay “Test Webhook” with `payment.failed`.
+10. Check Razorpay delivery response, Vercel function logs, InsForge `payment_events`, and Retry `/cases`.
 
-Your test-mode payment failures will now automatically stream into the Retry engine.
+**Important:**
+- NotesBay’s existing webhook remains unchanged.
+- Retry uses a second webhook endpoint.
+- Both endpoints may receive `order.paid` independently.
+- Test-mode configuration must be used with test-mode keys/events.
