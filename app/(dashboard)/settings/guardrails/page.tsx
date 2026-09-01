@@ -33,7 +33,8 @@ export default function GuardrailsPage() {
     enforceDND: true,
     suppressDowntime: true,
     exactAmountOnly: true,
-    escalateFailures: true
+    escalateFailures: true,
+    delayMinutes: "5"
   };
 
   const [state, setState] = useState(defaultState);
@@ -145,6 +146,25 @@ export default function GuardrailsPage() {
                 className="px-3 py-1.5 border border-border bg-surface focus:outline-none w-28"
               />
             </div>
+          </SettingRow>
+
+          <SettingRow 
+            label="Recovery Delay (Cool-off)" 
+            description="Time to wait after a failure before initiating the first automated contact."
+          >
+            <select 
+              value={state.delayMinutes} 
+              onChange={(e) => handleChange('delayMinutes', e.target.value)}
+              className="px-3 py-1.5 border border-border bg-surface text-sm focus:outline-none w-36 font-mono"
+            >
+              <option value="0">Immediate</option>
+              <option value="1">1 Minute</option>
+              <option value="2">2 Minutes</option>
+              <option value="5">5 Minutes</option>
+              <option value="10">10 Minutes</option>
+              <option value="15">15 Minutes</option>
+              <option value="30">30 Minutes</option>
+            </select>
           </SettingRow>
 
           <SettingRow 
