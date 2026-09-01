@@ -9,7 +9,7 @@ export default function SignupPage() {
         <p className="text-sm text-text-secondary mt-1">Create your Retry account.</p>
       </div>
       
-      <form className="flex flex-col" action="/verify-email">
+      <form className="flex flex-col" action="/api/auth/signup">
         <FormField label="Full name" id="name" required />
         <FormField label="Business/merchant name" id="business_name" required />
         <FormField label="Work email" id="email" type="email" placeholder="you@company.com" required />
