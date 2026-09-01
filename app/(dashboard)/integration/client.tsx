@@ -1,8 +1,17 @@
 "use client";
 
 import { Copy, AlertTriangle, ShieldCheck, CheckCircle2, ServerCrash, XCircle } from "lucide-react";
+import { useEffect, useState } from "react";
 
-export default function IntegrationClient({ apiKey, appUrl }: { apiKey: string, appUrl: string }) {
+export default function IntegrationClient({ apiKey, appUrl: serverAppUrl }: { apiKey: string, appUrl: string }) {
+  const [appUrl, setAppUrl] = useState(serverAppUrl);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setAppUrl(window.location.origin);
+    }
+  }, []);
+
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     alert('Copied to clipboard');
