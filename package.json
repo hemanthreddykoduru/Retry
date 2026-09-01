@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed": "tsx scripts/seed-insforge.ts",
+    "verify:db": "tsx scripts/verify-insforge.ts"
   },
   "dependencies": {
     "@insforge/sdk": "^1.5.2",

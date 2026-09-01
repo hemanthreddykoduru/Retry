@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { sql } from './db';
 import { transitionState } from './recovery-state-machine';
 
@@ -89,10 +90,15 @@ export const RecoveryServiceDB = {
           plink = `plink_test${Math.floor(Math.random()*10000)}`;
         }
 
-        await tx`UPDATE recovery_cases SET status = ${nextStatus}, razorpay_payment_link_id = ${plink} WHERE id = ${caseId}`;
+        let updateQuery = tx`UPDATE recovery_cases SET status = ${nextStatus}, razorpay_payment_link_id = ${plink} WHERE id = ${caseId}`;
+        if (isRecoveredNow) {
+          updateQuery = tx`UPDATE recovery_cases SET status = ${nextStatus}, razorpay_payment_link_id = ${plink}, recovered_amount = ${c.amount} WHERE id = ${caseId}`;
+        }
+        await updateQuery;
         
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await tx`INSERT INTO audit_log (recovery_case_id, actor, action, reasoning, metadata) 
-                 VALUES (${caseId}, 'system', ${auditAction}, ${auditReasoning}, ${tx.json(metadata as unknown as Record<string, unknown>)})`;
+                 VALUES (${caseId}, 'system', ${auditAction}, ${auditReasoning}, ${tx.json(metadata as any)})`;
 
         if (addIntervention) {
           await tx`INSERT INTO interventions (recovery_case_id, type, status)
@@ -100,6 +106,9 @@ export const RecoveryServiceDB = {
         }
 
         if (isRecoveredNow) {
+          // Cancel outstanding interventions
+          await tx`UPDATE interventions SET status = 'skipped' WHERE recovery_case_id = ${caseId} AND status = 'queued'`;
+
           // Atomic metrics update
           const dateStr = new Date().toISOString().split('T')[0];
           await tx`UPDATE daily_metrics SET 

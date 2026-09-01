@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { verifySarvamWebhookSignature, normalizeSarvamCallOutcome } from '@/lib/sarvam';
-import { RecoveryService } from '@/lib/recovery-service';
+import { RecoveryServiceDB } from '@/lib/recovery-service-db';
 
 export async function POST(request: Request) {
   // 1. Read Raw Body for signature verification
@@ -45,7 +45,7 @@ export async function POST(request: Request) {
   const internalEvent = sarvamEventMap[outcome] || 'sarvam.unknown';
   
   try {
-    RecoveryService.processEvent(recoveryCaseId, internalEvent, { callId, provider_payload: payload });
+    await RecoveryServiceDB.processEvent(recoveryCaseId, internalEvent, { callId, provider_payload: payload });
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error(`[PROCESS] Error processing Sarvam outcome: ${error.message}`);

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { sql } from '../db';
 import type { RecoveryCase } from '../demo-data';
 
@@ -22,5 +23,9 @@ export const RecoveryCasesRepository = {
       ORDER BY rc.opened_at DESC
     `;
     return rows;
+  },
+  update: async (id: string, data: Partial<any>) => {
+    const [c] = await sql`UPDATE recovery_cases SET ${sql(data)} WHERE id = ${id} RETURNING *`;
+    return c;
   }
 };

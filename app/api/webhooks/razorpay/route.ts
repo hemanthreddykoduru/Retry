@@ -1,9 +1,7 @@
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
-import { RecoveryService } from '@/lib/recovery-service';
-
-// Basic idempotency store (in-memory for demo)
-const processedEvents = new Set<string>();
+import { RecoveryServiceDB } from '@/lib/recovery-service-db';
+import { PaymentEventsRepository } from '@/lib/repositories/payment-events';
 
 export async function POST(request: Request) {
   try {
@@ -45,7 +43,14 @@ export async function POST(request: Request) {
     const eventId = payload.id || `synthetic_${Date.now()}`;
     const event = payload.event;
     
-    if (processedEvents.has(eventId)) {
+    // Store in payment_events first for idempotency
+    const inserted = await PaymentEventsRepository.insert({
+      razorpay_event_id: eventId,
+      event_type: event,
+      payload: payload
+    });
+
+    if (!inserted) {
       return NextResponse.json({ success: true, message: 'Event already processed idempotently' });
     }
 
@@ -53,11 +58,11 @@ export async function POST(request: Request) {
     // For demo, we just extract it from notes or use a default test case.
     const caseId = payload.payload?.payment?.entity?.notes?.recovery_case_id || 
                    payload.payload?.payment_link?.entity?.notes?.recovery_case_id ||
-                   'rc_c931'; // Fallback to main demo case
+                   '20000000-0000-0000-0000-000000000003'; // Fallback to main demo case (uuid instead of rc_c931)
 
-    RecoveryService.processEvent(caseId, event, { eventId, synthetic: !!payload.synthetic });
+    await RecoveryServiceDB.processEvent(caseId, event, { eventId, synthetic: !!payload.synthetic });
     
-    processedEvents.add(eventId);
+    await PaymentEventsRepository.markProcessed(inserted.id);
     
     return NextResponse.json({ success: true, event });
   } catch (error: unknown) {

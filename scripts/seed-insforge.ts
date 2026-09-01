@@ -51,6 +51,26 @@ async function seed() {
     if (error) console.error('Case error:', error);
   }
 
+  // Interventions & Audit Logs
+  const interventions = [
+    { recovery_case_id: cases[2].id, type: 'voice_call', status: 'completed', outcome: 'promise_to_pay' }
+  ];
+  for (const int of interventions) {
+    const { error } = await insforge.database.from('interventions').insert(int);
+    if (error) console.error('Intervention error:', error);
+  }
+
+  const auditLogs = cases.map(c => ({
+    recovery_case_id: c.id,
+    actor: 'system',
+    action: 'case_opened',
+    reasoning: 'Automated failure detection'
+  }));
+  for (const al of auditLogs) {
+    const { error } = await insforge.database.from('audit_log').insert(al);
+    if (error) console.error('AuditLog error:', error);
+  }
+
   // 4. Metrics
   const { error: metErr } = await insforge.database.from('daily_metrics').upsert({
     merchant_id: mId,
