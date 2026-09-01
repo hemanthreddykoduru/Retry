@@ -33,9 +33,18 @@ async function getOrCreateRecoveryCase(payload: any) {
     customerId = inserted[0].id;
   }
   
+  const failureCode = payment.error_code || null;
+  const failureReason = payment.error_description || payment.error_reason || null;
+  
+  // Basic root cause mapping
+  let rootCause = 'unknown';
+  if (failureCode?.includes('BAD_REQUEST') || failureReason?.includes('bank')) rootCause = 'bank_downtime';
+  else if (failureCode?.includes('INSUFFICIENT')) rootCause = 'insufficient_funds';
+  else if (failureReason?.includes('network') || failureReason?.includes('timeout')) rootCause = 'network_drop';
+
   const insertedCase = await sql`
-    INSERT INTO recovery_cases (merchant_id, customer_id, amount, trigger_source, root_cause, status)
-    VALUES (${merchantId}, ${customerId}, ${payment.amount || 0}, 'payment_failed_webhook', 'insufficient_funds', 'open')
+    INSERT INTO recovery_cases (merchant_id, customer_id, amount, trigger_source, failure_code, failure_reason, root_cause, status)
+    VALUES (${merchantId}, ${customerId}, ${payment.amount || 0}, 'payment_failed_webhook', ${failureCode}, ${failureReason}, ${rootCause}, 'open')
     RETURNING id
   `;
   
