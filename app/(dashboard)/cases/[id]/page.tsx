@@ -54,8 +54,11 @@ export default function CaseDetailPage() {
 
   const maskPhone = (phone: string) => {
     if (!phone) return "—";
-    const last4 = phone.slice(-4);
-    return `+91 98••• ${last4}`;
+    const cleanPhone = phone.replace('+91', '');
+    if (cleanPhone.length < 10) return phone;
+    const first2 = cleanPhone.slice(0, 2);
+    const last4 = cleanPhone.slice(-4);
+    return `+91 ${first2}••• ${last4}`;
   };
 
   const formatRootCause = (rc: string) => {
@@ -215,8 +218,16 @@ export default function CaseDetailPage() {
           
           <div className="bg-neutral-bg border border-border p-4 font-mono text-xs text-text-secondary italic">
             <div className="font-bold text-text-primary mb-2 not-italic text-[10px] uppercase tracking-widest">Transcript Preview</div>
-            &quot;Avunu, nenu payment complete chesthanu. Link pampandi.&quot;<br/><br/>
-            [System: intent classified as PROMISE_TO_PAY. Sent link request to Payment Link fallback.]
+            {c.status === 'promise_logged' ? (
+              <>
+                "Avunu, nenu payment complete chesthanu. Link pampandi."<br/><br/>
+                [System: intent classified as PROMISE_TO_PAY. Sent link request to Payment Link fallback.]
+              </>
+            ) : c.status === 'contacting' ? (
+              "Call in progress... Waiting for customer answer."
+            ) : (
+              "Call not initiated yet."
+            )}
           </div>
         </div>
 
@@ -228,7 +239,7 @@ export default function CaseDetailPage() {
             <div className="flex flex-col gap-4 font-mono text-sm">
               <div className="flex justify-between items-center">
                 <span className="text-text-secondary">Quiet hours check</span>
-                <span className="text-recovered">PASS (15:11 IST)</span>
+                <span className="text-recovered">PASS ({new Date(c.opened_at).toLocaleTimeString('en-IN', { hour12: false, hour: '2-digit', minute: '2-digit' })} IST)</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-text-secondary">Amount threshold</span>
@@ -236,19 +247,19 @@ export default function CaseDetailPage() {
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-text-secondary">DND status</span>
-                <span className="text-recovered">PASS</span>
+                <span className={c.customer?.do_not_contact ? 'text-lost font-bold' : 'text-recovered'}>{c.customer?.do_not_contact ? 'FAIL' : 'PASS'}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-text-secondary">Max attempts</span>
-                <span className="text-recovered">PASS (1/2)</span>
+                <span className="text-recovered">PASS ({c.attempt_count}/{c.max_attempts})</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-text-secondary">Bank downtime check</span>
-                <span className="text-recovered">PASS (Operational)</span>
+                <span className={c.root_cause === 'bank_downtime' ? 'text-lost font-bold' : 'text-recovered'}>{c.root_cause === 'bank_downtime' ? 'FAIL' : 'PASS'}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-text-secondary">Original amount only</span>
-                <span className="text-recovered">ENFORCED (₹1,999)</span>
+                <span className="text-recovered">ENFORCED ({formatCurrency(c.amount)})</span>
               </div>
             </div>
           </div>
