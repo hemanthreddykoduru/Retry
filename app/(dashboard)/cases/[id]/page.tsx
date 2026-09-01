@@ -57,7 +57,11 @@ export default function CaseDetailPage() {
   // Demo controls alert
   const simulateAction = async (action: string) => {
     try {
-      const res = await fetch(`/api/demo/events/${action}`, { method: 'POST' });
+      const res = await fetch(`/api/demo/events/${action}`, { 
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ caseId: c.id })
+      });
       const data = await res.json();
       alert(`Demo: ${data.message || 'Action executed'}`);
     } catch(err) {

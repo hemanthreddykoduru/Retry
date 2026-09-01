@@ -10,31 +10,30 @@ export async function POST(
   try {
     let message = '';
     
+    const body = await request.json().catch(() => ({}));
+    const caseId = body.caseId;
+    if (!caseId) return NextResponse.json({ error: 'Missing caseId' }, { status: 400 });
+
     switch (action) {
-      case 'insufficient_funds':
-        await RecoveryServiceDB.processEvent('20000000-0000-0000-0000-000000000003', 'payment.failed', { synthetic: true });
-        await RecoveryServiceDB.processEvent('20000000-0000-0000-0000-000000000003', 'sarvam.promise_to_pay', { synthetic: true });
-        message = 'Triggered payment.failed and sarvam.promise_to_pay';
+      case 'promise':
+        await RecoveryServiceDB.processEvent(caseId, 'sarvam.promise_to_pay', { synthetic: true });
+        message = 'Simulated Sarvam promise_to_pay outcome';
         break;
-      case 'bank_downtime':
-        await RecoveryServiceDB.processEvent('20000000-0000-0000-0000-000000000001', 'payment.failed', { synthetic: true });
-        await RecoveryServiceDB.processEvent('20000000-0000-0000-0000-000000000001', 'downtime.started', { synthetic: true });
-        message = 'Triggered payment.failed and downtime.started';
+      case 'link':
+        await RecoveryServiceDB.processEvent(caseId, 'sarvam.link_requested', { synthetic: true });
+        message = 'Simulated Sarvam link_requested outcome';
         break;
-      case 'no_answer':
-        await RecoveryServiceDB.processEvent('20000000-0000-0000-0000-000000000002', 'payment.failed', { synthetic: true });
-        await RecoveryServiceDB.processEvent('20000000-0000-0000-0000-000000000002', 'sarvam.no_answer', { synthetic: true });
-        message = 'Triggered sarvam.no_answer, scheduled second attempt';
+      case 'optout':
+        await RecoveryServiceDB.processEvent(caseId, 'sarvam.do_not_contact', { synthetic: true });
+        message = 'Simulated customer opt-out';
         break;
-      case 'opt_out':
-        await RecoveryServiceDB.processEvent('20000000-0000-0000-0000-000000000004', 'payment.failed', { synthetic: true });
-        await RecoveryServiceDB.processEvent('20000000-0000-0000-0000-000000000004', 'sarvam.do_not_contact', { synthetic: true });
-        message = 'Triggered sarvam.do_not_contact / customer opt-out';
+      case 'noanswer':
+        await RecoveryServiceDB.processEvent(caseId, 'sarvam.no_answer', { synthetic: true });
+        message = 'Simulated no answer';
         break;
-      case 'sarvam_failure':
-        await RecoveryServiceDB.processEvent('20000000-0000-0000-0000-000000000005', 'payment.failed', { synthetic: true });
-        await RecoveryServiceDB.processEvent('20000000-0000-0000-0000-000000000005', 'sarvam.call_failed', { synthetic: true });
-        message = 'Triggered sarvam.call_failed';
+      case 'sarvam_fail':
+        await RecoveryServiceDB.processEvent(caseId, 'sarvam.call_failed', { synthetic: true });
+        message = 'Simulated Sarvam call_failed';
         break;
       default:
         return NextResponse.json({ error: 'Unknown demo action' }, { status: 400 });
