@@ -4,12 +4,11 @@ import { insforge } from '@/lib/insforge';
 export async function POST(request: Request) {
   try {
     const { name, business_name, email, password } = await request.json();
-    const { data, error } = await insforge.auth.signUpWithPassword({
+    const { data, error } = await insforge.auth.signUp({
       email,
       password,
-      options: {
-        data: { name, business_name }
-      }
+      name,
+      // business_name is not part of CreateUserRequest; handle separately if needed
     });
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 400 });
