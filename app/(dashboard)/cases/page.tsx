@@ -11,6 +11,7 @@ export default function CasesPage() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [causeFilter, setCauseFilter] = useState("all");
   const [cases, setCases] = useState<RecoveryCase[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const refreshState = async () => {
     const merchantId = typeof window !== 'undefined' ? localStorage.getItem('retry_merchant_id') : null;
@@ -27,6 +28,7 @@ export default function CasesPage() {
 
     fetch('/api/demo/state', { headers }).then(r => r.json()).then(data => {
       setCases(data.cases);
+      setIsLoading(false);
     });
     const interval = setInterval(() => {
       fetch('/api/demo/state', { headers }).then(r => r.json()).then(data => {
@@ -94,8 +96,10 @@ export default function CasesPage() {
           <h1 className="text-2xl font-bold tracking-tight text-text-primary uppercase">
             RECOVERY CASES
           </h1>
-          <div className="text-xs font-mono tracking-widest uppercase text-text-secondary">
-            {cases.length} cases detected · ₹{formatCurrency(cases.reduce((sum, c) => sum + c.amount, 0))} revenue at risk
+          <div className="flex flex-col gap-2">
+            <div className="text-[11px] font-medium tracking-[0.12em] uppercase text-text-secondary flex items-center gap-1">
+              {isLoading ? <span className="inline-block w-4 h-3 bg-neutral-bg animate-pulse rounded"></span> : filteredCases.length} CASES DETECTED · {isLoading ? <span className="inline-block w-12 h-3 bg-neutral-bg animate-pulse rounded"></span> : formatCurrency(filteredCases.reduce((sum, c) => sum + c.amount, 0))} REVENUE AT RISK
+            </div>
           </div>
         </div>
         
@@ -153,7 +157,34 @@ export default function CasesPage() {
         </div>
 
         <div className="flex flex-col min-w-[1000px] flex-1">
-          {filteredCases.length === 0 ? (
+          {isLoading ? (
+            Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="grid grid-cols-12 gap-4 p-4 border-b border-border/50 animate-pulse items-center">
+                <div className="col-span-2">
+                  <div className="h-4 bg-neutral-bg rounded w-24 mb-2"></div>
+                  <div className="h-3 bg-neutral-bg rounded w-16"></div>
+                </div>
+                <div className="col-span-2">
+                  <div className="h-4 bg-neutral-bg rounded w-32 mb-2"></div>
+                  <div className="h-3 bg-neutral-bg rounded w-24"></div>
+                </div>
+                <div className="col-span-1 flex justify-end">
+                  <div className="h-4 bg-neutral-bg rounded w-16"></div>
+                </div>
+                <div className="col-span-2">
+                  <div className="h-4 bg-neutral-bg rounded w-20 mb-2"></div>
+                  <div className="h-4 bg-neutral-bg rounded w-24"></div>
+                </div>
+                <div className="col-span-2">
+                  <div className="h-4 bg-neutral-bg rounded w-24 mb-2"></div>
+                  <div className="h-3 bg-neutral-bg rounded w-20"></div>
+                </div>
+                <div className="col-span-3 flex justify-end">
+                  <div className="h-6 bg-neutral-bg rounded w-24"></div>
+                </div>
+              </div>
+            ))
+          ) : filteredCases.length === 0 ? (
             <div className="flex flex-col items-center justify-center flex-1 text-text-secondary font-mono text-sm gap-2">
               <Inbox size={32} className="text-border" />
               <div>No cases match your filters.</div>
