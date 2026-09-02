@@ -128,7 +128,14 @@ export async function POST(request: Request) {
 
     // Generate or fetch the case dynamically from the webhook payload
     const { searchParams } = new URL(request.url);
-    const merchantId = searchParams.get('merchantId') || '00000000-0000-0000-0000-000000000001';
+    let merchantId = searchParams.get('merchantId') || '00000000-0000-0000-0000-000000000001';
+    
+    // Validate UUID format, if invalid fallback to demo
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(merchantId)) {
+      merchantId = '00000000-0000-0000-0000-000000000001';
+    }
+
     const caseId = await getOrCreateRecoveryCase(payload, merchantId);
 
     await RecoveryServiceDB.processEvent(caseId, event, { eventId });
@@ -138,7 +145,7 @@ export async function POST(request: Request) {
     console.info(`razorpay_webhook_processed: ${event}`);
     return NextResponse.json({ ok: true, event });
   } catch (error: unknown) {
-    console.error('razorpay_webhook_processing_error');
+    console.error('razorpay_webhook_processing_error', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
