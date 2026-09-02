@@ -75,8 +75,7 @@ export const mockCases: RecoveryCase[] = [];
 export const formatCurrency = (paise: number) => {
   return new Intl.NumberFormat('en-IN', {
     style: 'currency',
-    currency: 'INR',
-    maximumFractionDigits: 0
+    currency: 'INR'
   }).format(paise / 100);
 };
 

@@ -13,21 +13,26 @@ export default function CaseDetailPage() {
   const [c, setC] = useState<RecoveryCase | null>(null);
 
   const refreshState = async () => {
-    const res = await fetch('/api/demo/state');
+    const merchantId = typeof window !== 'undefined' ? localStorage.getItem('retry_merchant_id') : null;
+    const headers = { 'x-merchant-id': merchantId || '00000000-0000-0000-0000-000000000001' };
+    const res = await fetch('/api/demo/state', { headers });
     const data = await res.json();
-    const caseObj = data.cases.find((rc: RecoveryCase) => rc.id === id) || data.cases.find((rc: RecoveryCase) => rc.id === "rc_c931") || data.cases[0];
+    const caseObj = data.cases.find((rc: RecoveryCase) => rc.id === id) || data.cases[0];
     setC(caseObj);
   };
 
   useEffect(() => {
-    fetch('/api/demo/state').then(r => r.json()).then(data => {
-      const caseObj = data.cases.find((rc: RecoveryCase) => rc.id === id) || data.cases.find((rc: RecoveryCase) => rc.id === "rc_c931") || data.cases[0];
+    const merchantId = typeof window !== 'undefined' ? localStorage.getItem('retry_merchant_id') : null;
+    const headers = { 'x-merchant-id': merchantId || '00000000-0000-0000-0000-000000000001' };
+
+    fetch('/api/demo/state', { headers }).then(r => r.json()).then(data => {
+      const caseObj = data.cases.find((rc: RecoveryCase) => rc.id === id) || data.cases[0];
       setC(caseObj);
     }).catch(() => {});
     
     const interval = setInterval(() => {
-      fetch('/api/demo/state').then(r => r.json()).then(data => {
-        const caseObj = data.cases.find((rc: RecoveryCase) => rc.id === id) || data.cases.find((rc: RecoveryCase) => rc.id === "rc_c931") || data.cases[0];
+      fetch('/api/demo/state', { headers }).then(r => r.json()).then(data => {
+        const caseObj = data.cases.find((rc: RecoveryCase) => rc.id === id) || data.cases[0];
         setC(caseObj);
       }).catch(() => {});
     }, 2000);
