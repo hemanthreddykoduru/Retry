@@ -55,7 +55,27 @@ export default function CaseDetailPage() {
     setWebhookOpen(!webhookOpen);
   };
 
-  if (!c) return <div className="p-8">Loading...</div>;
+  if (!c) {
+    return (
+      <div className="max-w-5xl mx-auto flex flex-col gap-8 pb-12 p-8 animate-pulse">
+        <div className="w-32 h-4 bg-neutral-bg border border-border rounded"></div>
+        <div className="flex justify-between items-start flex-wrap gap-4">
+          <div className="flex flex-col gap-2">
+            <div className="w-24 h-3 bg-neutral-bg border border-border rounded"></div>
+            <div className="w-64 h-10 bg-neutral-bg border border-border rounded"></div>
+          </div>
+          <div className="bg-surface border border-border p-4 w-48 h-20 rounded"></div>
+        </div>
+        <div className="h-14 bg-neutral-bg border border-border w-full rounded"></div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="sharp-card p-6 h-48 bg-neutral-bg/50"></div>
+          <div className="sharp-card p-6 h-48 bg-neutral-bg/50"></div>
+          <div className="sharp-card p-6 h-64 bg-neutral-bg/50"></div>
+          <div className="sharp-card p-6 h-64 bg-neutral-bg/50"></div>
+        </div>
+      </div>
+    );
+  }
 
   const maskPhone = (phone: string) => {
     if (!phone) return "—";
