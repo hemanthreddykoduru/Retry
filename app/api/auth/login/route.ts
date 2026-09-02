@@ -32,7 +32,7 @@ export async function POST(request: Request) {
       user: data.user,
       token: data.accessToken ?? null,
       business_name: business_name,
-      name: data.user?.user_metadata?.name || 'Hemanth R.',
+      name: (data.user as any)?.metadata?.name || (data.user as any)?.profile?.name || 'Hemanth R.',
     }, { status: 200 });
   } catch (e: any) {
     return NextResponse.json({ error: e.message || 'Server error' }, { status: 500 });
