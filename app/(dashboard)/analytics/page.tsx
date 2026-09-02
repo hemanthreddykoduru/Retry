@@ -252,6 +252,7 @@ export default function AnalyticsPage() {
             <span className="text-text-muted">→</span>
           </Link>
         </div>
+      </div>
         </>
       )}
     </div>
