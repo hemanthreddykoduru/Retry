@@ -19,13 +19,15 @@ export const RecoveryServiceDB = {
 
         if (event === 'payment.failed') {
           if (currentStatus !== 'open') {
-            console.info(`payment.failed gracefully ignored because case is already in ${currentStatus}`);
-            return;
+            auditAction = 'duplicate_failure_ignored';
+            auditReasoning = 'Duplicate payment failure event received. Case already in progress.';
+            // nextStatus remains currentStatus
+          } else {
+            nextStatus = transitionState(currentStatus, 'diagnosing');
+            auditAction = 'diagnose_started';
+            auditReasoning = 'Payment failure detected, diagnosing root cause';
           }
-          nextStatus = transitionState(currentStatus, 'diagnosing');
-          auditAction = 'diagnose_started';
-          auditReasoning = 'Payment failure detected, diagnosing root cause';
-        } 
+        }
         else if (event === 'downtime.started') {
           nextStatus = transitionState(currentStatus, 'awaiting_downtime_resolution');
           auditAction = 'downtime_suppression';
@@ -90,8 +92,41 @@ export const RecoveryServiceDB = {
 
         // Apply updates
         let plink = c.razorpay_payment_link_id;
-        if (event === 'sarvam.link_requested' || event === 'sarvam.call_failed') {
-          plink = `plink_test${Math.floor(Math.random()*10000)}`;
+        if ((event === 'sarvam.link_requested' || event === 'sarvam.call_failed') && !plink) {
+          const keyId = process.env.RAZORPAY_KEY_ID;
+          const keySecret = process.env.RAZORPAY_KEY_SECRET;
+          
+          if (keyId && keySecret) {
+            const [cust] = await tx`SELECT * FROM customers WHERE id = ${c.customer_id}`;
+            const rzpRes = await fetch('https://api.razorpay.com/v1/payment_links', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Basic ${Buffer.from(`${keyId}:${keySecret}`).toString('base64')}`
+              },
+              body: JSON.stringify({
+                amount: c.amount,
+                currency: 'INR',
+                reference_id: caseId,
+                description: 'Complete your checkout',
+                customer: {
+                  contact: cust?.phone || '',
+                  name: cust?.name || ''
+                },
+                notify: { sms: false, email: false },
+                reminder_enable: false,
+                notes: { recovery_case_id: caseId }
+              })
+            });
+            if (rzpRes.ok) {
+              const rzpData = await rzpRes.json();
+              plink = rzpData.id;
+            } else {
+              plink = `plink_test${Math.floor(Math.random()*10000)}`;
+            }
+          } else {
+            plink = `plink_test${Math.floor(Math.random()*10000)}`;
+          }
         }
 
         let updateQuery = tx`UPDATE recovery_cases SET status = ${nextStatus}, razorpay_payment_link_id = ${plink} WHERE id = ${caseId}`;

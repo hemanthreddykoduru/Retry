@@ -47,7 +47,10 @@ export async function POST(
             sms: false,
             email: false
           },
-          reminder_enable: false
+          reminder_enable: false,
+          notes: {
+            recovery_case_id: caseId
+          }
         })
       });
 
