@@ -3,9 +3,17 @@
 import Link from "next/link";
 import { Play, ArrowRight, ShieldCheck, PhoneOff, ServerCrash, AlertCircle, WifiOff } from "lucide-react";
 
-const simulateDemo = async (action: string) => {
+const simulateDemo = async (action: string, caseId?: string) => {
   try {
-    const res = await fetch(`/api/demo/events/${action}`, { method: 'POST' });
+    const merchantId = typeof window !== 'undefined' ? localStorage.getItem('retry_merchant_id') : null;
+    const res = await fetch(`/api/demo/events/${action}`, { 
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-merchant-id': merchantId || '00000000-0000-0000-0000-000000000001'
+      },
+      body: JSON.stringify({ caseId: caseId || 'case_demo_123' })
+    });
     const data = await res.json();
     alert(`Demo: ${data.message || 'Action executed'}`);
   } catch (err) {
@@ -59,7 +67,7 @@ const ScenarioCard = ({
       </div>
       <div className="flex justify-between items-center gap-4">
         <button 
-          onClick={() => simulateDemo(action)}
+          onClick={() => simulateDemo(action, caseId)}
           className="btn-primary py-2 px-4 flex items-center gap-2"
         >
           <Play size={14} /> Trigger Scenario

@@ -3,32 +3,35 @@ import { insforge } from '@/lib/insforge';
 
 export async function POST(request: Request) {
   try {
-    const { name, business_name, email, password } = await request.json();
-    const { data, error } = await insforge.auth.signUp({
+    const { email, otp, name, business_name, password } = await request.json();
+    console.log("verify-otp called with:", { email, otp, name, business_name });
+    
+    // 1. Verify the email OTP
+    const { data: verifyData, error: verifyError } = await insforge.auth.verifyEmail({
+      email,
+      otp,
+    });
+    console.log("verifyEmail response:", { verifyData, verifyError });
+    
+    if (verifyError) {
+      return NextResponse.json({ error: verifyError.message }, { status: 400 });
+    }
+    
+    // 2. Sign in with password to get the session
+    const { data, error } = await insforge.auth.signInWithPassword({
       email,
       password,
-      name,
     });
     
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
     
-    if (data && data.requireEmailVerification) {
-      // User created but needs verification.
-      return NextResponse.json({ 
-        requireEmailVerification: true,
-        message: 'Please check your email for the verification code'
-      }, { status: 200 });
-    }
-
     if (!data || !data.user) {
-      return NextResponse.json({ 
-        error: 'Signup failed: No user returned',
-      }, { status: 500 });
+      return NextResponse.json({ error: 'Verification failed: No user returned' }, { status: 500 });
     }
 
-    // Insert into merchants table
+    // Insert into merchants table now that verification is complete
     const { error: merchantError } = await insforge.database
       .from('merchants')
       .insert({

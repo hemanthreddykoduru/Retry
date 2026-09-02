@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { User, Bell, Shield, LogOut, Trash2, Mail, Users, MapPin, Building, Activity, Copy, AlertTriangle } from "lucide-react";
 
 const TabButton = ({ id, icon: Icon, label, activeTab, setActiveTab }: { id: string, icon: React.ElementType, label: string, activeTab: string, setActiveTab: (id: string) => void }) => (
@@ -18,6 +18,24 @@ const TabButton = ({ id, icon: Icon, label, activeTab, setActiveTab }: { id: str
 
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState('profile');
+  const [businessName, setBusinessName] = useState('');
+  const [userName, setUserName] = useState('');
+  const [userEmail, setUserEmail] = useState('');
+  const [merchantId, setMerchantId] = useState('');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const bName = localStorage.getItem('retry_business_name');
+      const uName = localStorage.getItem('retry_user_name');
+      const uEmail = localStorage.getItem('retry_user_email');
+      const mId = localStorage.getItem('retry_merchant_id');
+      
+      if (bName) setBusinessName(bName);
+      if (uName) setUserName(uName);
+      if (uEmail) setUserEmail(uEmail);
+      if (mId) setMerchantId(mId);
+    }
+  }, []);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const copyToClipboard = (text: string) => {
@@ -56,12 +74,12 @@ export default function SettingsPage() {
               
               <div className="flex flex-col gap-2">
                 <label className="text-xs font-mono uppercase tracking-widest text-text-secondary">Business Name</label>
-                <input type="text" defaultValue="NammaMart Demo Store" className="px-3 py-2 border border-border bg-surface focus:outline-none" />
+                <input type="text" value={businessName} onChange={(e) => setBusinessName(e.target.value)} className="px-3 py-2 border border-border bg-surface focus:outline-none" />
               </div>
               
               <div className="flex flex-col gap-2">
                 <label className="text-xs font-mono uppercase tracking-widest text-text-secondary">Support Email</label>
-                <input type="email" defaultValue="support@nammamart.demo" className="px-3 py-2 border border-border bg-surface focus:outline-none font-mono" />
+                <input type="email" value={userEmail} onChange={(e) => setUserEmail(e.target.value)} className="px-3 py-2 border border-border bg-surface focus:outline-none font-mono" />
               </div>
 
               <div className="flex flex-col gap-2">
@@ -74,8 +92,8 @@ export default function SettingsPage() {
               <div className="flex flex-col gap-2">
                 <label className="text-xs font-mono uppercase tracking-widest text-text-secondary">Merchant ID</label>
                 <div className="flex items-center">
-                  <div className="bg-neutral-bg border border-border p-2 font-mono text-sm flex-1">m_demo_••••••••</div>
-                  <button onClick={() => copyToClipboard('m_demo_12345')} className="p-2 border border-l-0 border-border bg-surface hover:bg-neutral-bg transition-colors"><Copy size={18} /></button>
+                  <div className="bg-neutral-bg border border-border p-2 font-mono text-sm flex-1">{merchantId}</div>
+                  <button onClick={() => copyToClipboard(merchantId)} className="p-2 border border-l-0 border-border bg-surface hover:bg-neutral-bg transition-colors"><Copy size={18} /></button>
                 </div>
               </div>
 
@@ -99,23 +117,13 @@ export default function SettingsPage() {
                 </div>
                 <div className="grid grid-cols-12 gap-4 p-4 border-b border-border items-center">
                   <div className="col-span-5 font-mono text-sm">
-                    <div className="font-bold text-text-primary">Hemanth R. (You)</div>
-                    <div className="text-xs text-text-secondary">hemanth@nammamart.demo</div>
+                    <div className="font-bold text-text-primary">{userName || 'You'}</div>
+                    <div className="text-xs text-text-secondary">{userEmail || 'email@example.com'}</div>
                   </div>
                   <div className="col-span-3">
                     <span className="px-2 py-0.5 border border-border bg-neutral-bg text-[10px] font-mono uppercase tracking-widest">Owner</span>
                   </div>
                   <div className="col-span-4 text-right text-xs font-mono text-recovered">Active</div>
-                </div>
-                <div className="grid grid-cols-12 gap-4 p-4 items-center">
-                  <div className="col-span-5 font-mono text-sm">
-                    <div className="font-bold text-text-primary">Support Agent</div>
-                    <div className="text-xs text-text-secondary">support@nammamart.demo</div>
-                  </div>
-                  <div className="col-span-3">
-                    <span className="px-2 py-0.5 border border-border bg-neutral-bg text-[10px] font-mono uppercase tracking-widest">Editor</span>
-                  </div>
-                  <div className="col-span-4 text-right text-xs font-mono text-waiting">Pending Invite</div>
                 </div>
               </div>
             </div>

@@ -4,7 +4,7 @@ import { RecoveryServiceDB } from '@/lib/recovery-service-db';
 import { PaymentEventsRepository } from '@/lib/repositories/payment-events';
 import { sql } from '@/lib/db';
 
-async function getOrCreateRecoveryCase(payload: any) {
+async function getOrCreateRecoveryCase(payload: any, merchantId: string) {
   const notesId = payload.payload?.payment?.entity?.notes?.recovery_case_id || 
                   payload.payload?.payment_link?.entity?.notes?.recovery_case_id;
   if (notesId) return notesId;
@@ -14,7 +14,6 @@ async function getOrCreateRecoveryCase(payload: any) {
      return '20000000-0000-0000-0000-000000000003';
   }
   
-  const merchantId = '00000000-0000-0000-0000-000000000001';
   let phone = payment.contact;
   if (!phone.startsWith('+')) {
     phone = '+' + phone;
@@ -128,7 +127,9 @@ export async function POST(request: Request) {
     }
 
     // Generate or fetch the case dynamically from the webhook payload
-    const caseId = await getOrCreateRecoveryCase(payload);
+    const { searchParams } = new URL(request.url);
+    const merchantId = searchParams.get('merchantId') || '00000000-0000-0000-0000-000000000001';
+    const caseId = await getOrCreateRecoveryCase(payload, merchantId);
 
     await RecoveryServiceDB.processEvent(caseId, event, { eventId });
     

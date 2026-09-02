@@ -42,7 +42,12 @@ export default function GuardrailsPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/settings')
+    const merchantId = typeof window !== 'undefined' ? localStorage.getItem('retry_merchant_id') : null;
+    fetch('/api/settings', {
+      headers: {
+        'x-merchant-id': merchantId || '00000000-0000-0000-0000-000000000001'
+      }
+    })
       .then(r => r.json())
       .then(data => {
         if (!data.error) setState(data);
@@ -58,9 +63,13 @@ export default function GuardrailsPage() {
 
   const handleSave = async () => {
     try {
+      const merchantId = typeof window !== 'undefined' ? localStorage.getItem('retry_merchant_id') : null;
       await fetch('/api/settings', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-merchant-id': merchantId || '00000000-0000-0000-0000-000000000001'
+        },
         body: JSON.stringify(state)
       });
       setIsSaved(true);
@@ -70,7 +79,12 @@ export default function GuardrailsPage() {
   };
 
   const handleReset = () => {
-    fetch('/api/settings')
+    const merchantId = typeof window !== 'undefined' ? localStorage.getItem('retry_merchant_id') : null;
+    fetch('/api/settings', {
+      headers: {
+        'x-merchant-id': merchantId || '00000000-0000-0000-0000-000000000001'
+      }
+    })
       .then(r => r.json())
       .then(data => {
         if (!data.error) setState(data);

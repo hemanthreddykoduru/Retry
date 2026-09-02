@@ -1,11 +1,10 @@
 import { NextResponse } from 'next/server';
 import { sql } from '@/lib/db';
 
-const MERCHANT_ID = '00000000-0000-0000-0000-000000000001';
-
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const res = await sql`SELECT voice_call_threshold, policies FROM merchants WHERE id = ${MERCHANT_ID}`;
+    const merchantId = request.headers.get('x-merchant-id') || '00000000-0000-0000-0000-000000000001';
+    const res = await sql`SELECT voice_call_threshold, policies FROM merchants WHERE id = ${merchantId}`;
     if (!res.length) {
       return NextResponse.json({ error: 'Merchant not found' }, { status: 404 });
     }
@@ -28,6 +27,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    const merchantId = request.headers.get('x-merchant-id') || '00000000-0000-0000-0000-000000000001';
     const data = await request.json();
     const thresholdPaise = parseInt(data.threshold || '500') * 100;
     
@@ -45,7 +45,7 @@ export async function POST(request: Request) {
     await sql`
       UPDATE merchants 
       SET voice_call_threshold = ${thresholdPaise}, policies = ${sql.json(policies as any)}
-      WHERE id = ${MERCHANT_ID}
+      WHERE id = ${merchantId}
     `;
 
     return NextResponse.json({ success: true });

@@ -64,10 +64,10 @@ export default function IntegrationClient({ apiKey, appUrl: serverAppUrl }: { ap
                 <div className="text-xs font-mono text-text-secondary uppercase tracking-widest mb-2">Endpoint URL</div>
                 <div className="flex items-center">
                   <div className="bg-neutral-bg border border-border p-3 font-mono text-sm flex-1 truncate">
-                    {appUrl}/api/webhooks/razorpay
+                    {appUrl}/api/webhooks/razorpay?merchantId={apiKey}
                   </div>
                   <button 
-                    onClick={() => copyToClipboard(`${appUrl}/api/webhooks/razorpay`)}
+                    onClick={() => copyToClipboard(`${appUrl}/api/webhooks/razorpay?merchantId=${apiKey}`)}
                     className="p-3 border border-l-0 border-border bg-surface hover:bg-neutral-bg transition-colors"
                   >
                     <Copy size={18} />

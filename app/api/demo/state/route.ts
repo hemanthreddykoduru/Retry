@@ -4,8 +4,8 @@ import { InterventionsRepository } from '@/lib/repositories/interventions';
 import { AuditLogRepository } from '@/lib/repositories/audit-log';
 import { MetricsRepository } from '@/lib/repositories/metrics';
 
-export async function GET() {
-  const merchantId = '00000000-0000-0000-0000-000000000001';
+export async function GET(request: Request) {
+  const merchantId = request.headers.get('x-merchant-id') || '00000000-0000-0000-0000-000000000001';
   try {
     const rawCases = await RecoveryCasesRepository.listByMerchant(merchantId);
     

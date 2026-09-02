@@ -13,17 +13,23 @@ export default function CasesPage() {
   const [cases, setCases] = useState<RecoveryCase[]>([]);
 
   const refreshState = async () => {
-    const res = await fetch('/api/demo/state');
+    const merchantId = typeof window !== 'undefined' ? localStorage.getItem('retry_merchant_id') : null;
+    const res = await fetch('/api/demo/state', {
+      headers: { 'x-merchant-id': merchantId || '00000000-0000-0000-0000-000000000001' }
+    });
     const data = await res.json();
     setCases(data.cases);
   };
 
   useEffect(() => {
-    fetch('/api/demo/state').then(r => r.json()).then(data => {
+    const merchantId = typeof window !== 'undefined' ? localStorage.getItem('retry_merchant_id') : null;
+    const headers = { 'x-merchant-id': merchantId || '00000000-0000-0000-0000-000000000001' };
+
+    fetch('/api/demo/state', { headers }).then(r => r.json()).then(data => {
       setCases(data.cases);
     });
     const interval = setInterval(() => {
-      fetch('/api/demo/state').then(r => r.json()).then(data => {
+      fetch('/api/demo/state', { headers }).then(r => r.json()).then(data => {
         setCases(data.cases);
       });
     }, 2000);

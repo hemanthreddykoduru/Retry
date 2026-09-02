@@ -2,8 +2,45 @@
 import Link from "next/link";
 import { FormField } from "@/components/form-field";
 import { FaGoogle, FaGithub } from "react-icons/fa";
+import { useState } from "react";
 
 export default function LoginPage() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+    
+    const form = e.currentTarget;
+    const email = (form.elements.namedItem('email') as HTMLInputElement).value;
+    const password = (form.elements.namedItem('password') as HTMLInputElement).value;
+    
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      if (res.ok) {
+        const body = await res.json();
+        if (body.business_name) localStorage.setItem('retry_business_name', body.business_name);
+        if (body.name) localStorage.setItem('retry_user_name', body.name);
+        if (body.user && body.user.id) localStorage.setItem('retry_merchant_id', body.user.id);
+        if (body.user && body.user.email) localStorage.setItem('retry_user_email', body.user.email);
+        window.location.href = '/dashboard';
+      } else {
+        const err = await res.json();
+        setError(err.error || 'Login failed');
+      }
+    } catch (err: any) {
+      setError(err.message || 'An error occurred');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="flex flex-col">
       <div className="mb-6 text-center">
@@ -11,26 +48,11 @@ export default function LoginPage() {
         <p className="text-sm text-text-secondary mt-1">Sign in to your account to continue.</p>
       </div>
       
-      <form className="flex flex-col" onSubmit={async (e) => {
-        e.preventDefault();
-        const form = e.currentTarget;
-        const email = (form.elements.namedItem('email') as HTMLInputElement).value;
-        const password = (form.elements.namedItem('password') as HTMLInputElement).value;
-        const res = await fetch('/api/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password })
-        });
-        if (res.ok) {
-          window.location.href = '/dashboard';
-        } else {
-          const err = await res.json();
-          alert(err.error || 'Login failed');
-        }
-      }}>
+      <form className="flex flex-col" onSubmit={handleSubmit}>
         <FormField label="Email" id="email" type="email" placeholder="you@company.com" required />
         <FormField label="Password" id="password" type="password" required />
 
+        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
         
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2">
@@ -42,8 +64,8 @@ export default function LoginPage() {
           </Link>
         </div>
 
-        <button type="submit" className="w-full bg-text-primary text-surface py-2 rounded-md font-medium text-sm hover:bg-text-primary/90 transition-colors">
-          Log in
+        <button type="submit" disabled={loading} className="w-full bg-text-primary text-surface py-2 rounded-md font-medium text-sm hover:bg-text-primary/90 transition-colors disabled:opacity-50">
+          {loading ? 'Logging in...' : 'Log in'}
         </button>
       </form>
 

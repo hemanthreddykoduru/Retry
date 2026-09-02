@@ -14,7 +14,10 @@ export default function Dashboard() {
 
   const refreshState = async () => {
     try {
-      const res = await fetch('/api/demo/state');
+      const merchantId = typeof window !== 'undefined' ? localStorage.getItem('retry_merchant_id') : null;
+      const res = await fetch('/api/demo/state', {
+        headers: { 'x-merchant-id': merchantId || '00000000-0000-0000-0000-000000000001' }
+      });
       const data = await res.json();
       setMetrics(data.metrics);
       setFeed(data.cases.filter((c: RecoveryCase) => c.status === "recovered").slice(0, 5));
@@ -23,13 +26,24 @@ export default function Dashboard() {
     }
   };
 
+  const [businessName, setBusinessName] = useState('Demo workspace');
   useEffect(() => {
-    fetch('/api/demo/state').then(r => r.json()).then(data => {
+    if (typeof window !== 'undefined') {
+      const name = localStorage.getItem('retry_business_name');
+      if (name) setBusinessName(name);
+    }
+  }, []);
+
+  useEffect(() => {
+    const merchantId = typeof window !== 'undefined' ? localStorage.getItem('retry_merchant_id') : null;
+    const headers = { 'x-merchant-id': merchantId || '00000000-0000-0000-0000-000000000001' };
+
+    fetch('/api/demo/state', { headers }).then(r => r.json()).then(data => {
       setMetrics(data.metrics);
       setFeed(data.cases.filter((c: RecoveryCase) => c.status === "recovered").slice(0, 5));
     }).catch(() => {});
     const interval = setInterval(() => {
-      fetch('/api/demo/state').then(r => r.json()).then(data => {
+      fetch('/api/demo/state', { headers }).then(r => r.json()).then(data => {
         setMetrics(data.metrics);
         setFeed(data.cases.filter((c: RecoveryCase) => c.status === "recovered").slice(0, 5));
       }).catch(() => {});
@@ -50,7 +64,7 @@ export default function Dashboard() {
           Revenue recovery, measured and attributable.
         </h1>
         <div className="text-sm text-text-secondary font-mono mt-1 uppercase tracking-widest text-[10px]">
-          Demo workspace · Razorpay test-mode sample
+          {businessName} · Razorpay test-mode sample
         </div>
       </div>
 

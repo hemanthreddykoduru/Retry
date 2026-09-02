@@ -12,18 +12,24 @@ export default function AnalyticsPage() {
 
   const refreshState = async () => {
     try {
-      const res = await fetch('/api/demo/state');
+      const merchantId = typeof window !== 'undefined' ? localStorage.getItem('retry_merchant_id') : null;
+      const res = await fetch('/api/demo/state', {
+        headers: { 'x-merchant-id': merchantId || '00000000-0000-0000-0000-000000000001' }
+      });
       const data = await res.json();
       setMetrics(data.metrics);
     } catch(e) {}
   };
 
   useEffect(() => {
-    fetch('/api/demo/state').then(r => r.json()).then(data => {
+    const merchantId = typeof window !== 'undefined' ? localStorage.getItem('retry_merchant_id') : null;
+    const headers = { 'x-merchant-id': merchantId || '00000000-0000-0000-0000-000000000001' };
+
+    fetch('/api/demo/state', { headers }).then(r => r.json()).then(data => {
       setMetrics(data.metrics);
     }).catch(() => {});
     const interval = setInterval(() => {
-      fetch('/api/demo/state').then(r => r.json()).then(data => {
+      fetch('/api/demo/state', { headers }).then(r => r.json()).then(data => {
         setMetrics(data.metrics);
       }).catch(() => {});
     }, 2000);
@@ -146,27 +152,27 @@ export default function AnalyticsPage() {
           <div className="flex flex-col gap-4 font-mono text-sm">
             <div className="flex justify-between items-center">
               <span className="text-text-primary">Smart Retry (Background)</span>
-              <span className="font-bold text-recovered">24 recovered</span>
+              <span className="font-bold text-recovered">0 recovered</span>
             </div>
-            <div className="w-full bg-neutral-bg h-1.5"><div className="bg-recovered h-full" style={{ width: '39%' }}></div></div>
+            <div className="w-full bg-neutral-bg h-1.5"><div className="bg-recovered h-full" style={{ width: '0%' }}></div></div>
 
             <div className="flex justify-between items-center mt-2">
               <span className="text-text-primary">Payment-link follow-up</span>
-              <span className="font-bold text-recovered">22 recovered</span>
+              <span className="font-bold text-recovered">0 recovered</span>
             </div>
-            <div className="w-full bg-neutral-bg h-1.5"><div className="bg-recovered h-full" style={{ width: '36%' }}></div></div>
+            <div className="w-full bg-neutral-bg h-1.5"><div className="bg-recovered h-full" style={{ width: '0%' }}></div></div>
 
             <div className="flex justify-between items-center mt-2">
               <span className="text-text-primary">Telugu Voice Call (Sarvam)</span>
-              <span className="font-bold text-recovered">11 recovered</span>
+              <span className="font-bold text-recovered">0 recovered</span>
             </div>
-            <div className="w-full bg-neutral-bg h-1.5"><div className="bg-recovered h-full" style={{ width: '18%' }}></div></div>
+            <div className="w-full bg-neutral-bg h-1.5"><div className="bg-recovered h-full" style={{ width: '0%' }}></div></div>
 
             <div className="flex justify-between items-center mt-2">
               <span className="text-text-primary">Hindi Voice Call (Sarvam)</span>
-              <span className="font-bold text-recovered">4 recovered</span>
+              <span className="font-bold text-recovered">0 recovered</span>
             </div>
-            <div className="w-full bg-neutral-bg h-1.5"><div className="bg-recovered h-full" style={{ width: '7%' }}></div></div>
+            <div className="w-full bg-neutral-bg h-1.5"><div className="bg-recovered h-full" style={{ width: '0%' }}></div></div>
             
             <div className="mt-4 p-3 bg-waiting-bg border-l-2 border-waiting text-waiting text-xs">
               {metrics.contacts_avoided || 0} cases were actively suppressed during downtime and recovered via Smart Retry without any customer friction.
@@ -182,39 +188,39 @@ export default function AnalyticsPage() {
             <div className="flex items-end gap-2 h-32 font-mono text-xs">
               <div className="flex flex-col items-center flex-1 gap-2">
                 <div className="w-full bg-neutral-bg relative h-full flex items-end">
-                  <div className="w-full bg-recovered/40 border-t border-recovered absolute bottom-0" style={{ height: '40%' }}></div>
+                  <div className="w-full bg-recovered/40 border-t border-recovered absolute bottom-0" style={{ height: '0%' }}></div>
                 </div>
-                <span className="text-text-muted text-[10px]">Aug 25</span>
+                <span className="text-text-muted text-[10px]">Day 1</span>
               </div>
               <div className="flex flex-col items-center flex-1 gap-2">
                 <div className="w-full bg-neutral-bg relative h-full flex items-end">
-                  <div className="w-full bg-recovered/40 border-t border-recovered absolute bottom-0" style={{ height: '65%' }}></div>
+                  <div className="w-full bg-recovered/40 border-t border-recovered absolute bottom-0" style={{ height: '0%' }}></div>
                 </div>
-                <span className="text-text-muted text-[10px]">Aug 26</span>
+                <span className="text-text-muted text-[10px]">Day 2</span>
               </div>
               <div className="flex flex-col items-center flex-1 gap-2">
                 <div className="w-full bg-neutral-bg relative h-full flex items-end">
-                  <div className="w-full bg-recovered/40 border-t border-recovered absolute bottom-0" style={{ height: '85%' }}></div>
+                  <div className="w-full bg-recovered/40 border-t border-recovered absolute bottom-0" style={{ height: '0%' }}></div>
                 </div>
-                <span className="text-text-muted text-[10px]">Aug 27</span>
+                <span className="text-text-muted text-[10px]">Day 3</span>
               </div>
               <div className="flex flex-col items-center flex-1 gap-2">
                 <div className="w-full bg-neutral-bg relative h-full flex items-end">
-                  <div className="w-full bg-recovered/40 border-t border-recovered absolute bottom-0" style={{ height: '45%' }}></div>
+                  <div className="w-full bg-recovered/40 border-t border-recovered absolute bottom-0" style={{ height: '0%' }}></div>
                 </div>
-                <span className="text-text-muted text-[10px]">Aug 28</span>
+                <span className="text-text-muted text-[10px]">Day 4</span>
               </div>
               <div className="flex flex-col items-center flex-1 gap-2">
                 <div className="w-full bg-neutral-bg relative h-full flex items-end">
-                  <div className="w-full bg-recovered/40 border-t border-recovered absolute bottom-0" style={{ height: '70%' }}></div>
+                  <div className="w-full bg-recovered/40 border-t border-recovered absolute bottom-0" style={{ height: '0%' }}></div>
                 </div>
-                <span className="text-text-muted text-[10px]">Aug 29</span>
+                <span className="text-text-muted text-[10px]">Day 5</span>
               </div>
               <div className="flex flex-col items-center flex-1 gap-2">
                 <div className="w-full bg-neutral-bg relative h-full flex items-end">
-                  <div className="w-full bg-recovered/40 border-t border-recovered absolute bottom-0" style={{ height: '100%' }}></div>
+                  <div className="w-full bg-recovered/40 border-t border-recovered absolute bottom-0" style={{ height: '0%' }}></div>
                 </div>
-                <span className="text-text-muted text-[10px] font-bold text-text-primary">Aug 30</span>
+                <span className="text-text-muted text-[10px] font-bold text-text-primary">Today</span>
               </div>
             </div>
           </div>
