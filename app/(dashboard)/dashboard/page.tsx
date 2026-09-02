@@ -69,7 +69,6 @@ export default function Dashboard() {
           {businessName} · Razorpay test-mode sample
         </div>
       </div>
-      </div>
 
       {isLoading ? (
         <div className="flex flex-col gap-8 w-full animate-pulse">

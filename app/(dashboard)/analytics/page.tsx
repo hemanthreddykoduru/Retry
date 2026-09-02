@@ -52,7 +52,6 @@ export default function AnalyticsPage() {
             Razorpay Live Webhooks
           </div>
         </div>
-        </div>
       </div>
 
       {isLoading ? (
