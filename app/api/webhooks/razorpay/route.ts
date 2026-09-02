@@ -41,9 +41,13 @@ async function getOrCreateRecoveryCase(payload: any, merchantId: string) {
   else if (failureCode?.includes('INSUFFICIENT')) rootCause = 'insufficient_funds';
   else if (failureReason?.includes('network') || failureReason?.includes('timeout')) rootCause = 'network_drop';
 
+  const merchantRes = await sql`SELECT policies FROM merchants WHERE id = ${merchantId}`;
+  const policies = merchantRes[0]?.policies || {};
+  const maxAttempts = parseInt(policies.maxAttempts || '3', 10);
+
   const insertedCase = await sql`
-    INSERT INTO recovery_cases (merchant_id, customer_id, amount, trigger_source, failure_code, failure_reason, root_cause, status)
-    VALUES (${merchantId}, ${customerId}, ${payment.amount || 0}, 'payment_failed_webhook', ${failureCode}, ${failureReason}, ${rootCause}, 'open')
+    INSERT INTO recovery_cases (merchant_id, customer_id, amount, trigger_source, failure_code, failure_reason, root_cause, status, max_attempts)
+    VALUES (${merchantId}, ${customerId}, ${payment.amount || 0}, 'payment_failed_webhook', ${failureCode}, ${failureReason}, ${rootCause}, 'open', ${maxAttempts})
     RETURNING id
   `;
   
