@@ -11,6 +11,7 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 export default function Dashboard() {
   const [metrics, setMetrics] = useState(metricsData);
   const [feed, setFeed] = useState<RecoveryCase[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const refreshState = async () => {
     try {
@@ -41,6 +42,7 @@ export default function Dashboard() {
     fetch('/api/demo/state', { headers }).then(r => r.json()).then(data => {
       setMetrics(data.metrics);
       setFeed(data.cases.filter((c: RecoveryCase) => c.status === "recovered").slice(0, 5));
+      setIsLoading(false);
     }).catch(() => {});
     const interval = setInterval(() => {
       fetch('/api/demo/state', { headers }).then(r => r.json()).then(data => {
@@ -67,8 +69,23 @@ export default function Dashboard() {
           {businessName} · Razorpay test-mode sample
         </div>
       </div>
+      </div>
 
-      {/* Primary Metrics */}
+      {isLoading ? (
+        <div className="flex flex-col gap-8 w-full animate-pulse">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="h-28 bg-neutral-bg border border-border rounded"></div>
+            ))}
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+            <div className="lg:col-span-2 h-96 bg-neutral-bg border border-border rounded"></div>
+            <div className="h-96 bg-neutral-bg border border-border rounded"></div>
+          </div>
+        </div>
+      ) : (
+        <>
+          {/* Primary Metrics */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <MetricCard
           title="RECOVERED REVENUE"
@@ -153,6 +170,8 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+        </>
+      )}
     </div>
   );
 }

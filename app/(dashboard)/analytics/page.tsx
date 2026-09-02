@@ -9,6 +9,7 @@ import { FileText } from "lucide-react";
 
 export default function AnalyticsPage() {
   const [metrics, setMetrics] = useState(metricsData);
+  const [isLoading, setIsLoading] = useState(true);
 
   const refreshState = async () => {
     try {
@@ -27,6 +28,7 @@ export default function AnalyticsPage() {
 
     fetch('/api/demo/state', { headers }).then(r => r.json()).then(data => {
       setMetrics(data.metrics);
+      setIsLoading(false);
     }).catch(() => {});
     const interval = setInterval(() => {
       fetch('/api/demo/state', { headers }).then(r => r.json()).then(data => {
@@ -50,9 +52,24 @@ export default function AnalyticsPage() {
             Razorpay Live Webhooks
           </div>
         </div>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      {isLoading ? (
+        <div className="flex flex-col gap-8 w-full animate-pulse">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="h-28 bg-neutral-bg border border-border rounded"></div>
+            ))}
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2 h-96 bg-neutral-bg border border-border rounded"></div>
+            <div className="h-96 bg-neutral-bg border border-border rounded"></div>
+          </div>
+        </div>
+      ) : (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <MetricCard title="REVENUE AT RISK" value={formatCurrency(metrics.revenue_at_risk_paise || 0)} detail={`${metrics.cases_opened || 0} failed payments`} />
         <MetricCard title="RECOVERED REVENUE" value={formatCurrency(metrics.recovered_revenue_paise || 0)} detail="from AI interventions" isPositive={true} />
         <MetricCard title="RECOVERY RATE" value={`${metrics.recovery_rate || 0}%`} detail={`${metrics.cases_recovered || 0} of ${metrics.cases_opened || 0} cases`} />
@@ -236,7 +253,8 @@ export default function AnalyticsPage() {
             <span className="text-text-muted">→</span>
           </Link>
         </div>
-      </div>
+        </>
+      )}
     </div>
   );
 }

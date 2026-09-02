@@ -92,7 +92,20 @@ export default function GuardrailsPage() {
       });
   };
 
-  if (isLoading) return <div className="p-8">Loading settings...</div>;
+  if (isLoading) {
+    return (
+      <div className="max-w-[1000px] flex flex-col gap-8 pb-12 animate-pulse">
+        <div className="flex flex-col gap-2">
+          <div className="h-6 w-48 bg-neutral-bg border border-border rounded"></div>
+          <div className="h-4 w-64 bg-neutral-bg border border-border rounded mt-1"></div>
+        </div>
+        
+        <div className="bg-neutral-bg border border-border p-6 h-32 rounded"></div>
+
+        <div className="sharp-card flex flex-col h-[500px] bg-neutral-bg/50"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-[1000px] flex flex-col gap-8 pb-12">
