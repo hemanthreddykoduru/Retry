@@ -77,6 +77,12 @@ export async function POST(
       WHERE id = ${interventionId}
     `;
 
+    await sql`
+      UPDATE recovery_cases
+      SET attempt_count = attempt_count + 1
+      WHERE id = ${id}
+    `;
+
     return NextResponse.json({
       success: true,
       message: 'Voice call initiated safely.',
