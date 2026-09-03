@@ -29,11 +29,12 @@ export async function POST(
   const currentInterventionCount = voiceCallInterventions.length;
 
   // Fetch Merchant config
-  const merchantRes = await sql`SELECT policies FROM merchants WHERE id = ${recoveryCase.merchant_id}`;
+  const merchantRes = await sql`SELECT voice_call_threshold, policies FROM merchants WHERE id = ${recoveryCase.merchant_id}`;
   const policies = merchantRes[0]?.policies || {};
+  const voiceThresholdPaise = merchantRes[0]?.voice_call_threshold || 50000;
 
   // 1. Guardrails Check
-  const decision = checkVoiceGuardrails(recoveryCase, customer, 50000, currentInterventionCount, policies);
+  const decision = checkVoiceGuardrails(recoveryCase, customer, voiceThresholdPaise, currentInterventionCount, policies);
   
   if (!decision.allowed) {
     // Audit log should be written here in a real db

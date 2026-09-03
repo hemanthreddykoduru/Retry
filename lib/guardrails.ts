@@ -32,16 +32,24 @@ export function checkVoiceGuardrails(
     }
   }
 
-  // 2. Quiet hours (09:00 - 21:00 IST)
-  // Using generic UTC to IST offset for pure testable function logic (5.5 hours)
+  // 2. Quiet hours
   const utcHour = now.getUTCHours();
   const utcMin = now.getUTCMinutes();
   const istTime = (utcHour + 5) + (utcMin + 30) / 60; 
-  // Normalize to 0-24
   const istHour = istTime >= 24 ? istTime - 24 : istTime;
   
-  if (istHour < 9 || istHour >= 21) {
-    reasons.push("Outside permitted contact window (09:00 - 21:00 IST).");
+  const startTimeStr = merchantPolicies.startTime || '09:00';
+  const endTimeStr = merchantPolicies.endTime || '21:00';
+  const startHour = parseInt(startTimeStr.split(':')[0], 10);
+  const endHour = parseInt(endTimeStr.split(':')[0], 10);
+  
+  // Check if current time is outside the contact window
+  const isQuietHours = endHour > startHour 
+    ? (istHour < startHour || istHour >= endHour)
+    : (istHour >= endHour && istHour < startHour); // Handles overnight windows if needed
+    
+  if (isQuietHours) {
+    reasons.push(`Outside permitted contact window (${startTimeStr} - ${endTimeStr} IST).`);
   }
 
   // 3. Amount Threshold
@@ -50,8 +58,10 @@ export function checkVoiceGuardrails(
   }
 
   // 4. Attempts
-  if (currentInterventionCount >= 2) {
-    reasons.push("Maximum voice call attempts (2) reached.");
+  const maxAttemptsStr = merchantPolicies.maxAttempts || '2';
+  const maxAttempts = parseInt(maxAttemptsStr.replace(/\D/g, ''), 10) || 2;
+  if (currentInterventionCount >= maxAttempts) {
+    reasons.push(`Maximum voice call attempts (${maxAttempts}) reached.`);
   }
 
   // 5. Case State
