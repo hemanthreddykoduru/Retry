@@ -42,13 +42,13 @@ export default async function LandingPage() {
           
           {/* Compact Product Preview */}
           <div className="mt-8 font-mono text-xs text-text-muted flex flex-wrap items-center justify-center gap-3 bg-neutral-bg px-5 py-2.5 border border-border">
-            <span className="animate-pipeline-1">payment.failed</span>
+            <span className="animate-pipeline-1 bg-lost-bg text-lost font-medium px-2 py-1 rounded-sm border border-lost/20">payment.failed</span>
             <span className="text-text-muted">→</span>
             <span className="animate-pipeline-2">cause diagnosed</span>
             <span className="text-text-muted">→</span>
             <span className="animate-pipeline-3">policy selected</span>
             <span className="text-text-muted">→</span>
-            <span className="animate-pipeline-4 text-text-primary">
+            <span className="animate-pipeline-4 bg-recovered-bg text-recovered font-bold px-2 py-1 rounded-sm border border-recovered/20">
               payment recovered
             </span>
           </div>
