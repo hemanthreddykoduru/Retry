@@ -82,10 +82,19 @@ export default function LoginPage() {
         <Link href="/api/auth/google" className="w-full border border-border bg-surface text-text-primary py-2 rounded-md font-medium text-sm flex items-center justify-center gap-2 hover:bg-neutral-bg transition-colors"><FaGoogle size={16} className="mr-2"/> Sign in with Google</Link>
         <Link href="/api/auth/github" className="w-full border border-border bg-surface text-text-primary py-2 rounded-md font-medium text-sm flex items-center justify-center gap-2 hover:bg-neutral-bg transition-colors mt-2"><FaGithub size={16} className="mr-2"/> Sign in with GitHub</Link>
         
-        {/* TODO: Add actual OAuth handler */}
-        <Link href="/dashboard" className="w-full border border-border bg-surface text-text-primary py-2 rounded-md font-medium text-sm flex items-center justify-center gap-2 hover:bg-neutral-bg transition-colors">
+        {/* Demo workspace handler */}
+        <button 
+          type="button"
+          onClick={() => {
+            if (typeof window !== 'undefined') {
+              localStorage.setItem('retry_business_name', 'Testing Business');
+              window.location.href = '/dashboard';
+            }
+          }} 
+          className="w-full border border-border bg-surface text-text-primary py-2 rounded-md font-medium text-sm flex items-center justify-center gap-2 hover:bg-neutral-bg transition-colors"
+        >
           Demo workspace (Test data)
-        </Link>
+        </button>
 
         <p className="text-center text-sm text-text-secondary mt-2">
           Don&apos;t have an account? <Link href="/signup" className="font-medium text-active hover:underline">Sign up</Link>
