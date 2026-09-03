@@ -124,8 +124,8 @@ export default function LandingPage() {
             <div className="flex flex-col gap-4 scroll-animate-stagger-1">
               <h2 className="text-2xl font-bold tracking-tight">Features</h2>
               <ul className="flex flex-col gap-2 text-sm text-text-secondary font-mono">
-                <li className="flex items-start gap-2"><span className="text-active">■</span> Razorpay webhook integration</li>
-                <li className="flex items-start gap-2"><span className="text-active">■</span> Silent checkout-drop detection</li>
+                <li className="flex items-start gap-2"><span className="text-active">■</span> <strong>Backend:</strong> Razorpay Webhook Integration (Live)</li>
+                <li className="flex items-start gap-2"><span className="text-active">■</span> <strong>Frontend:</strong> Checkout Drop-off Snippet (Future Vision)</li>
                 <li className="flex items-start gap-2"><span className="text-active">■</span> Downtime-aware decisions</li>
                 <li className="flex items-start gap-2"><span className="text-active">■</span> Smart retry scheduling</li>
                 <li className="flex items-start gap-2"><span className="text-active">■</span> Manual payment-link follow-ups</li>
