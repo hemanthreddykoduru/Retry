@@ -111,7 +111,7 @@ export const liveReceipts = mockCases.map(c => {
   const latestLog = c.audit_logs?.[c.audit_logs.length - 1];
   return {
     id: c.id,
-    time: latestLog ? new Date(latestLog.created_at).toLocaleTimeString('en-IN', { hour12: false }) + ' IST' : '',
+    time: latestLog ? new Date(latestLog.created_at).toLocaleTimeString('en-IN', { hour12: true }) + ' IST' : '',
     event: latestLog ? latestLog.action : 'opened',
     amount: c.amount,
     detail: latestLog ? latestLog.reasoning : '',

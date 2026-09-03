@@ -199,7 +199,7 @@ export default function CasesPage() {
               >
                 <div className="col-span-2 font-mono text-xs text-text-primary">
                   <div className="font-bold">{c.id}</div>
-                  <div className="text-text-muted mt-1 text-[10px]">{new Date(c.opened_at).toLocaleString('en-IN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</div>
+                  <div className="text-text-muted mt-1 text-[10px]">{new Date(c.opened_at).toLocaleString('en-IN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true })}</div>
                 </div>
                 <div className="col-span-2 font-mono text-xs">
                   <div className="text-text-primary">{c.customer?.name || "Unknown"}</div>

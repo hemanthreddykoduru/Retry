@@ -271,7 +271,7 @@ export default function CaseDetailPage() {
             <div className="flex flex-col gap-4 font-mono text-sm">
               <div className="flex justify-between items-center">
                 <span className="text-text-secondary">Quiet hours check</span>
-                <span className="text-recovered">PASS ({new Date(c.opened_at).toLocaleTimeString('en-IN', { hour12: false, hour: '2-digit', minute: '2-digit' })} IST)</span>
+                <span className="text-recovered">PASS ({new Date(c.opened_at).toLocaleTimeString('en-IN', { hour12: true, hour: '2-digit', minute: '2-digit' })} IST)</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-text-secondary">Amount threshold</span>
@@ -356,7 +356,7 @@ export default function CaseDetailPage() {
           {c.audit_logs?.map((log, index) => (
             <div key={log.id} className={`p-4 border-b border-border transition-colors flex gap-4 ${getActionColor(log.action).replace('text-', 'bg-').replace('-bg', '-bg/30')}`}>
               <div className="w-24 shrink-0 text-text-muted text-xs">
-                {new Date(log.created_at).toLocaleTimeString('en-IN', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                {new Date(log.created_at).toLocaleTimeString('en-IN', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' })}
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
@@ -387,8 +387,8 @@ export default function CaseDetailPage() {
           {c.interventions?.length ? c.interventions.map(int => (
             <div key={int.id} className="grid grid-cols-4 p-4 border-b border-border last:border-0 font-mono text-sm items-center">
               <div className="uppercase">{int.type.replace('_', ' ')}</div>
-              <div>{new Date(int.scheduled_for).toLocaleString('en-IN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</div>
-              <div>{int.executed_at ? new Date(int.executed_at).toLocaleString('en-IN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : "—"}</div>
+              <div>{new Date(int.scheduled_for).toLocaleString('en-IN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true })}</div>
+              <div>{int.executed_at ? new Date(int.executed_at).toLocaleString('en-IN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }) : "—"}</div>
               <div>
                 <span className={`px-2 py-1 text-xs border ${int.status === 'completed' ? 'border-recovered text-recovered bg-recovered-bg' : 'border-border'}`}>
                   {int.outcome || int.status}
