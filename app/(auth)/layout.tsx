@@ -31,18 +31,6 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
             </div>
           </div>
         </div>
-        
-        <div className="bg-surface/10 p-6 rounded-lg backdrop-blur-sm border border-surface/20 max-w-md relative overflow-hidden">
-          <div className="absolute top-0 right-0 -mr-4 -mt-4 text-surface/10 text-9xl font-serif">"</div>
-          <p className="text-surface font-medium mb-6 relative z-10">"Retry completely changed how we handle payment drops. We recovered ₹48,620 in our first week alone with zero manual effort."</p>
-          <div className="flex items-center gap-3 relative z-10">
-            <div className="w-10 h-10 bg-active rounded-full flex items-center justify-center font-bold text-text-primary">JD</div>
-            <div>
-              <div className="font-bold text-sm">John Doe</div>
-              <div className="text-xs text-neutral-bg/70 uppercase tracking-wider mt-0.5">Founder, NotesBay</div>
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* Right side: Auth Form */}
