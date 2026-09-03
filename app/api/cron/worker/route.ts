@@ -7,7 +7,7 @@ export async function GET(request: Request) {
   try {
     // 1. Fetch all recovery cases currently waiting in the 'diagnosing' state
     const waitingCases = await sql`
-      SELECT c.id, c.created_at, m.policies
+      SELECT c.id, c.opened_at, m.policies
       FROM recovery_cases c
       JOIN merchants m ON c.merchant_id = m.id
       WHERE c.status = 'diagnosing'
@@ -21,7 +21,7 @@ export async function GET(request: Request) {
 
     // 2. Iterate and check cool-off times
     for (const row of waitingCases) {
-      const openedAt = new Date(row.created_at);
+      const openedAt = new Date(row.opened_at);
       const diffMinutes = (now.getTime() - openedAt.getTime()) / (1000 * 60);
       
       const policies = row.policies || {};
