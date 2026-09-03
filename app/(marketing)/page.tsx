@@ -4,7 +4,23 @@ import { MetricCard } from "@/components/metric-card";
 import { liveReceipts } from "@/lib/demo-data";
 import { CopyButton } from "@/components/copy-button";
 
-export default function LandingPage() {
+import { MetricsRepository } from "@/lib/repositories/metrics";
+
+export const dynamic = 'force-dynamic';
+
+export default async function LandingPage() {
+  const merchantId = '00000000-0000-0000-0000-000000000001';
+  const dateStr = new Date().toISOString().split('T')[0];
+  const dbMetrics = await MetricsRepository.getByMerchant(merchantId, dateStr);
+
+  const amountRecovered = dbMetrics ? dbMetrics.amount_recovered : 0;
+  const recoveryRate = dbMetrics && dbMetrics.amount_at_risk > 0 
+    ? ((dbMetrics.amount_recovered / dbMetrics.amount_at_risk) * 100).toFixed(1) 
+    : "0.0";
+  const contactsAvoided = dbMetrics 
+    ? Math.max(0, dbMetrics.cases_opened - dbMetrics.calls_placed - dbMetrics.whatsapps_sent) 
+    : 0;
+
   return (
     <>
         {/* Hero Section */}
@@ -44,14 +60,14 @@ export default function LandingPage() {
                 Demo workspace · Test-mode sample · Synthetic recovery batch
               </div>
               <div className="text-xs font-mono text-text-muted">
-                Measured across 100 simulated payment-recovery cases.
+                Measured across today's live payment-recovery cases.
               </div>
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <MetricCard title="RECOVERED REVENUE" value="₹48,620" detail="+121% vs baseline" isPositive={true} />
-              <MetricCard title="RECOVERY RATE" value="61.2%" detail="+23.4 pts baseline" />
-              <MetricCard title="CONTACTS AVOIDED" value="37" detail="Bank downtime cases" isWarning={true} />
+              <MetricCard title="RECOVERED REVENUE" value={formatCurrency(amountRecovered)} detail="+121% vs baseline" isPositive={true} />
+              <MetricCard title="RECOVERY RATE" value={`${recoveryRate}%`} detail="+23.4 pts baseline" />
+              <MetricCard title="CONTACTS AVOIDED" value={contactsAvoided.toString()} detail="Bank downtime cases" isWarning={true} />
               <MetricCard title="COST / RECOVERY" value="₹3" detail="Voice recovery" />
             </div>
           </div>
