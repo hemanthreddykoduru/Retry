@@ -144,6 +144,25 @@ export async function POST(request: Request) {
 
     await RecoveryServiceDB.processEvent(caseId, event, { eventId });
     
+    // Fetch merchant policies to see if Cool-off is set to 'Immediate' (0)
+    const merchantRes = await sql`SELECT policies FROM merchants WHERE id = ${merchantId}`;
+    const policies = merchantRes[0]?.policies || {};
+    const delayMinutes = parseInt(policies.delayMinutes || '15', 10);
+    
+    // If cool-off is 'Immediate', automatically dispatch the Voice Agent right now!
+    if (event === 'payment.failed' && delayMinutes === 0) {
+      try {
+        const host = request.headers.get('host') || 'localhost:3000';
+        const protocol = host.includes('localhost') ? 'http' : 'https';
+        // Fire and forget the call trigger
+        fetch(`${protocol}://${host}/api/recovery-cases/${caseId}/voice-call`, {
+          method: 'POST',
+        }).catch(e => console.error('[Auto-Trigger Error]', e));
+      } catch (e) {
+        console.error('[Auto-Trigger Error]', e);
+      }
+    }
+    
     await PaymentEventsRepository.markProcessed(inserted.id);
     
     console.info(`razorpay_webhook_processed: ${event}`);
