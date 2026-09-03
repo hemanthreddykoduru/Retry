@@ -4,8 +4,9 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
   return (
     <div className="flex flex-col min-h-screen">
       {/* Announcement Strip */}
-      <div className="w-full bg-neutral-bg border-b border-border text-center py-2 text-xs font-mono text-text-secondary uppercase tracking-widest">
-        Built for Razorpay test-mode recovery workflows
+      <div className="w-full bg-surface border-b border-border py-2 px-4 text-center text-xs font-mono text-text-secondary uppercase tracking-widest flex items-center justify-center gap-2">
+        <span className="w-2 h-2 rounded-full bg-waiting animate-pulse"></span>
+        Built for <span className="bg-[#facc15] text-[#854d0e] font-bold px-1.5 py-0.5 rounded-sm">Razorpay test-mode</span> recovery workflows
       </div>
 
       <header className="flex justify-between items-center p-6 lg:px-12 border-b border-border bg-surface sticky top-0 z-10">
