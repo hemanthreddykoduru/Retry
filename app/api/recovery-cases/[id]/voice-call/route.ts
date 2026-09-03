@@ -31,10 +31,9 @@ export async function POST(
   // Fetch Merchant config
   const merchantRes = await sql`SELECT policies FROM merchants WHERE id = ${recoveryCase.merchant_id}`;
   const policies = merchantRes[0]?.policies || {};
-  const delayMinutes = parseInt(policies.delayMinutes || '15', 10);
 
   // 1. Guardrails Check
-  const decision = checkVoiceGuardrails(recoveryCase, customer, 50000, currentInterventionCount, delayMinutes);
+  const decision = checkVoiceGuardrails(recoveryCase, customer, 50000, currentInterventionCount, policies);
   
   if (!decision.allowed) {
     // Audit log should be written here in a real db

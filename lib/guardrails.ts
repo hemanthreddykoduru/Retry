@@ -11,7 +11,7 @@ export function checkVoiceGuardrails(
   customer: Customer, 
   merchantVoiceThresholdPaise: number = 50000, 
   currentInterventionCount: number = 0,
-  coolOffMinutes: number = 15
+  merchantPolicies: any = {}
 ): GuardrailDecision {
   const reasons: string[] = [];
 
@@ -25,6 +25,7 @@ export function checkVoiceGuardrails(
   if (recoveryCase.opened_at) {
     const openedAt = new Date(recoveryCase.opened_at);
     const diffMinutes = (now.getTime() - openedAt.getTime()) / (1000 * 60);
+    const coolOffMinutes = parseInt(merchantPolicies.delayMinutes || '15', 10);
     
     if (diffMinutes < coolOffMinutes) {
       reasons.push(`In recovery cool-off period. Please wait ${Math.ceil(coolOffMinutes - diffMinutes)} more minutes before initiating contact.`);
@@ -60,7 +61,9 @@ export function checkVoiceGuardrails(
   }
 
   // 6. Bank downtime
-  if (recoveryCase.root_cause === 'bank_downtime') {
+  // Default to true if not explicitly set
+  const suppressDowntime = merchantPolicies.suppressDowntime !== false;
+  if (recoveryCase.root_cause === 'bank_downtime' && suppressDowntime) {
     reasons.push("Bank downtime cases are not eligible for voice calls to prevent frustration.");
   }
 
