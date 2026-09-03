@@ -10,7 +10,8 @@ export function checkVoiceGuardrails(
   recoveryCase: RecoveryCase, 
   customer: Customer, 
   merchantVoiceThresholdPaise: number = 50000, 
-  currentInterventionCount: number = 0
+  currentInterventionCount: number = 0,
+  coolOffMinutes: number = 15
 ): GuardrailDecision {
   const reasons: string[] = [];
 
@@ -24,7 +25,6 @@ export function checkVoiceGuardrails(
   if (recoveryCase.opened_at) {
     const openedAt = new Date(recoveryCase.opened_at);
     const diffMinutes = (now.getTime() - openedAt.getTime()) / (1000 * 60);
-    const coolOffMinutes = 15; // Standard 15-minute cool-off
     
     if (diffMinutes < coolOffMinutes) {
       reasons.push(`In recovery cool-off period. Please wait ${Math.ceil(coolOffMinutes - diffMinutes)} more minutes before initiating contact.`);
