@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ReceiptRow } from "@/components/receipt-row";
 import { MetricCard } from "@/components/metric-card";
-import { liveReceipts } from "@/lib/demo-data";
+import { liveReceipts, formatCurrency } from "@/lib/demo-data";
 import { CopyButton } from "@/components/copy-button";
 
 import { MetricsRepository } from "@/lib/repositories/metrics";
