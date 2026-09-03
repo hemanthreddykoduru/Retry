@@ -88,6 +88,8 @@ export default function LoginPage() {
           onClick={() => {
             if (typeof window !== 'undefined') {
               localStorage.setItem('retry_business_name', 'Testing Business');
+              localStorage.setItem('retry_user_email', 'founder@testingbusiness.com');
+              localStorage.setItem('retry_merchant_id', 'm_demo_123');
               window.location.href = '/dashboard';
             }
           }} 
