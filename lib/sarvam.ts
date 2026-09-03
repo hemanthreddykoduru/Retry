@@ -19,7 +19,7 @@ export type NormalizedSarvamOutcome = 'promise_to_pay' | 'link_requested' | 'do_
 
 export function isSarvamConfigured(): boolean {
   return process.env.SARVAM_MOCK_MODE === 'true' || 
-    (!!process.env.SARVAM_API_KEY && !!process.env.SARVAM_AGENT_ID && !!process.env.SARVAM_OUTBOUND_PHONE_NUMBER_ID);
+    (!!process.env.SARVAM_API_KEY && !!process.env.SARVAM_ORG_ID && !!process.env.SARVAM_WORKSPACE_ID && !!process.env.SARVAM_APP_ID);
 }
 
 export async function triggerSarvamOutboundCall(input: SarvamCallInput): Promise<SarvamCallOutput> {
@@ -34,24 +34,34 @@ export async function triggerSarvamOutboundCall(input: SarvamCallInput): Promise
   }
 
   // Live Mode Adapter
-  // Note: These headers and payloads are estimations for the adapter structure.
-  // Must confirm exact payload schema with Sarvam API documentation.
-  const apiUrl = process.env.SARVAM_API_BASE_URL || 'https://api.sarvam.ai/v1/outbound';
+  const baseUrl = process.env.SARVAM_API_BASE_URL || 'https://apps.sarvam.ai/api';
+  const orgId = process.env.SARVAM_ORG_ID;
+  const workspaceId = process.env.SARVAM_WORKSPACE_ID;
+  
+  if (!orgId || !workspaceId) {
+    throw new Error('Sarvam configuration missing orgId or workspaceId');
+  }
+
+  const apiUrl = `${baseUrl}/outbounds/v1/orgs/${orgId}/workspaces/${workspaceId}/outbounds`;
   
   const payload = {
-    agent_id: process.env.SARVAM_AGENT_ID,
-    outbound_phone_number_id: process.env.SARVAM_OUTBOUND_PHONE_NUMBER_ID,
-    recipient_phone_number: input.customer_phone,
-    callback_url: `${process.env.APP_BASE_URL}/api/webhooks/sarvam`,
-    context: {
-      customer_name: input.customer_name,
-      merchant_name: input.merchant_name,
-      amount_rupees: input.amount_rupees,
-      order_id: input.order_id,
-      failure_reason: input.failure_reason,
-      payment_link_url: input.payment_link_url,
-      preferred_language: input.preferred_language,
-      recovery_case_id: input.recovery_case_id
+    app_config: {
+      app_id: process.env.SARVAM_APP_ID,
+      app_version: process.env.SARVAM_APP_VERSION,
+      connection_id: process.env.SARVAM_CONNECTION_ID
+    },
+    user_config: {
+      to_number: input.customer_phone,
+      from_number: process.env.SARVAM_AGENT_PHONE_NUMBER,
+      variables: {
+        customer_name: input.customer_name,
+        merchant_name: input.merchant_name,
+        amount: input.amount_rupees.toString(),
+        reason: input.failure_reason,
+        payment_link: input.payment_link_url,
+        language: input.preferred_language,
+        case_id: input.recovery_case_id
+      }
     }
   };
 
@@ -59,7 +69,7 @@ export async function triggerSarvamOutboundCall(input: SarvamCallInput): Promise
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${process.env.SARVAM_API_KEY}`
+      'X-API-Key': process.env.SARVAM_API_KEY || ''
     },
     body: JSON.stringify(payload)
   });
@@ -71,8 +81,8 @@ export async function triggerSarvamOutboundCall(input: SarvamCallInput): Promise
 
   const data = await response.json();
   return {
-    call_id: data.call_id || data.id,
-    status: data.status || 'initiated'
+    call_id: data.attempt_id || data.id || `mock_call_${Date.now()}`,
+    status: 'queued'
   };
 }
 

@@ -43,10 +43,12 @@ export async function POST(
   // 2. Queue Intervention
   console.log(`[DB] Queuing voice_call intervention for case ${id}`);
   
-  await sql`
+  const insertedIntervention = await sql`
     INSERT INTO interventions (recovery_case_id, type, status, scheduled_for)
     VALUES (${id}, 'voice_call', 'pending', ${new Date().toISOString()})
+    RETURNING id
   `;
+  const interventionId = insertedIntervention[0].id;
 
   // 3. Trigger Sarvam
   try {
@@ -64,9 +66,17 @@ export async function POST(
 
     console.log(`[AUDIT] Voice call initiated via Sarvam. Call ID: ${sarvamResult.call_id}`);
     
+    await sql`
+      UPDATE interventions
+      SET status = 'scheduled', metadata = jsonb_set(COALESCE(metadata, '{}'::jsonb), '{attempt_id}', ${JSON.stringify(sarvamResult.call_id)}::jsonb)
+      WHERE id = ${interventionId}
+    `;
+
     return NextResponse.json({
       success: true,
       message: 'Voice call initiated safely.',
+      case_id: recoveryCase.id,
+      attempt_id: sarvamResult.call_id,
       call_status: sarvamResult.status,
       demo_mode: process.env.SARVAM_MOCK_MODE === 'true'
     });
