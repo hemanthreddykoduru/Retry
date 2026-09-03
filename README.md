@@ -24,11 +24,11 @@ Measured across a **105-case batch** (15 merchants, **₹2,01,765 at risk**), ru
 
 ---
 
-## The problem
+## Failure mix used in the simulation
 
-In India, a large share of checkout failures have **nothing to do with the customer not wanting to pay**. They break down roughly like this:
+The measurement harness uses an India-oriented **synthetic failure mix** to compare recovery policies across the same 105 deterministic cases. These percentages are modeling assumptions for the experiment, not claims about aggregate Razorpay or India-wide payment-failure rates.
 
-| Root cause | Share | What actually happened |
+| Simulated root cause | Model share | Interpretation |
 |---|---:|---|
 | Bank / gateway downtime | ~35% | The bank's rails were down for a few minutes. The customer did nothing wrong. |
 | Insufficient funds | ~25% | Money isn't in the account *right now* — often a timing problem, not an intent problem. |
@@ -45,7 +45,7 @@ Existing recovery tools treat all of these the same way: **retry blindly, or mes
 ## What Retry does differently
 
 1. **Diagnosis before contact.** Every failure is classified into a root cause from its decline code and downtime signals *before* any customer is contacted. If it's bank downtime, Retry **waits and retries and never calls** — because those cases self-resolve once the rails recover. This single decision is why Retry recovers more while contacting fewer people.
-2. **Vernacular voice recovery.** For high-value, high-intent cases, Retry places a real **Telugu / Hindi / English voice call** (via Sarvam), holds a natural conversation, captures a promise-to-pay, and sends a fresh payment link. This is a channel Indian customers actually pick up — and it's genuinely impossible to do with rules alone.
+2. **Vernacular voice recovery.** For high-value, high-intent cases, Retry can place a controlled Sarvam voice call in English, Telugu, or Hindi, with an agent design that supports language switching where configured. Sarvam Voice Agents supports additional Indian languages depending on the deployed agent configuration.
 3. **Silent drop-off detection.** A lightweight JS heartbeat on the checkout catches customers who abandon *without* a failure event ever firing — the invisible leak most tools never see.
 
 ---
@@ -58,7 +58,7 @@ flowchart TD
     A -->|"JS heartbeat: silent drop-off"| B
     B --> C{"Diagnose root cause<br/>(rules — no LLM)"}
     C -->|"bank_downtime"| D["Wait + smart retry<br/>NO contact"]
-    C -->|"insufficient_funds ≥ ₹500"| E["Vernacular voice call<br/>(Sarvam)"]
+    C -->|"insufficient_funds ≥ ₹500"| E["Eligible for vernacular voice recovery<br/>(Sarvam · operator scheduled)"]
     C -->|"insufficient_funds < ₹500"| F["WhatsApp nudge + link"]
     C -->|"auth_failure / network_drop"| F
     C -->|"unknown"| E
@@ -69,7 +69,7 @@ flowchart TD
     G --> I[("Postgres<br/>recovery_cases · interventions<br/>audit_log · daily_metrics")]
 
     J["Guardrails: opt-out stops all ·<br/>quiet hours 9PM–9AM · max 2 calls · escalate to human"]
-    J -.->|gates every contact| E
+    J -.->|requires pass + operator action| E
     J -.->|gates every contact| F
 ```
 
@@ -109,7 +109,7 @@ The system is built to bend, not break. Handled and demonstrated:
 - **Malformed webhook payload** → routed to a `needs_review` sink; the pipeline keeps running.
 - **Duplicate webhook** (unique event id) → deduped; no double-case, no double-charge.
 - **Unknown decline code** → `root_cause = unknown` → safe default; never crashes.
-- **WhatsApp send fails / template not yet approved** → fall back to retry-only, log, continue.
+- **WhatsApp path unavailable or template not approved** → record a queued fallback action, continue with the configured recovery policy, and audit the decision.
 - **Voice call times out / no answer** → increment attempt count to the cap, then escalate.
 - **HMAC mismatch** → reject and audit.
 
@@ -139,7 +139,7 @@ The wedge: existing tools are built for **subscription churn in Western markets 
 - **App:** Next.js (checkout snippet + merchant dashboard + webhook + agent API routes)
 - **Data:** Postgres (InsForge) — `recovery_cases`, `interventions`, `call_sessions`, `promises`, `audit_log`, `daily_metrics`
 - **Payments:** Razorpay test-mode APIs (webhooks, payment links)
-- **Messaging:** WhatsApp Cloud API (utility templates)
+- **Messaging:** WhatsApp recovery path designed and represented as a queued fallback action; live WhatsApp Cloud API sending is not included in this build.
 - **Voice:** Sarvam vernacular voice agents
 - **Measurement:** zero-dependency Node (`retry-harness/`)
 
@@ -181,14 +181,32 @@ The live integrations run on **Razorpay test-mode** and recover a **real test pa
 
 ## What's real in this submission
 
-> Fill this in as you complete each piece — judges value an honest status box far more than an inflated one.
+> The harness metrics are simulated and reproducible. The integrations below are marked by actual test status.
 
-- ✅ **Measurement harness** — runs, produces the money slide, injects failures, writes an audit log.
+- ✅ **Measurement harness** — runs deterministically, produces the money slide, injects duplicate/malformed failures, and writes an audit log.
 - ✅ **Deterministic diagnosis + bounded policy engine** — implemented and exercised by the harness.
-- ⬜ **Live Razorpay test payment-link recovery** — recorded on camera.
-- ⬜ **Live WhatsApp send** (happy path) — fallback: queued message + template shown.
-- ⬜ **Live Sarvam Telugu call** — fallback: pre-recorded, clearly labelled clip.
-- ⬜ **Merchant dashboard** — fallback: renders from static harness output.
+- ✅ **Merchant dashboard** — deployed on Vercel; shows recovery cases, guardrails, audit events, intervention history, and masked customer contact data.
+- ✅ **Live Razorpay Test Mode failure ingestion** — a real `payment.failed` event is HMAC-verified, deduplicated, persisted, and converted into a Retry recovery case.
+- ✅ **Customer mapping** — the verified Razorpay payment contact is associated with the case and masked in the dashboard.
+- ✅ **Live Sarvam controlled outbound call** — Retry successfully initiated a real test call to the operator's own phone number through Sarvam.
+- ✅ **Operator-controlled intervention** — Razorpay failure creates a case; a voice call is not triggered automatically from the payment webhook.
+- 🟡 **Sarvam callback attribution** — implementation exists; final hosted callback verification is pending or should be recorded before submission.
+- 🟡 **Live Razorpay Test Mode payment-link recovery** — Payment Link creation is implemented; end-to-end proof of `payment_link.paid → recovered` should be recorded.
+- ⬜ **Live WhatsApp send** — intentionally omitted in this build; Retry records/queues the fallback action instead.
+
+---
+
+## Integration proof
+
+The build combines simulated policy evaluation with controlled live Test Mode integrations:
+
+| Flow | Evidence |
+|---|---|
+| Razorpay failure ingestion | A real Razorpay Test Mode `payment.failed` event reached the deployed Retry webhook, passed signature verification, and created a recovery case. |
+| Customer contact mapping | The payment contact was mapped to the recovery case and masked in the dashboard. |
+| Sarvam outbound calling | Retry initiated a controlled Sarvam outbound call to the operator's own phone number in local and deployed test environments. |
+| Automatic customer calling | Deliberately disabled. Payment webhooks create cases; intervention scheduling remains guarded and operator-controlled. |
+| Payment Link recovery closure | Implemented/Test Mode path; final `payment_link.paid → recovered` recording remains a recommended proof point. |
 
 ---
 
@@ -200,28 +218,90 @@ Recovery is one agent in a larger surface. Next: a **Track-2 crossover** that tu
 
 *Built solo for the Razorpay AI Buildathon 2026. Code speaks louder than a résumé — so every claim here is reproducible from this repo.*
 
-## Production Deployment Checklist
+## Controlled Deployment Checklist
 
-Before deploying to Vercel or your preferred host, ensure the following steps are complete:
+> This build is demonstrated using Razorpay Test Mode and a controlled Sarvam call to the operator's own phone number. Do not enable unrestricted automated calling to customers without authorization, consent, DND/opt-out enforcement, callback validation, and legal/compliance review.
 
-1. **Environment Variables:**
-   - Configure `NEXT_PUBLIC_APP_URL` to your production domain.
-   - Add all `RAZORPAY_*` credentials (`RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, `RAZORPAY_WEBHOOK_SECRET`).
-   - Add `SARVAM_API_KEY`, `SARVAM_AGENT_ID`, and `SARVAM_WEBHOOK_SECRET` with live values.
-   - Set `DEMO_MODE=false`, `SARVAM_MOCK_MODE=false`.
-2. **Razorpay Webhooks:**
-   - Add your production URL `https://<domain>/api/webhooks/razorpay` to your Razorpay dashboard.
-   - Subscribe to `payment.failed`, `payment_link.paid`, etc.
-3. **Sarvam Callback URL:**
-   - Register `https://<domain>/api/webhooks/sarvam` in your Sarvam agent settings.
-4. **Test the Live Flow:**
-   - Run a test failure in Razorpay test mode first and verify Sarvam initiates a live outbound call to a designated test number.
-5. **Limitations:**
-   - WhatsApp is intentionally omitted in this build.
-   - Do not use for non-INR currencies without modifying the `formatCurrency` logic.
+### 1. Environment variables
+
+Configure server-side environment variables in Vercel. Never expose these with a `NEXT_PUBLIC_` prefix:
+
+```env
+# Application
+NEXT_PUBLIC_APP_URL=https://your-domain.example
+
+# Razorpay
+RAZORPAY_KEY_ID=...
+RAZORPAY_KEY_SECRET=...
+RAZORPAY_WEBHOOK_SECRET=...
+
+# Sarvam Voice Agents
+SARVAM_API_KEY=...
+SARVAM_API_BASE_URL=https://apps.sarvam.ai/api
+SARVAM_ORG_ID=...
+SARVAM_WORKSPACE_ID=...
+SARVAM_APP_ID=...
+SARVAM_APP_VERSION=...
+SARVAM_CONNECTION_ID=...
+SARVAM_AGENT_PHONE_NUMBER=...
+
+# Only for one controlled self-test
+SARVAM_TEST_RECIPIENT_PHONE_NUMBER=...
+SARVAM_WEBHOOK_SECRET=...
+
+# Keep true for normal demos. Set false only for a single controlled test.
+SARVAM_MOCK_MODE=true
+```
+
+After changing environment variables, redeploy Vercel.
+
+### 2. Razorpay Test Mode webhook
+
+Configure the deployed endpoint:
+
+```text
+https://<domain>/api/webhooks/razorpay
+```
+
+Subscribe initially to:
+
+```text
+payment.failed
+payment_link.paid
+payment.captured
+order.paid
+payment_link.expired
+```
+
+Retry verifies the Razorpay `X-Razorpay-Signature` before processing an event and uses a raw request body for signature validation.
+
+### 3. Sarvam controlled test
+
+1. Create and publish the Sarvam agent.
+2. Configure an approved outbound telephony connection and agent/caller number.
+3. Keep `SARVAM_MOCK_MODE=true` for normal dashboard/demo operation.
+4. For one controlled test only, use the operator's own E.164 number as `SARVAM_TEST_RECIPIENT_PHONE_NUMBER`.
+5. Set `SARVAM_MOCK_MODE=false`, redeploy, and trigger one manual test call.
+6. Verify Sarvam returns an attempt ID and Retry receives/records the callback.
+7. Return to mock mode if callback, authorization, deduplication, or guardrails are not verified.
+
+### 4. Before real customer outreach
+
+Require all of the following:
+
+- Verified Razorpay and Sarvam callbacks.
+- Idempotency for duplicate payment and call events.
+- Payment-success closure: `payment_link.paid`, `payment.captured`, or `order.paid` marks the original case recovered and suppresses pending outreach.
+- Server-side DND/opt-out enforcement.
+- Quiet-hours and attempt-cap enforcement.
+- Merchant authentication and tenant isolation.
+- Authorized customer-contact basis and applicable compliance review.
+- No collection of OTP, PIN, CVV, card data, UPI PIN, passwords, or bank credentials in the voice flow.
 
 ## Known limitations
-- **Razorpay test mode only**: Production credentials are not supported without explicit webhook configuration.
-- **Sarvam mock mode by default**: Outbound-call provider values require manual dashboard configuration to execute live HTTP requests.
-- **No WhatsApp/SMS integration yet**: The `payment_link_follow_up` intervention serves as the baseline alternative to messaging.
-- **Synthetic evaluation data**: The workspace is preloaded with 100 deterministic mock cases, not production merchant results.
+
+- **Razorpay Test Mode demonstration:** live payment-failure ingestion is demonstrated with Razorpay Test Mode. Live-mode merchant onboarding and per-merchant webhook configuration are outside this build.
+- **Controlled Sarvam test:** Sarvam outbound calling has been tested only against the operator's own number. General customer calling requires completed callback verification, DND/opt-out handling, consent/authorization controls, quiet hours, attempt caps, and access controls.
+- **No live WhatsApp/SMS provider:** the `payment_link_follow_up` intervention represents a queued fallback action; live WhatsApp Cloud API sending is not included.
+- **Synthetic evaluation:** the 105-case evaluation dataset and policy outcomes are deterministic synthetic data, not production merchant results.
+- **Payment-link recovery proof:** the Test Mode payment link path is implemented; recording the final `payment_link.paid → recovered` proof remains a recommended final validation.
