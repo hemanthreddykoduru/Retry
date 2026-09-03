@@ -179,21 +179,18 @@ export default async function LandingPage() {
               <div className="flex flex-col gap-2">
                 <div className="text-[11px] font-medium tracking-[0.12em] uppercase text-text-secondary">Razorpay Webhook Endpoint</div>
                 <div className="flex items-center justify-between border border-border p-2 bg-neutral-bg font-mono text-sm">
-                  <span className="truncate mr-4 text-text-muted">https://api.retry.inc/v1/razorpay/webhook</span>
-                  <CopyButton text="https://api.retry.inc/v1/razorpay/webhook" />
+                  <span className="truncate mr-4 text-text-muted">https://retry-buildathon.vercel.app/api/webhooks/razorpay?merchantId=m_demo_123</span>
+                  <CopyButton text="https://retry-buildathon.vercel.app/api/webhooks/razorpay?merchantId=m_demo_123" />
                 </div>
               </div>
               <div className="flex flex-col gap-2">
                 <div className="text-[11px] font-medium tracking-[0.12em] uppercase text-text-secondary">Checkout Snippet</div>
                 <div className="border border-border p-2 bg-neutral-bg font-mono text-sm relative group">
                   <pre className="text-text-muted overflow-x-auto p-2">
-{`<script src="https://js.retry.inc/v1/retry.js"></script>
-<script>
-  Retry.init({ merchant_id: "m_123" });
-</script>`}
+{`<script src="https://retry-buildathon.vercel.app/retry-snippet.js" data-retry-key="m_demo_123"></script>`}
                   </pre>
                   <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <CopyButton text={`<script src="https://js.retry.inc/v1/retry.js"></script>\n<script>\n  Retry.init({ merchant_id: "m_123" });\n</script>`} />
+                    <CopyButton text={`<script src="https://retry-buildathon.vercel.app/retry-snippet.js" data-retry-key="m_demo_123"></script>`} />
                   </div>
                 </div>
               </div>
