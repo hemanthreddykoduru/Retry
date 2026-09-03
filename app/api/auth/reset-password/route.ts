@@ -5,7 +5,8 @@ export async function POST(request: Request) {
   try {
     const { email } = await request.json();
     
-    const { error } = await insforge.auth.resetPasswordForEmail(email, {
+    const { error } = await insforge.auth.sendResetPasswordEmail({
+      email,
       redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/update-password`,
     });
     
