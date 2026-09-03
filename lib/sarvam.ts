@@ -44,31 +44,33 @@ export async function triggerSarvamOutboundCall(input: SarvamCallInput): Promise
 
   const apiUrl = `${baseUrl}/outbounds/v1/orgs/${orgId}/workspaces/${workspaceId}/outbounds`;
   
+  const baseUrlString = process.env.NEXT_PUBLIC_APP_URL || 'https://retry-buildathon.vercel.app';
+  
   const payload = {
     app_config: {
       app_id: process.env.SARVAM_APP_ID,
       app_version: parseInt(process.env.SARVAM_APP_VERSION || '1', 10),
+      app_type: "agent",
       connection_config: {
         connection_id: process.env.SARVAM_CONNECTION_ID,
         agent_phone_number: process.env.SARVAM_AGENT_PHONE_NUMBER
       },
-      webhook_config: {
-        url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://retry-buildathon.vercel.app'}/api/webhooks/sarvam`,
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${process.env.SARVAM_WEBHOOK_SECRET}`
-        }
-      }
-    },
-    user_config: {
-      user_phone_number: input.customer_phone,
-      variables: {
+      agent_variables: {
         customer_name: input.customer_name,
         merchant_name: input.merchant_name,
         amount: input.amount_rupees.toString(),
         reason: input.failure_reason,
         payment_link: input.payment_link_url,
         language: input.preferred_language,
+        case_id: input.recovery_case_id
+      }
+    },
+    user_config: {
+      user_phone_number: input.customer_phone
+    },
+    webhook_config: {
+      url: `${baseUrlString}/api/webhooks/sarvam?token=${process.env.SARVAM_WEBHOOK_SECRET}`,
+      metadata: {
         case_id: input.recovery_case_id
       }
     }
@@ -97,18 +99,16 @@ export async function triggerSarvamOutboundCall(input: SarvamCallInput): Promise
 
 import { timingSafeEqual } from 'crypto';
 
-export function verifySarvamWebhookAuth(authHeader: string | null): boolean {
+export function verifySarvamWebhookAuth(tokenParam: string | null): boolean {
   if (process.env.SARVAM_MOCK_MODE === 'true') return true;
   
   const secret = process.env.SARVAM_WEBHOOK_SECRET;
-  if (!secret || !authHeader) return false;
+  if (!secret || !tokenParam) return false;
 
-  const expectedHeader = `Bearer ${secret}`;
-  
   // Timing-safe comparison to prevent timing attacks
   try {
-    const a = Buffer.from(authHeader);
-    const b = Buffer.from(expectedHeader);
+    const a = Buffer.from(tokenParam);
+    const b = Buffer.from(secret);
     return a.length === b.length && timingSafeEqual(a, b);
   } catch (e) {
     return false;

@@ -4,9 +4,10 @@ import { RecoveryServiceDB } from '@/lib/recovery-service-db';
 import { sql } from '@/lib/db';
 
 export async function POST(request: Request) {
-  const authHeader = request.headers.get('Authorization');
+  const { searchParams } = new URL(request.url);
+  const tokenParam = searchParams.get('token');
 
-  if (!verifySarvamWebhookAuth(authHeader)) {
+  if (!verifySarvamWebhookAuth(tokenParam)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
