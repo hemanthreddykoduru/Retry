@@ -49,7 +49,7 @@ export async function POST(
   
   const insertedIntervention = await sql`
     INSERT INTO interventions (recovery_case_id, type, status, scheduled_for)
-    VALUES (${id}, 'voice_call', 'pending', ${new Date().toISOString()})
+    VALUES (${id}, 'voice_call', 'queued', ${new Date().toISOString()})
     RETURNING id
   `;
   const interventionId = insertedIntervention[0].id;
@@ -72,7 +72,7 @@ export async function POST(
     
     await sql`
       UPDATE interventions
-      SET status = 'scheduled', metadata = jsonb_set(COALESCE(metadata, '{}'::jsonb), '{attempt_id}', ${JSON.stringify(sarvamResult.call_id)}::jsonb)
+      SET status = 'sent', metadata = jsonb_set(COALESCE(metadata, '{}'::jsonb), '{attempt_id}', ${JSON.stringify(sarvamResult.call_id)}::jsonb)
       WHERE id = ${interventionId}
     `;
 
@@ -93,7 +93,7 @@ export async function POST(
       VALUES (
         ${id}, 
         'payment_link_follow_up', 
-        'pending', 
+        'queued', 
         ${new Date().toISOString()}, 
         ${sql.json({ reason: 'sarvam.call_failed', fallback_triggered: 'payment_link_follow_up' })}
       )
