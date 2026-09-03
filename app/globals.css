@@ -130,4 +130,15 @@ body {
   .delay-600 { animation-delay: 600ms; }
   .delay-700 { animation-delay: 700ms; }
   .delay-800 { animation-delay: 800ms; }
+
+  @keyframes pipeline-step {
+    0%, 100% { opacity: 0.4; transform: scale(1); }
+    10% { opacity: 1; transform: scale(1.05); color: var(--text-primary); }
+    30% { opacity: 0.4; transform: scale(1); }
+  }
+
+  .animate-pipeline-1 { animation: pipeline-step 3.5s infinite 0s; display: inline-block; }
+  .animate-pipeline-2 { animation: pipeline-step 3.5s infinite 0.8s; display: inline-block; }
+  .animate-pipeline-3 { animation: pipeline-step 3.5s infinite 1.6s; display: inline-block; }
+  .animate-pipeline-4 { animation: pipeline-step 3.5s infinite 2.4s; display: inline-block; font-weight: bold; }
 }
