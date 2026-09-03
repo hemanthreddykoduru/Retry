@@ -47,7 +47,7 @@ export default function ForgotPasswordPage() {
     setLoading(true);
     
     const form = e.currentTarget;
-    const code = (form.elements.namedItem('code') as HTMLInputElement).value;
+    const code = (form.elements.namedItem('otp_verification') as HTMLInputElement).value;
     const newPassword = (form.elements.namedItem('newPassword') as HTMLInputElement).value;
     
     try {
@@ -93,8 +93,12 @@ export default function ForgotPasswordPage() {
         </div>
       ) : step === "code" ? (
         <form className="flex flex-col" onSubmit={handleUpdatePassword}>
+          {/* Autofill traps - invisible to user but catches aggressive password managers */}
+          <input type="email" name="fakeusernameremembered" className="hidden" aria-hidden="true" autoComplete="username" />
+          <input type="password" name="fakepasswordremembered" className="hidden" aria-hidden="true" autoComplete="current-password" />
+          
           {error && <p className="text-red-500 text-sm mb-4 bg-lost-bg p-3 rounded-md border border-lost/20">{error}</p>}
-          <FormField label="Verification Code" id="code" type="text" placeholder="123456" autoComplete="one-time-code" required />
+          <FormField label="Verification Code" id="otp_verification" type="text" placeholder="123456" autoComplete="off" required />
           <FormField label="New Password" id="newPassword" type="password" placeholder="••••••••" autoComplete="new-password" required />
 
           <button type="submit" disabled={loading} className="w-full bg-text-primary text-surface py-2 rounded-md font-medium text-sm hover:bg-text-primary/90 transition-colors disabled:opacity-50 mt-2">
