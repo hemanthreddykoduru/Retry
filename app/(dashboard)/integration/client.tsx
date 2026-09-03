@@ -76,6 +76,21 @@ export default function IntegrationClient({ apiKey, appUrl: serverAppUrl }: { ap
               </div>
               
               <div>
+                <div className="text-xs font-mono text-text-secondary uppercase tracking-widest mb-2">Webhook Secret</div>
+                <div className="flex items-center">
+                  <div className="bg-neutral-bg border border-border p-3 font-mono text-sm flex-1 truncate blur-[2px] hover:blur-none transition-all cursor-crosshair">
+                    retry_buildathon_secret_key_2026
+                  </div>
+                  <button 
+                    onClick={() => copyToClipboard('retry_buildathon_secret_key_2026')}
+                    className="p-3 border border-l-0 border-border bg-surface hover:bg-neutral-bg transition-colors"
+                  >
+                    <Copy size={18} />
+                  </button>
+                </div>
+              </div>
+              
+              <div>
                 <div className="text-xs font-mono text-text-secondary uppercase tracking-widest mb-2">Subscribed Events</div>
                 <div className="flex flex-wrap gap-2 font-mono text-[10px] uppercase">
                   <span className="bg-neutral-bg border border-border px-2 py-1">payment.failed</span>
