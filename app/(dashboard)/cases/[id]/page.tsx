@@ -147,7 +147,7 @@ export default function CaseDetailPage() {
                     alert('Demo error');
                   }
                 }} className="btn-primary py-2 px-6 h-full flex items-center justify-center font-bold tracking-wide uppercase text-sm border-2 border-transparent hover:border-active transition-all">
-            Trigger Voice Call
+            Manual Trigger Call
           </button>
           <div className="text-right flex flex-col gap-1 bg-surface border border-border p-4">
             <div className="text-[11px] font-medium tracking-[0.12em] uppercase text-text-secondary">
