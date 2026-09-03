@@ -129,6 +129,14 @@ export default function CaseDetailPage() {
           <div className="text-[11px] font-medium tracking-[0.12em] uppercase text-text-secondary">
             Recovery Case
           </div>
+          <div className="flex items-center gap-3">
+            <div className="text-lg font-mono font-bold text-text-primary">
+              {c.id}
+            </div>
+            <StatusBadge status={c.status} showDot={true} />
+          </div>
+        </div>
+        <div className="flex items-center gap-4">
           <button onClick={async () => {
                   try {
                     const res = await fetch(`/api/recovery-cases/${c.id}/voice-call`, { method: 'POST' });
@@ -138,17 +146,16 @@ export default function CaseDetailPage() {
                   } catch (e) {
                     alert('Demo error');
                   }
-                }} className="btn-primary py-1.5 w-full flex items-center justify-center gap-2">
-            {c.id}
-            <StatusBadge status={c.status} showDot={true} />
+                }} className="btn-primary py-2 px-6 h-full flex items-center justify-center font-bold tracking-wide uppercase text-sm border-2 border-transparent hover:border-active transition-all">
+            Trigger Voice Call
           </button>
-        </div>
-        <div className="text-right flex flex-col gap-1 bg-surface border border-border p-4">
-          <div className="text-[11px] font-medium tracking-[0.12em] uppercase text-text-secondary">
-            Revenue at risk
-          </div>
-          <div className="text-3xl font-mono tracking-tighter font-bold text-text-primary">
-            {formatCurrency(c.amount)}
+          <div className="text-right flex flex-col gap-1 bg-surface border border-border p-4">
+            <div className="text-[11px] font-medium tracking-[0.12em] uppercase text-text-secondary">
+              Revenue at risk
+            </div>
+            <div className="text-3xl font-mono tracking-tighter font-bold text-text-primary">
+              {formatCurrency(c.amount)}
+            </div>
           </div>
         </div>
       </div>
