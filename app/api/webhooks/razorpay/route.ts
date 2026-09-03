@@ -144,20 +144,6 @@ export async function POST(request: Request) {
 
     await RecoveryServiceDB.processEvent(caseId, event, { eventId });
     
-    // Automatically trigger the Voice Agent immediately for the demo!
-    if (event === 'payment.failed') {
-      try {
-        const host = request.headers.get('host') || 'localhost:3000';
-        const protocol = host.includes('localhost') ? 'http' : 'https';
-        // Fire and forget the call trigger
-        fetch(`${protocol}://${host}/api/recovery-cases/${caseId}/voice-call`, {
-          method: 'POST',
-        }).catch(e => console.error('[Auto-Trigger Error]', e));
-      } catch (e) {
-        console.error('[Auto-Trigger Error]', e);
-      }
-    }
-    
     await PaymentEventsRepository.markProcessed(inserted.id);
     
     console.info(`razorpay_webhook_processed: ${event}`);
