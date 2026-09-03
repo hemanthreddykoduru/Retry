@@ -62,6 +62,13 @@ export async function triggerSarvamOutboundCall(input: SarvamCallInput): Promise
         language: input.preferred_language,
         case_id: input.recovery_case_id
       }
+    },
+    webhook_config: {
+      url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://retry-buildathon.vercel.app'}/api/webhooks/sarvam`,
+      method: "POST",
+      header: {
+        "Authorization": `Bearer ${process.env.SARVAM_WEBHOOK_SECRET}`
+      }
     }
   };
 
@@ -86,16 +93,13 @@ export async function triggerSarvamOutboundCall(input: SarvamCallInput): Promise
   };
 }
 
-export function verifySarvamWebhookSignature(rawBody: string, signature: string): boolean {
+export function verifySarvamWebhookAuth(authHeader: string | null): boolean {
   if (process.env.SARVAM_MOCK_MODE === 'true') return true;
   
-  // Example implementation assuming HMAC-SHA256
-  // Documentation required from Sarvam to confirm their signature header (e.g. X-Sarvam-Signature)
   const secret = process.env.SARVAM_WEBHOOK_SECRET;
   if (!secret) return false;
 
-  const expectedSignature = 'MOCK_SIGNATURE'; // Replace with crypto in real implementation or use webcrypto
-  return signature === expectedSignature || signature !== '';
+  return authHeader === `Bearer ${secret}`;
 }
 
 export function normalizeSarvamCallOutcome(payload: Record<string, unknown>): NormalizedSarvamOutcome {

@@ -1,15 +1,16 @@
 import { NextResponse } from 'next/server';
-import { verifySarvamWebhookSignature, normalizeSarvamCallOutcome } from '@/lib/sarvam';
+import { verifySarvamWebhookAuth, normalizeSarvamCallOutcome } from '@/lib/sarvam';
 import { RecoveryServiceDB } from '@/lib/recovery-service-db';
 import { sql } from '@/lib/db';
 
 export async function POST(request: Request) {
-  const rawBody = await request.text();
-  const signature = request.headers.get('X-Sarvam-Signature') || '';
+  const authHeader = request.headers.get('Authorization');
 
-  if (!verifySarvamWebhookSignature(rawBody, signature)) {
-    return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
+  if (!verifySarvamWebhookAuth(authHeader)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
+
+  const rawBody = await request.text();
 
   let payload;
   try {
