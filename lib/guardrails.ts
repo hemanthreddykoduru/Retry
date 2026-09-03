@@ -19,8 +19,19 @@ export function checkVoiceGuardrails(
     reasons.push("Customer has opted out of communications.");
   }
 
-  // 2. Quiet hours (09:00 - 21:00 IST)
+  // 1.5 Recovery Delay (Cool-off)
   const now = new Date();
+  if (recoveryCase.opened_at) {
+    const openedAt = new Date(recoveryCase.opened_at);
+    const diffMinutes = (now.getTime() - openedAt.getTime()) / (1000 * 60);
+    const coolOffMinutes = 15; // Standard 15-minute cool-off
+    
+    if (diffMinutes < coolOffMinutes) {
+      reasons.push(`In recovery cool-off period. Please wait ${Math.ceil(coolOffMinutes - diffMinutes)} more minutes before initiating contact.`);
+    }
+  }
+
+  // 2. Quiet hours (09:00 - 21:00 IST)
   // Using generic UTC to IST offset for pure testable function logic (5.5 hours)
   const utcHour = now.getUTCHours();
   const utcMin = now.getUTCMinutes();
