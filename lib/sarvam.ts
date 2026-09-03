@@ -56,13 +56,8 @@ export async function triggerSarvamOutboundCall(input: SarvamCallInput): Promise
         agent_phone_number: process.env.SARVAM_AGENT_PHONE_NUMBER
       },
       agent_variables: {
-        customer_name: input.customer_name,
-        merchant_name: input.merchant_name,
-        amount: input.amount_rupees.toString(),
-        reason: input.failure_reason,
-        payment_link: input.payment_link_url,
-        language: input.preferred_language,
-        case_id: input.recovery_case_id
+        user_name: input.customer_name,
+        call_summary: `You are collecting ₹${input.amount_rupees} for ${input.merchant_name}. Failure reason: ${input.failure_reason}. Recovery Case ID: ${input.recovery_case_id}. Payment Link: ${input.payment_link_url}. Preferred Language: ${input.preferred_language}.`
       }
     },
     user_config: {
