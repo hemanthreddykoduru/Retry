@@ -147,7 +147,7 @@ export default async function LandingPage() {
                 <li className="flex items-start gap-2"><span className="text-active">■</span> Downtime-aware decisions</li>
                 <li className="flex items-start gap-2"><span className="text-active">■</span> Smart retry scheduling</li>
                 <li className="flex items-start gap-2"><span className="text-active">■</span> Manual payment-link follow-ups</li>
-                <li className="flex items-start gap-2"><span className="text-active">■</span> Telugu/Hindi/English voice recovery</li>
+                <li className="flex items-start gap-2"><span className="text-active">■</span> Telugu/Hindi/English/Kannada voice recovery</li>
                 <li className="flex items-start gap-2"><span className="text-active">■</span> Audit receipts</li>
                 <li className="flex items-start gap-2"><span className="text-active">■</span> Customer safety guardrails</li>
               </ul>
@@ -156,7 +156,7 @@ export default async function LandingPage() {
             <div className="flex flex-col gap-4">
               <h2 className="text-2xl font-bold tracking-tight">India-first recovery</h2>
               <p className="text-sm text-text-secondary">
-                Retry is explicitly designed for the complexities of Indian e-commerce. From native integration with Razorpay, handling UPI-first flows, classifying unique Indian payment failures (like NPCI timeouts), and initiating vernacular voice interactions in Telugu, Hindi, and English.
+                Retry is explicitly designed for the complexities of Indian e-commerce. From native integration with Razorpay, handling UPI-first flows, classifying unique Indian payment failures (like NPCI timeouts), and initiating vernacular voice interactions in Telugu, Hindi, Kannada, and English.
               </p>
             </div>
           </div>
