@@ -52,7 +52,7 @@ export default function LandingPage() {
               <MetricCard title="RECOVERED REVENUE" value="₹48,620" detail="+121% vs baseline" isPositive={true} />
               <MetricCard title="RECOVERY RATE" value="61.2%" detail="+23.4 pts baseline" />
               <MetricCard title="CONTACTS AVOIDED" value="37" detail="Bank downtime cases" isWarning={true} />
-              <MetricCard title="COST / RECOVERY" value="₹79" detail="Voice recovery" />
+              <MetricCard title="COST / RECOVERY" value="₹3" detail="Voice recovery" />
             </div>
           </div>
         </section>

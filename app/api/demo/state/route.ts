@@ -39,7 +39,7 @@ export async function GET(request: Request) {
       contacts_avoided: Math.max(0, dbMetrics.cases_opened - dbMetrics.calls_placed - dbMetrics.whatsapps_sent),
       recovered_revenue_trend: 10,
       recovery_rate_trend: 5,
-      cost_per_recovery: 79,
+      cost_per_recovery: 3,
       revenue_at_risk_trend: 2
     } : {
       failures_detected: 0,
