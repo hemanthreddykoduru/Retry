@@ -47,12 +47,21 @@ export async function triggerSarvamOutboundCall(input: SarvamCallInput): Promise
   const payload = {
     app_config: {
       app_id: process.env.SARVAM_APP_ID,
-      app_version: process.env.SARVAM_APP_VERSION,
-      connection_id: process.env.SARVAM_CONNECTION_ID
+      app_version: parseInt(process.env.SARVAM_APP_VERSION || '1', 10),
+      connection_config: {
+        connection_id: process.env.SARVAM_CONNECTION_ID,
+        agent_phone_number: process.env.SARVAM_AGENT_PHONE_NUMBER
+      },
+      webhook_config: {
+        url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://retry-buildathon.vercel.app'}/api/webhooks/sarvam`,
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${process.env.SARVAM_WEBHOOK_SECRET}`
+        }
+      }
     },
     user_config: {
-      to_number: input.customer_phone,
-      from_number: process.env.SARVAM_AGENT_PHONE_NUMBER,
+      user_phone_number: input.customer_phone,
       variables: {
         customer_name: input.customer_name,
         merchant_name: input.merchant_name,
@@ -61,13 +70,6 @@ export async function triggerSarvamOutboundCall(input: SarvamCallInput): Promise
         payment_link: input.payment_link_url,
         language: input.preferred_language,
         case_id: input.recovery_case_id
-      }
-    },
-    webhook_config: {
-      url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://retry-buildathon.vercel.app'}/api/webhooks/sarvam`,
-      method: "POST",
-      header: {
-        "Authorization": `Bearer ${process.env.SARVAM_WEBHOOK_SECRET}`
       }
     }
   };
@@ -93,13 +95,24 @@ export async function triggerSarvamOutboundCall(input: SarvamCallInput): Promise
   };
 }
 
+import { timingSafeEqual } from 'crypto';
+
 export function verifySarvamWebhookAuth(authHeader: string | null): boolean {
   if (process.env.SARVAM_MOCK_MODE === 'true') return true;
   
   const secret = process.env.SARVAM_WEBHOOK_SECRET;
-  if (!secret) return false;
+  if (!secret || !authHeader) return false;
 
-  return authHeader === `Bearer ${secret}`;
+  const expectedHeader = `Bearer ${secret}`;
+  
+  // Timing-safe comparison to prevent timing attacks
+  try {
+    const a = Buffer.from(authHeader);
+    const b = Buffer.from(expectedHeader);
+    return a.length === b.length && timingSafeEqual(a, b);
+  } catch (e) {
+    return false;
+  }
 }
 
 export function normalizeSarvamCallOutcome(payload: Record<string, unknown>): NormalizedSarvamOutcome {
