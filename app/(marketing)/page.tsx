@@ -24,40 +24,50 @@ export default async function LandingPage() {
   return (
     <>
         {/* Hero Section */}
-        <section className="px-6 lg:px-12 pt-16 pb-12 max-w-6xl mx-auto flex flex-col items-center text-center gap-6">
-          <h1 className="text-4xl lg:text-6xl font-bold tracking-tight text-text-primary max-w-4xl hero-animate">
+        <section className="relative px-6 lg:px-12 pt-24 pb-20 max-w-6xl mx-auto flex flex-col items-center text-center gap-6 overflow-hidden">
+          {/* Subtle glowing background effect */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-active/10 rounded-full blur-[100px] -z-10 pointer-events-none"></div>
+          
+          <h1 className="text-5xl lg:text-7xl font-extrabold tracking-tight hero-animate bg-gradient-to-br from-text-primary via-text-primary to-text-secondary bg-clip-text text-transparent max-w-4xl pb-2">
             Recover the payments your checkout never got back.
           </h1>
-          <p className="text-lg text-text-secondary max-w-2xl hero-animate delay-100">
+          <p className="text-xl text-text-secondary max-w-2xl hero-animate delay-100 leading-relaxed font-medium">
             Retry detects failed and abandoned payments, understands why they failed, and chooses the safest next action — wait, retry, message, or call. Built for Indian merchants and UPI-first payment flows.
           </p>
-          <div className="flex items-center gap-4 mt-2 hero-animate delay-200">
-            <Link href="/signup" className="btn-primary text-base px-6 py-3">
+          <div className="flex flex-col sm:flex-row items-center gap-4 mt-6 hero-animate delay-200">
+            <Link href="/signup" className="btn-primary text-base px-8 py-4 shadow-lg shadow-active/20 hover:shadow-active/40 transition-all font-bold">
               Start recovering revenue
             </Link>
-            <Link href="/dashboard" className="btn-secondary text-base px-6 py-3">
+            <Link href="/dashboard" className="btn-secondary text-base px-8 py-4 font-bold border-2 hover:bg-neutral-bg">
               View live recovery demo
             </Link>
           </div>
           
           {/* Compact Product Preview */}
-          <div className="mt-8 font-mono text-xs text-text-muted flex items-center justify-center gap-2 bg-neutral-bg px-4 py-2 border border-border hero-animate delay-300">
+          <div className="mt-12 font-mono text-xs text-text-muted flex flex-wrap items-center justify-center gap-3 bg-surface/80 backdrop-blur-sm px-6 py-3 rounded-full border border-border shadow-sm hero-animate delay-300">
             <span>payment.failed</span>
-            <span>→</span>
+            <span className="text-border">→</span>
             <span>cause diagnosed</span>
-            <span>→</span>
+            <span className="text-border">→</span>
             <span>policy selected</span>
-            <span>→</span>
-            <span className="text-recovered font-bold">payment recovered</span>
+            <span className="text-border">→</span>
+            <span className="text-active font-bold flex items-center gap-1">
+              <span className="relative flex h-2 w-2 mr-1">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-active opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-active"></span>
+              </span>
+              payment recovered
+            </span>
           </div>
         </section>
 
         {/* Evidence Section */}
-        <section className="bg-surface border-y border-border py-12 scroll-animate">
-          <div className="max-w-6xl mx-auto px-6 lg:px-12">
-            <div className="flex flex-col items-center gap-1 mb-8 text-center">
-              <div className="text-[11px] font-medium tracking-[0.12em] uppercase text-text-secondary">
-                Demo workspace · Test-mode sample · Synthetic recovery batch
+        <section className="bg-surface border-y border-border py-16 scroll-animate relative">
+          <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] dark:bg-[radial-gradient(#262626_1px,transparent_1px)] [background-size:16px_16px] opacity-30"></div>
+          <div className="max-w-6xl mx-auto px-6 lg:px-12 relative z-10">
+            <div className="flex flex-col items-center gap-2 mb-10 text-center">
+              <div className="text-[11px] font-bold tracking-[0.15em] uppercase text-active bg-active/10 px-3 py-1 rounded-full border border-active/20">
+                Razorpay Hackathon Demo · Live Production Metrics
               </div>
               <div className="text-xs font-mono text-text-muted">
                 Measured across today's live payment-recovery cases.
