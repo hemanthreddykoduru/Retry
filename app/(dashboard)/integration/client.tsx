@@ -1,10 +1,12 @@
 "use client";
 
-import { Copy, AlertTriangle, ShieldCheck, CheckCircle2, ServerCrash, XCircle } from "lucide-react";
+import { Copy, AlertTriangle, ShieldCheck, CheckCircle2, ServerCrash, XCircle, Eye, EyeOff, RefreshCw } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function IntegrationClient({ apiKey, appUrl: serverAppUrl }: { apiKey: string, appUrl: string }) {
   const [appUrl, setAppUrl] = useState(serverAppUrl);
+  const [showSecret, setShowSecret] = useState(false);
+  const [webhookSecret, setWebhookSecret] = useState('retry_buildathon_secret_key_2026');
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -78,12 +80,32 @@ export default function IntegrationClient({ apiKey, appUrl: serverAppUrl }: { ap
               <div>
                 <div className="text-xs font-mono text-text-secondary uppercase tracking-widest mb-2">Webhook Secret</div>
                 <div className="flex items-center">
-                  <div className="bg-neutral-bg border border-border p-3 font-mono text-sm flex-1 truncate blur-[2px] hover:blur-none transition-all cursor-crosshair">
-                    retry_buildathon_secret_key_2026
+                  <div className="bg-neutral-bg border border-border p-3 font-mono text-sm flex-1 truncate">
+                    {showSecret ? webhookSecret : '•'.repeat(webhookSecret.length)}
                   </div>
                   <button 
-                    onClick={() => copyToClipboard('retry_buildathon_secret_key_2026')}
+                    onClick={() => setShowSecret(!showSecret)}
+                    className="p-3 border border-l-0 border-border bg-surface hover:bg-neutral-bg transition-colors text-text-secondary hover:text-text-primary"
+                    title={showSecret ? "Hide secret" : "Show secret"}
+                  >
+                    {showSecret ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                  <button 
+                    onClick={() => {
+                      if(confirm("Are you sure you want to regenerate the Webhook Secret? You will need to update this in your Razorpay dashboard immediately.")) {
+                        setWebhookSecret('retry_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15));
+                        alert('Secret regenerated');
+                      }
+                    }}
+                    className="p-3 border border-l-0 border-border bg-surface hover:bg-neutral-bg transition-colors text-text-secondary hover:text-text-primary"
+                    title="Regenerate secret"
+                  >
+                    <RefreshCw size={18} />
+                  </button>
+                  <button 
+                    onClick={() => copyToClipboard(webhookSecret)}
                     className="p-3 border border-l-0 border-border bg-surface hover:bg-neutral-bg transition-colors"
+                    title="Copy secret"
                   >
                     <Copy size={18} />
                   </button>
