@@ -94,8 +94,8 @@ export default function ForgotPasswordPage() {
       ) : step === "code" ? (
         <form className="flex flex-col" onSubmit={handleUpdatePassword}>
           {error && <p className="text-red-500 text-sm mb-4 bg-lost-bg p-3 rounded-md border border-lost/20">{error}</p>}
-          <FormField label="Verification Code" id="code" type="text" placeholder="123456" required />
-          <FormField label="New Password" id="newPassword" type="password" placeholder="••••••••" required />
+          <FormField label="Verification Code" id="code" type="text" placeholder="123456" autoComplete="one-time-code" required />
+          <FormField label="New Password" id="newPassword" type="password" placeholder="••••••••" autoComplete="new-password" required />
 
           <button type="submit" disabled={loading} className="w-full bg-text-primary text-surface py-2 rounded-md font-medium text-sm hover:bg-text-primary/90 transition-colors disabled:opacity-50 mt-2">
             {loading ? 'Updating...' : 'Update password'}
@@ -104,7 +104,7 @@ export default function ForgotPasswordPage() {
       ) : (
         <form className="flex flex-col" onSubmit={handleSendEmail}>
           {error && <p className="text-red-500 text-sm mb-4 bg-lost-bg p-3 rounded-md border border-lost/20">{error}</p>}
-          <FormField label="Email" id="email" type="email" placeholder="you@company.com" required />
+          <FormField label="Email" id="email" type="email" placeholder="you@company.com" autoComplete="username" required />
 
           <button type="submit" disabled={loading} className="w-full bg-text-primary text-surface py-2 rounded-md font-medium text-sm hover:bg-text-primary/90 transition-colors disabled:opacity-50 mt-2">
             {loading ? 'Sending...' : 'Send reset code'}
