@@ -154,10 +154,10 @@ export async function POST(request: Request) {
       try {
         const host = request.headers.get('host') || 'localhost:3000';
         const protocol = host.includes('localhost') ? 'http' : 'https';
-        // Fire and forget the call trigger
-        fetch(`${protocol}://${host}/api/recovery-cases/${caseId}/voice-call`, {
+        // Await the call trigger so Vercel doesn't kill the background process
+        await fetch(`${protocol}://${host}/api/recovery-cases/${caseId}/voice-call`, {
           method: 'POST',
-        }).catch(e => console.error('[Auto-Trigger Error]', e));
+        });
       } catch (e) {
         console.error('[Auto-Trigger Error]', e);
       }
