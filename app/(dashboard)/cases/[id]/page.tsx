@@ -280,7 +280,11 @@ export default function CaseDetailPage() {
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-text-secondary">Bank downtime check</span>
-                <span className={c.root_cause === 'bank_downtime' ? 'text-lost font-bold' : 'text-recovered'}>{c.root_cause === 'bank_downtime' ? 'FAIL' : 'PASS'}</span>
+                {c.root_cause === 'bank_downtime' ? (
+                  <span className="text-lost font-bold">FAIL / OVERRIDDEN</span>
+                ) : (
+                  <span className="text-recovered">PASS</span>
+                )}
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-text-secondary">Original amount only</span>
