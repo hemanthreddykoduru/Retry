@@ -3,6 +3,7 @@ import { ReceiptRow } from "@/components/receipt-row";
 import { MetricCard } from "@/components/metric-card";
 import { liveReceipts, formatCurrency } from "@/lib/demo-data";
 import { CopyButton } from "@/components/copy-button";
+import { FaGithub } from "react-icons/fa";
 
 import { MetricsRepository } from "@/lib/repositories/metrics";
 
@@ -38,6 +39,10 @@ export default async function LandingPage() {
             <Link href="/dashboard" className="btn-secondary text-base px-8 py-3 font-medium border-2">
               View live recovery demo
             </Link>
+            <a href="https://github.com/hemanthreddykoduru/Retry" target="_blank" rel="noopener noreferrer" className="btn-secondary text-base px-8 py-3 font-medium border-2 flex items-center gap-2">
+              <FaGithub size={18} />
+              View GitHub
+            </a>
           </div>
           
           {/* Compact Product Preview */}
