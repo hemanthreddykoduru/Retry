@@ -8,9 +8,9 @@ export async function GET(request: Request) {
   if (!merchantId) return NextResponse.json({ error: 'Missing merchantId' }, { status: 400 });
 
   try {
-    const result = await sql`SELECT razorpay_webhook_secret FROM merchants WHERE id = ${merchantId}`;
+    const result = await sql`SELECT webhook_secret FROM merchants WHERE id = ${merchantId}`;
     if (result.length > 0) {
-      return NextResponse.json({ secret: result[0].razorpay_webhook_secret });
+      return NextResponse.json({ secret: result[0].webhook_secret });
     }
     return NextResponse.json({ secret: null });
   } catch (e) {
@@ -26,7 +26,7 @@ export async function POST(request: Request) {
 
     await sql`
       UPDATE merchants 
-      SET razorpay_webhook_secret = ${secret}
+      SET webhook_secret = ${secret}
       WHERE id = ${merchantId}
     `;
     

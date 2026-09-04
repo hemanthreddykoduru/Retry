@@ -91,9 +91,9 @@ export async function POST(request: Request) {
     // Try to get merchant secret from DB
     let secret = null;
     try {
-      const merchantResult = await sql`SELECT razorpay_webhook_secret FROM merchants WHERE id = ${merchantId}`;
-      if (merchantResult.length > 0 && merchantResult[0].razorpay_webhook_secret) {
-        secret = merchantResult[0].razorpay_webhook_secret;
+      const merchantResult = await sql`SELECT webhook_secret FROM merchants WHERE id = ${merchantId}`;
+      if (merchantResult.length > 0 && merchantResult[0].webhook_secret) {
+        secret = merchantResult[0].webhook_secret;
       }
     } catch (dbError) {
       console.warn('Could not fetch merchant secret from DB, falling back to env', dbError);
