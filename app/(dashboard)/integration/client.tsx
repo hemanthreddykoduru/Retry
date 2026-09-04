@@ -1,12 +1,15 @@
 "use client";
 
-import { Copy, AlertTriangle, ShieldCheck, CheckCircle2, ServerCrash, XCircle, Eye, EyeOff, RefreshCw, Edit2 } from "lucide-react";
+import { Copy, AlertTriangle, ShieldCheck, CheckCircle2, ServerCrash, XCircle, Eye, EyeOff, RefreshCw, Edit2, Check } from "lucide-react";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function IntegrationClient({ apiKey, appUrl: serverAppUrl }: { apiKey: string, appUrl: string }) {
   const [appUrl, setAppUrl] = useState(serverAppUrl);
   const [showSecret, setShowSecret] = useState(false);
   const [webhookSecret, setWebhookSecret] = useState('retry_buildathon_secret_key_2026');
+  const [isEditingSecret, setIsEditingSecret] = useState(false);
+  const [tempSecret, setTempSecret] = useState('');
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -24,7 +27,7 @@ export default function IntegrationClient({ apiKey, appUrl: serverAppUrl }: { ap
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
-    alert('Copied to clipboard');
+    toast.success('Copied to clipboard');
   };
 
   return (
@@ -87,9 +90,20 @@ export default function IntegrationClient({ apiKey, appUrl: serverAppUrl }: { ap
               <div>
                 <div className="text-xs font-mono text-text-secondary uppercase tracking-widest mb-2">Webhook Secret</div>
                 <div className="flex items-center">
-                  <div className="bg-neutral-bg border border-border p-3 font-mono text-sm flex-1 truncate">
-                    {showSecret ? webhookSecret : '•'.repeat(webhookSecret.length)}
-                  </div>
+                  {isEditingSecret ? (
+                    <input 
+                      type={showSecret ? "text" : "password"}
+                      value={tempSecret}
+                      onChange={e => setTempSecret(e.target.value)}
+                      className="bg-neutral-bg border border-border p-3 font-mono text-sm flex-1 focus:outline-none focus:border-active"
+                      autoFocus
+                    />
+                  ) : (
+                    <div className="bg-neutral-bg border border-border p-3 font-mono text-sm flex-1 truncate">
+                      {showSecret ? webhookSecret : '•'.repeat(webhookSecret.length)}
+                    </div>
+                  )}
+                  
                   <button 
                     onClick={() => setShowSecret(!showSecret)}
                     className="p-3 border border-l-0 border-border bg-surface hover:bg-neutral-bg transition-colors text-text-secondary hover:text-text-primary"
@@ -97,50 +111,68 @@ export default function IntegrationClient({ apiKey, appUrl: serverAppUrl }: { ap
                   >
                     {showSecret ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
-                  <button 
-                    onClick={async () => {
-                      if(confirm("Are you sure you want to regenerate the Webhook Secret? You will need to update this in your Razorpay dashboard immediately.")) {
-                        const newSecret = 'retry_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-                        setWebhookSecret(newSecret);
-                        try {
-                          await fetch('/api/merchants/secret', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ merchantId: apiKey, secret: newSecret })
-                          });
-                          alert('Secret regenerated and saved to database.');
-                        } catch (e) {
-                          alert('Failed to save to database.');
+                  
+                  {isEditingSecret ? (
+                    <button 
+                      onClick={async () => {
+                        if (tempSecret && tempSecret.trim() !== "") {
+                          setWebhookSecret(tempSecret);
+                          setIsEditingSecret(false);
+                          try {
+                            await fetch('/api/merchants/secret', {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({ merchantId: apiKey, secret: tempSecret })
+                            });
+                            toast.success('Custom secret saved to database');
+                          } catch (e) {
+                            toast.error('Failed to save to database');
+                          }
+                        } else {
+                          toast.error("Secret cannot be empty");
                         }
-                      }
-                    }}
-                    className="p-3 border border-l-0 border-border bg-surface hover:bg-neutral-bg transition-colors text-text-secondary hover:text-text-primary"
-                    title="Regenerate secret"
-                  >
-                    <RefreshCw size={18} />
-                  </button>
-                  <button 
-                    onClick={async () => {
-                      const customSecret = prompt("Enter your Razorpay Webhook Secret (or leave blank to cancel):", webhookSecret);
-                      if(customSecret && customSecret.trim() !== "" && customSecret !== webhookSecret) {
-                        setWebhookSecret(customSecret);
-                        try {
-                          await fetch('/api/merchants/secret', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ merchantId: apiKey, secret: customSecret })
-                          });
-                          alert('Custom secret saved to database.');
-                        } catch (e) {
-                          alert('Failed to save to database.');
-                        }
-                      }
-                    }}
-                    className="p-3 border border-l-0 border-border bg-surface hover:bg-neutral-bg transition-colors text-text-secondary hover:text-text-primary"
-                    title="Edit secret manually"
-                  >
-                    <Edit2 size={18} />
-                  </button>
+                      }}
+                      className="p-3 border border-l-0 border-border bg-active hover:bg-active/90 text-white transition-colors"
+                      title="Save custom secret"
+                    >
+                      <Check size={18} />
+                    </button>
+                  ) : (
+                    <>
+                      <button 
+                        onClick={async () => {
+                          if(confirm("Are you sure you want to regenerate the Webhook Secret? You will need to update this in your Razorpay dashboard immediately.")) {
+                            const newSecret = 'retry_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                            setWebhookSecret(newSecret);
+                            try {
+                              await fetch('/api/merchants/secret', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ merchantId: apiKey, secret: newSecret })
+                              });
+                              toast.success('Secret regenerated and saved to database');
+                            } catch (e) {
+                              toast.error('Failed to save to database');
+                            }
+                          }
+                        }}
+                        className="p-3 border border-l-0 border-border bg-surface hover:bg-neutral-bg transition-colors text-text-secondary hover:text-text-primary"
+                        title="Regenerate secret"
+                      >
+                        <RefreshCw size={18} />
+                      </button>
+                      <button 
+                        onClick={() => {
+                          setTempSecret(webhookSecret);
+                          setIsEditingSecret(true);
+                        }}
+                        className="p-3 border border-l-0 border-border bg-surface hover:bg-neutral-bg transition-colors text-text-secondary hover:text-text-primary"
+                        title="Edit secret manually"
+                      >
+                        <Edit2 size={18} />
+                      </button>
+                    </>
+                  )}
                   <button 
                     onClick={() => copyToClipboard(webhookSecret)}
                     className="p-3 border border-l-0 border-border bg-surface hover:bg-neutral-bg transition-colors"
@@ -172,7 +204,7 @@ export default function IntegrationClient({ apiKey, appUrl: serverAppUrl }: { ap
                 </div>
               </div>
 
-              <button className="btn-secondary w-full text-xs font-mono uppercase tracking-widest" onClick={() => alert('Demo: Test Webhook Sent')}>
+              <button className="btn-secondary w-full text-xs font-mono uppercase tracking-widest" onClick={() => toast.success('Demo: Test Webhook Sent')}>
                 Send Test Webhook
               </button>
             </div>

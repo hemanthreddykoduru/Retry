@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Toaster } from 'sonner';
 
 const sans = Space_Grotesk({
   subsets: ["latin"],
@@ -25,6 +26,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${sans.variable} ${geistMono.variable} antialiased min-h-screen bg-background text-text-primary`}>
         {children}
+        <Toaster position="top-center" richColors theme="light" />
       </body>
     </html>
   );
