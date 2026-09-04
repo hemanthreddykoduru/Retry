@@ -39,16 +39,25 @@ export default function Dashboard() {
     const merchantId = typeof window !== 'undefined' ? localStorage.getItem('retry_merchant_id') : null;
     const headers = { 'x-merchant-id': merchantId || '00000000-0000-0000-0000-000000000001' };
 
-    fetch('/api/demo/state', { headers }).then(r => r.json()).then(data => {
-      setMetrics(data.metrics);
-      setFeed(data.cases.filter((c: RecoveryCase) => c.status === "recovered").slice(0, 5));
-      setIsLoading(false);
-    }).catch(() => {});
+    fetch('/api/demo/state', { headers })
+      .then(r => r.json())
+      .then(data => {
+        if (data && data.metrics) setMetrics(data.metrics);
+        if (data && data.cases) setFeed(data.cases.filter((c: RecoveryCase) => c.status === "recovered").slice(0, 5));
+      })
+      .catch(() => {})
+      .finally(() => setIsLoading(false));
     const interval = setInterval(() => {
-      fetch('/api/demo/state', { headers }).then(r => r.json()).then(data => {
-        setMetrics(data.metrics);
-        setFeed(data.cases.filter((c: RecoveryCase) => c.status === "recovered").slice(0, 5));
-      }).catch(() => {});
+      fetch('/api/demo/state', { headers })
+        .then(r => r.json())
+        .then(data => {
+          if (data && data.metrics) setMetrics(data.metrics);
+          if (data && data.cases) {
+            setFeed(data.cases.filter((c: RecoveryCase) => c.status === "recovered").slice(0, 5));
+            setIsLoading(false); // In case initial fetch failed
+          }
+        })
+        .catch(() => {});
     }, 2000);
     return () => clearInterval(interval);
   }, []);
