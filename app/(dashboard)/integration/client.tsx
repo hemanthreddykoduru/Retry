@@ -1,6 +1,6 @@
 "use client";
 
-import { Copy, AlertTriangle, ShieldCheck, CheckCircle2, ServerCrash, XCircle, Eye, EyeOff, RefreshCw } from "lucide-react";
+import { Copy, AlertTriangle, ShieldCheck, CheckCircle2, ServerCrash, XCircle, Eye, EyeOff, RefreshCw, Edit2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function IntegrationClient({ apiKey, appUrl: serverAppUrl }: { apiKey: string, appUrl: string }) {
@@ -118,6 +118,28 @@ export default function IntegrationClient({ apiKey, appUrl: serverAppUrl }: { ap
                     title="Regenerate secret"
                   >
                     <RefreshCw size={18} />
+                  </button>
+                  <button 
+                    onClick={async () => {
+                      const customSecret = prompt("Enter your Razorpay Webhook Secret (or leave blank to cancel):", webhookSecret);
+                      if(customSecret && customSecret.trim() !== "" && customSecret !== webhookSecret) {
+                        setWebhookSecret(customSecret);
+                        try {
+                          await fetch('/api/merchants/secret', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ merchantId: apiKey, secret: customSecret })
+                          });
+                          alert('Custom secret saved to database.');
+                        } catch (e) {
+                          alert('Failed to save to database.');
+                        }
+                      }
+                    }}
+                    className="p-3 border border-l-0 border-border bg-surface hover:bg-neutral-bg transition-colors text-text-secondary hover:text-text-primary"
+                    title="Edit secret manually"
+                  >
+                    <Edit2 size={18} />
                   </button>
                   <button 
                     onClick={() => copyToClipboard(webhookSecret)}
