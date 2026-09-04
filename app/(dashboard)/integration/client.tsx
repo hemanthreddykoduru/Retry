@@ -10,10 +10,17 @@ export default function IntegrationClient({ apiKey, appUrl: serverAppUrl }: { ap
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setAppUrl(window.location.origin);
     }
-  }, []);
+    fetch(`/api/merchants/secret?merchantId=${apiKey}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.secret) {
+          setWebhookSecret(data.secret);
+        }
+      })
+      .catch(console.error);
+  }, [apiKey]);
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -91,10 +98,20 @@ export default function IntegrationClient({ apiKey, appUrl: serverAppUrl }: { ap
                     {showSecret ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
                   <button 
-                    onClick={() => {
+                    onClick={async () => {
                       if(confirm("Are you sure you want to regenerate the Webhook Secret? You will need to update this in your Razorpay dashboard immediately.")) {
-                        setWebhookSecret('retry_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15));
-                        alert('Secret regenerated');
+                        const newSecret = 'retry_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                        setWebhookSecret(newSecret);
+                        try {
+                          await fetch('/api/merchants/secret', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ merchantId: apiKey, secret: newSecret })
+                          });
+                          alert('Secret regenerated and saved to database.');
+                        } catch (e) {
+                          alert('Failed to save to database.');
+                        }
                       }
                     }}
                     className="p-3 border border-l-0 border-border bg-surface hover:bg-neutral-bg transition-colors text-text-secondary hover:text-text-primary"

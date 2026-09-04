@@ -75,7 +75,35 @@ export async function POST(request: Request) {
 
     const rawBody = await request.text();
 
-    const secret = process.env.RAZORPAY_WEBHOOK_SECRET;
+    const { searchParams } = new URL(request.url);
+    const rawMerchantId = searchParams.get('merchantId');
+    let merchantId = rawMerchantId || '00000000-0000-0000-0000-000000000001';
+    
+    // Validate UUID format, if invalid fallback to demo
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(merchantId)) {
+      // In the context of the buildathon, we allow 'm_demo_123' as well as valid UUIDs.
+      if (merchantId !== 'm_demo_123') {
+        merchantId = '00000000-0000-0000-0000-000000000001';
+      }
+    }
+
+    // Try to get merchant secret from DB
+    let secret = null;
+    try {
+      const merchantResult = await sql`SELECT razorpay_webhook_secret FROM merchants WHERE id = ${merchantId}`;
+      if (merchantResult.length > 0 && merchantResult[0].razorpay_webhook_secret) {
+        secret = merchantResult[0].razorpay_webhook_secret;
+      }
+    } catch (dbError) {
+      console.warn('Could not fetch merchant secret from DB, falling back to env', dbError);
+    }
+    
+    // Fallback to global env variable for MVP/Demo
+    if (!secret) {
+      secret = process.env.RAZORPAY_WEBHOOK_SECRET;
+    }
+
     if (!secret) {
       console.error('razorpay_webhook_configuration_error: secret_missing');
       return NextResponse.json({ error: 'Server misconfiguration' }, { status: 500 });
@@ -130,15 +158,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: true, duplicate: true });
     }
 
-    // Generate or fetch the case dynamically from the webhook payload
-    const { searchParams } = new URL(request.url);
-    let merchantId = searchParams.get('merchantId') || '00000000-0000-0000-0000-000000000001';
-    
-    // Validate UUID format, if invalid fallback to demo
-    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-    if (!uuidRegex.test(merchantId)) {
-      merchantId = '00000000-0000-0000-0000-000000000001';
-    }
+    // merchantId is already extracted and validated at the top.
 
     const caseId = await getOrCreateRecoveryCase(payload, merchantId);
 
