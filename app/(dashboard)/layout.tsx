@@ -15,7 +15,7 @@ export default function DashboardLayout({
         <div className="flex items-center gap-4">
           <span>Sarvam Mock Mode</span>
           <span className="text-border-strong">•</span>
-          <span>Razorpay Test Mode</span>
+          <span className="bg-[#facc15] text-[#854d0e] font-bold px-1.5 py-0.5 rounded-sm">Razorpay Test Mode</span>
           <span className="text-border-strong">•</span>
           <span>Payment Links Mock Mode</span>
         </div>
