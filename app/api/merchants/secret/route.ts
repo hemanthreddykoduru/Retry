@@ -25,9 +25,9 @@ export async function POST(request: Request) {
     if (!merchantId || !secret) return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
 
     await sql`
-      INSERT INTO merchants (id, razorpay_webhook_secret) 
-      VALUES (${merchantId}, ${secret})
-      ON CONFLICT (id) DO UPDATE SET razorpay_webhook_secret = EXCLUDED.razorpay_webhook_secret
+      UPDATE merchants 
+      SET razorpay_webhook_secret = ${secret}
+      WHERE id = ${merchantId}
     `;
     
     return NextResponse.json({ success: true });
