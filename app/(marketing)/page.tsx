@@ -27,10 +27,10 @@ export default async function LandingPage() {
         {/* Hero Section */}
         <section className="px-6 lg:px-12 pt-24 pb-20 max-w-6xl mx-auto flex flex-col items-center text-center gap-6">
           <h1 className="text-5xl lg:text-6xl font-extrabold tracking-tight text-text-primary max-w-4xl">
-            Recover the payments your checkout never got back.
+            Stop losing customers to failed payments.
           </h1>
           <p className="text-xl text-text-secondary max-w-2xl leading-relaxed">
-            Retry detects failed and abandoned payments, understands why they failed, and chooses the safest next action — wait, retry, message, or call. Built for Indian merchants and UPI-first payment flows.
+            Retry automatically figures out why a payment failed and follows up with your customer at the right time. Built from the ground up for Indian businesses and UPI.
           </p>
           <div className="flex flex-col sm:flex-row items-center gap-4 mt-6">
             <Link href="/signup" className="btn-primary text-base px-8 py-3 font-medium">
@@ -84,8 +84,8 @@ export default async function LandingPage() {
         <section className="px-6 lg:px-12 py-16 w-full border-b border-border bg-neutral-bg scroll-animate">
           <div className="max-w-[1040px] mx-auto">
             <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold tracking-tight mb-2">Evidence, not decoration.</h2>
-              <p className="text-text-secondary">Every decision is attributable, bounded, and auditable.</p>
+              <h2 className="text-2xl font-bold tracking-tight mb-2">See exactly how we recover payments.</h2>
+              <p className="text-text-secondary">Every action our system takes is fully logged and transparent.</p>
             </div>
             <div className="sharp-card">
               <div className="flex justify-between items-center p-4 border-b border-border bg-background/50">
@@ -105,23 +105,23 @@ export default async function LandingPage() {
           
           {/* Problem */}
           <div className="flex flex-col gap-4 scroll-animate">
-            <h2 className="text-2xl font-bold tracking-tight">Payment failure is not always customer failure.</h2>
+            <h2 className="text-2xl font-bold tracking-tight">Why payments actually fail</h2>
             <div className="text-text-secondary grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="sharp-card p-4">
                 <div className="font-bold text-text-primary mb-1 text-sm uppercase tracking-widest">Bank Downtime</div>
-                <div className="text-sm">Issuer banks go offline. Pestering a customer when their bank is down only causes frustration.</div>
+                <div className="text-sm">When a bank goes offline, sending immediate payment reminders just frustrates customers. We wait until the bank is back up.</div>
               </div>
               <div className="sharp-card p-4">
                 <div className="font-bold text-text-primary mb-1 text-sm uppercase tracking-widest">Insufficient Balance</div>
-                <div className="text-sm">Often temporary. A polite, perfectly-timed payment-link follow-up recovers the intent later.</div>
+                <div className="text-sm">This is usually temporary. A polite follow-up link sent at the right time often saves the sale.</div>
               </div>
               <div className="sharp-card p-4">
                 <div className="font-bold text-text-primary mb-1 text-sm uppercase tracking-widest">OTP/PIN Errors</div>
-                <div className="text-sm">Human mistakes during authentication shouldn&apos;t mean a permanently lost order.</div>
+                <div className="text-sm">Simple typing mistakes shouldn't cost you a customer. We give them a seamless way to try again.</div>
               </div>
               <div className="sharp-card p-4">
                 <div className="font-bold text-text-primary mb-1 text-sm uppercase tracking-widest">Network Drop-offs</div>
-                <div className="text-sm">The payment succeeded, but the customer&apos;s browser dropped before the redirect.</div>
+                <div className="text-sm">The payment went through, but the connection dropped before the customer returned to your site. We verify and close the loop.</div>
               </div>
             </div>
           </div>
@@ -159,23 +159,23 @@ export default async function LandingPage() {
             </div>
             
             <div className="flex flex-col gap-4">
-              <h2 className="text-2xl font-bold tracking-tight">India-first recovery</h2>
+              <h2 className="text-2xl font-bold tracking-tight">Built for Indian e-commerce</h2>
               <p className="text-sm text-text-secondary">
-                Retry is explicitly designed for the complexities of Indian e-commerce. From native integration with Razorpay, handling UPI-first flows, classifying unique Indian payment failures (like NPCI timeouts), and initiating vernacular voice interactions in Telugu, Hindi, Kannada, and English.
+                The Indian payments landscape is unique. We built Retry to handle UPI timeouts, integrate directly with Razorpay, and follow up with your customers in their native language—including Telugu, Hindi, Kannada, and English.
               </p>
             </div>
           </div>
 
           {/* Safety */}
           <div className="flex flex-col gap-4 scroll-animate">
-            <h2 className="text-2xl font-bold tracking-tight">Built-in safety guardrails</h2>
+            <h2 className="text-2xl font-bold tracking-tight">We protect your brand reputation</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 font-mono text-xs">
-              <div className="sharp-card p-3 border-l-4 border-l-waiting">No contact during bank downtime</div>
-              <div className="sharp-card p-3 border-l-4 border-l-waiting">09:00–21:00 IST contact window</div>
-              <div className="sharp-card p-3 border-l-4 border-l-waiting">Maximum two voice calls</div>
-              <div className="sharp-card p-3 border-l-4 border-l-neutral">Customer opt-out stops automation</div>
-              <div className="sharp-card p-3 border-l-4 border-l-active">Original payment amount only</div>
-              <div className="sharp-card p-3 border-l-4 border-l-lost">Human escalation after failures</div>
+              <div className="sharp-card p-3 border-l-4 border-l-waiting">We never message users during known bank outages</div>
+              <div className="sharp-card p-3 border-l-4 border-l-waiting">We only contact customers during daytime hours (9 AM - 9 PM)</div>
+              <div className="sharp-card p-3 border-l-4 border-l-waiting">We limit voice calls to a maximum of two attempts</div>
+              <div className="sharp-card p-3 border-l-4 border-l-neutral">Immediate stop if a customer opts out</div>
+              <div className="sharp-card p-3 border-l-4 border-l-active">Links are locked to the exact original cart value</div>
+              <div className="sharp-card p-3 border-l-4 border-l-lost">Fails over to your support team if we can't recover it</div>
             </div>
           </div>
 
