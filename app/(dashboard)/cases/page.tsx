@@ -46,7 +46,7 @@ export default function CasesPage() {
           }
         })
         .catch(() => {});
-    }, 2000);
+    }, 10000);
     return () => clearInterval(interval);
   }, []);
 
