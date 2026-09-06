@@ -1,12 +1,7 @@
 # Retry
-
 Retry is an AI-assisted revenue recovery system for failed Razorpay payments.
-
 Website: https://retry-buildathon.vercel.app/
-Judge demo: https://retry-testing.vercel.app/
 Agent overview: https://retry-buildathon.vercel.app/agents.md
+Judge testing store: https://retry-testing.vercel.app/
 GitHub: https://github.com/hemanthreddykoduru/Retry
-
-Retry verifies Razorpay webhooks, applies deterministic recovery-safety rules,
-and uses Sarvam AI only for eligible multilingual customer conversations.
-It never collects OTPs, UPI PINs, CVVs, card details, passwords, or bank credentials.
+Retry receives and verifies Razorpay webhooks, creates auditable recovery cases, applies deterministic safety rules, and uses Sarvam AI only for eligible multilingual customer conversations. Retry is not a payment processor or merchant of record. Razorpay remains the payment system of record. Retry never collects OTPs, UPI PINs, CVVs, card numbers, passwords, or bank credentials through its AI voice conversation.

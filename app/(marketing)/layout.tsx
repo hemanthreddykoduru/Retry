@@ -29,11 +29,10 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
       <footer className="border-t border-border bg-surface p-6 lg:px-12 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-text-secondary">
         <div>© 2026 Retry. Smarter second attempts.</div>
         <div className="flex gap-6">
-          <Link href="/features" className="hover:text-text-primary">Features</Link>
-          <Link href="/how-it-works" className="hover:text-text-primary">How it works</Link>
-          <Link href="/pricing" className="hover:text-text-primary">Pricing</Link>
-          <Link href="/agents.md" className="hover:text-text-primary font-mono text-xs">/agents.md</Link>
-          <Link href="/llms.txt" className="hover:text-text-primary font-mono text-xs">/llms.txt</Link>
+          <Link href="/agents.md" className="hover:text-text-primary">Agent documentation</Link>
+          <Link href="/llms.txt" className="hover:text-text-primary">LLM index</Link>
+          <a href="https://retry-testing.vercel.app/" target="_blank" rel="noopener noreferrer" className="hover:text-text-primary">Judge demo</a>
+          <a href="https://github.com/hemanthreddykoduru/Retry" target="_blank" rel="noopener noreferrer" className="hover:text-text-primary">GitHub</a>
         </div>
       </footer>
     </div>

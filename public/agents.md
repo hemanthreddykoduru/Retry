@@ -45,24 +45,27 @@ The primary Retry dashboard is available at:
 
 This Buildathon demo uses Razorpay Test Mode only. No real money is charged, no real product is delivered, and no judge account is required.
 
+> **Demo note:** Use only Razorpay Test Mode. Never enter real bank credentials, card details, OTPs, UPI PINs, or personal financial information.
+
 ### Test a failed payment
 
 1. Open [Retry Checkout Lab](https://retry-testing.vercel.app/).
 2. Choose any sample product.
 3. Start the Razorpay Test Mode checkout.
 4. Select **Netbanking**.
-5. Select any test bank and click **Pay Now**.
-6. On the Razorpay simulator page, click **Fail** to simulate downtime.
-7. Open the [Retry Dashboard](https://retry-buildathon.vercel.app/) to see the created recovery case.
+5. Choose any available test bank and click **Pay Now**.
+6. On Razorpay’s mock bank page, click **Failure**.
+7. Return to the [Retry Dashboard](https://retry-buildathon.vercel.app/).
+8. Open the newly created recovery case and review its event timeline.
 
 ### Test a successful payment
 
 1. Start another Razorpay Test Mode checkout.
 2. Select **Netbanking**.
-3. Select any test bank and click **Pay Now**.
-4. Click **Success**.
-5. Return to the Retry dashboard.
-6. Confirm that payment success is recorded and that further recovery outreach is suppressed when applicable.
+3. Choose any available test bank and click **Pay Now**.
+4. On Razorpay’s mock bank page, click **Success**.
+5. Return to the [Retry Dashboard](https://retry-buildathon.vercel.app/).
+6. Confirm that the successful payment outcome is recorded and that no recovery intervention is created or continued for that completed payment.
 
 ## Core workflow
 
