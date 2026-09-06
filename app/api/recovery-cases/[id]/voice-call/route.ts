@@ -31,7 +31,7 @@ export async function POST(
   // Fetch Merchant config
   const merchantRes = await sql`SELECT voice_call_threshold, policies FROM merchants WHERE id = ${recoveryCase.merchant_id}`;
   const policies = merchantRes[0]?.policies || {};
-  const voiceThresholdPaise = merchantRes[0]?.voice_call_threshold || 50000;
+  const voiceThresholdPaise = merchantRes[0]?.voice_call_threshold ?? 50000;
 
   // 1. Guardrails Check
   const decision = checkVoiceGuardrails(recoveryCase, customer, voiceThresholdPaise, currentInterventionCount, policies);
