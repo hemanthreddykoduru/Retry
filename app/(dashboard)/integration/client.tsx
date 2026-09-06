@@ -204,7 +204,26 @@ export default function IntegrationClient({ apiKey, appUrl: serverAppUrl }: { ap
                 </div>
               </div>
 
-              <button className="btn-secondary w-full text-xs font-mono uppercase tracking-widest" onClick={() => toast.success('Demo: Test Webhook Sent')}>
+              <button 
+                className="btn-secondary w-full text-xs font-mono uppercase tracking-widest disabled:opacity-50" 
+                onClick={async () => {
+                  try {
+                    toast.loading('Sending test webhook...', { id: 'test-webhook' });
+                    const res = await fetch('/api/webhooks/test', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ merchantId: apiKey, secret: webhookSecret, appUrl })
+                    });
+                    if (res.ok) {
+                      toast.success('Test Webhook Sent & Processed Successfully!', { id: 'test-webhook' });
+                    } else {
+                      toast.error('Test Webhook Failed to Process', { id: 'test-webhook' });
+                    }
+                  } catch (e) {
+                    toast.error('Error sending test webhook', { id: 'test-webhook' });
+                  }
+                }}
+              >
                 Send Test Webhook
               </button>
             </div>
