@@ -3,7 +3,7 @@ import crypto from 'crypto';
 
 export async function POST(request: Request) {
   try {
-    const { merchantId, secret, appUrl } = await request.json();
+    const { merchantId, secret, appUrl, phone } = await request.json();
     
     const payload = {
       event: "payment.failed",
@@ -19,7 +19,7 @@ export async function POST(request: Request) {
             error_description: "Payment failed due to bank downtime",
             error_source: "bank",
             error_reason: "bank_downtime",
-            contact: "+919876543210",
+            contact: phone || "+919876543210",
             email: "test@example.com"
           }
         }
