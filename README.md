@@ -4,7 +4,7 @@
 
 *Razorpay AI Buildathon 2026 · Track 03: AI Revenue Recovery*
 
-https://github.com/user-attachments/assets/691cb25a-30e5-41d7-8c61-068aec5576cd
+<img src="public/assets/export-1788688614221.gif" width="1000" alt="Star Repo">
 
 ---
 
