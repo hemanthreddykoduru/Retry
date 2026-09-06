@@ -38,8 +38,8 @@ export function checkVoiceGuardrails(
   const istTime = (utcHour + 5) + (utcMin + 30) / 60; 
   const istHour = istTime >= 24 ? istTime - 24 : istTime;
   
-  const startTimeStr = merchantPolicies.startTime || '09:00';
-  const endTimeStr = merchantPolicies.endTime || '21:00';
+  const startTimeStr = merchantPolicies.startTime || '00:00';
+  const endTimeStr = merchantPolicies.endTime || '23:59';
   const startHour = parseInt(startTimeStr.split(':')[0], 10);
   const endHour = parseInt(endTimeStr.split(':')[0], 10);
   
