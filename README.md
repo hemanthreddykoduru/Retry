@@ -1,8 +1,17 @@
 # Retry — AI Revenue Recovery
+<p align="center">
+  <img
+    src="https://github.com/user-attachments/assets/30032128-0008-401c-ab07-926cf8748439"
+    alt="Retry — AI Revenue Recovery"
+    width="420"
+  />
+</p>
 
 > **वसूली / వసూలు** — "recovery." An agent that plugs into a Razorpay merchant's checkout, catches every failed and silently-abandoned payment, **diagnoses *why* it failed before it acts**, and recovers the money with the lightest touch that works — smart retries, a WhatsApp nudge, or a **vernacular Telugu/Hindi/English voice call**. Every rupee is measured; every action is audited.
 
 *Razorpay AI Buildathon 2026 · Track 03: AI Revenue Recovery*
+
+                                                     Star the Repo 🌟 
 
 <img src="public/assets/export-1788688614221.gif" width="1000" alt="Star Repo">
 
