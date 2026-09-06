@@ -28,10 +28,11 @@ export async function POST(request: Request) {
   console.log(`[Sarvam Webhook] Processing callback for attempt_id: ${attemptId}`);
 
   // Correlate using attempt_id
+  const quotedAttemptId = `"${attemptId}"`;
   const interventions = await sql`
     SELECT id, recovery_case_id, status 
     FROM interventions 
-    WHERE metadata->>'attempt_id' = ${attemptId}
+    WHERE metadata->>'attempt_id' = ${attemptId} OR metadata->>'attempt_id' = ${quotedAttemptId}
     LIMIT 1
   `;
 
