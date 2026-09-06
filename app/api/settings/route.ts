@@ -3,7 +3,11 @@ import { sql } from '@/lib/db';
 
 export async function GET(request: Request) {
   try {
-    const merchantId = request.headers.get('x-merchant-id') || '00000000-0000-0000-0000-000000000001';
+    let merchantId = request.headers.get('x-merchant-id') || '00000000-0000-0000-0000-000000000001';
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(merchantId)) {
+      merchantId = '00000000-0000-0000-0000-000000000001';
+    }
     const res = await sql`SELECT voice_call_threshold, policies FROM merchants WHERE id = ${merchantId}`;
     if (!res.length) {
       return NextResponse.json({ error: 'Merchant not found' }, { status: 404 });
@@ -27,7 +31,11 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const merchantId = request.headers.get('x-merchant-id') || '00000000-0000-0000-0000-000000000001';
+    let merchantId = request.headers.get('x-merchant-id') || '00000000-0000-0000-0000-000000000001';
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(merchantId)) {
+      merchantId = '00000000-0000-0000-0000-000000000001';
+    }
     const data = await request.json();
     const thresholdPaise = parseInt(data.threshold || '500') * 100;
     
