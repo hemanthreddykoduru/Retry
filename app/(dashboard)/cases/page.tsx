@@ -36,18 +36,7 @@ export default function CasesPage() {
       .catch(() => {})
       .finally(() => setIsLoading(false));
       
-    const interval = setInterval(() => {
-      fetch('/api/demo/state', { headers })
-        .then(r => r.json())
-        .then(data => {
-          if (data && data.cases) {
-            setCases(data.cases);
-            setIsLoading(false);
-          }
-        })
-        .catch(() => {});
-    }, 10000);
-    return () => clearInterval(interval);
+    // Polling removed to prevent DB connection exhaustion during demo
   }, []);
 
   const filteredCases = cases.filter(c => {
@@ -111,6 +100,13 @@ export default function CasesPage() {
           <div className="flex flex-col gap-2">
             <div className="text-[11px] font-medium tracking-[0.12em] uppercase text-text-secondary flex items-center gap-1">
               {isLoading ? <span className="inline-block w-4 h-3 bg-neutral-bg animate-pulse rounded"></span> : filteredCases.length} CASES DETECTED · {isLoading ? <span className="inline-block w-12 h-3 bg-neutral-bg animate-pulse rounded"></span> : formatCurrency(filteredCases.reduce((sum, c) => sum + c.amount, 0))} REVENUE AT RISK
+              <button 
+                onClick={() => { setIsLoading(true); refreshState().finally(() => setIsLoading(false)); }}
+                className="ml-4 flex items-center gap-1 hover:text-text-primary transition-colors border border-border px-2 py-0.5 rounded-sm"
+                disabled={isLoading}
+              >
+                <span className={`inline-block ${isLoading ? 'animate-spin' : ''}`}>↻</span> REFRESH
+              </button>
             </div>
           </div>
         </div>

@@ -47,19 +47,6 @@ export default function Dashboard() {
       })
       .catch(() => {})
       .finally(() => setIsLoading(false));
-    const interval = setInterval(() => {
-      fetch('/api/demo/state', { headers })
-        .then(r => r.json())
-        .then(data => {
-          if (data && data.metrics) setMetrics(data.metrics);
-          if (data && data.cases) {
-            setFeed(data.cases.filter((c: RecoveryCase) => c.status === "recovered").slice(0, 5));
-            setIsLoading(false); // In case initial fetch failed
-          }
-        })
-        .catch(() => {});
-    }, 2000);
-    return () => clearInterval(interval);
   }, []);
 
   const liveFeed = feed;

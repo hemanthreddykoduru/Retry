@@ -34,18 +34,6 @@ export default function AnalyticsPage() {
       .catch(() => {})
       .finally(() => setIsLoading(false));
       
-    const interval = setInterval(() => {
-      fetch('/api/demo/state', { headers })
-        .then(r => r.json())
-        .then(data => {
-          if (data && data.metrics) {
-            setMetrics(data.metrics);
-            setIsLoading(false);
-          }
-        })
-        .catch(() => {});
-    }, 2000);
-    return () => clearInterval(interval);
   }, []);
 
   return (

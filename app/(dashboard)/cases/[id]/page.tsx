@@ -30,13 +30,6 @@ export default function CaseDetailPage() {
       setC(caseObj);
     }).catch(() => {});
     
-    const interval = setInterval(() => {
-      fetch('/api/demo/state', { headers }).then(r => r.json()).then(data => {
-        const caseObj = data.cases.find((rc: RecoveryCase) => rc.id === id) || data.cases[0];
-        setC(caseObj);
-      }).catch(() => {});
-    }, 2000);
-    return () => clearInterval(interval);
   }, [id]);
 
   const [webhookOpen, setWebhookOpen] = useState(false);
