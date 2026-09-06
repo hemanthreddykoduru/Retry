@@ -206,27 +206,17 @@ export default function IntegrationClient({ apiKey, appUrl: serverAppUrl }: { ap
 
               <button 
                 className="btn-secondary w-full text-xs font-mono uppercase tracking-widest disabled:opacity-50" 
-                onClick={async () => {
-                  const phone = window.prompt("Enter your phone number (e.g. +919876543210) to receive the AI voice call:", "+91");
-                  if (!phone || phone.trim() === "" || phone === "+91") {
-                    toast.error('Test webhook cancelled (no phone number provided)');
-                    return;
+                onClick={() => {
+                  const pastedSecret = window.prompt("Verify Connection:\n\nPlease paste the Webhook Secret exactly as you entered it in your Razorpay Dashboard:");
+                  
+                  if (pastedSecret === null) {
+                    return; // User cancelled
                   }
                   
-                  try {
-                    toast.loading('Sending test webhook...', { id: 'test-webhook' });
-                    const res = await fetch('/api/webhooks/test', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({ merchantId: apiKey, secret: webhookSecret, appUrl, phone })
-                    });
-                    if (res.ok) {
-                      toast.success('Test Webhook Sent & Processed Successfully!', { id: 'test-webhook' });
-                    } else {
-                      toast.error('Test Webhook Failed to Process', { id: 'test-webhook' });
-                    }
-                  } catch (e) {
-                    toast.error('Error sending test webhook', { id: 'test-webhook' });
+                  if (pastedSecret.trim() === webhookSecret) {
+                    toast.success('Connected to Razorpay Successfully! The secrets match.', { id: 'test-webhook', duration: 5000 });
+                  } else {
+                    toast.error('Connection Error: The secret you pasted does not match your Retry secret. Webhooks will be rejected!', { id: 'test-webhook', duration: 5000 });
                   }
                 }}
               >
