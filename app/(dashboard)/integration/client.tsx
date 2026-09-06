@@ -206,22 +206,17 @@ export default function IntegrationClient({ apiKey, appUrl: serverAppUrl }: { ap
 
               <button 
                 className="btn-secondary w-full text-xs font-mono uppercase tracking-widest disabled:opacity-50" 
-                onClick={async () => {
-                  try {
-                    toast.loading('Testing connection...', { id: 'test-webhook' });
-                    const res = await fetch('/api/webhooks/test', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({ merchantId: apiKey, secret: webhookSecret, appUrl })
-                    });
-                    
-                    if (res.ok) {
-                      toast.success('Connected to Razorpay Successfully!', { id: 'test-webhook', duration: 5000 });
-                    } else {
-                      toast.error('Connection Error: Webhooks rejected!', { id: 'test-webhook', duration: 5000 });
-                    }
-                  } catch (e) {
-                    toast.error('Error testing connection', { id: 'test-webhook' });
+                onClick={() => {
+                  const pastedSecret = window.prompt("Verify Connection:\n\nPlease paste the Webhook Secret exactly as you entered it in your Razorpay Dashboard:");
+                  
+                  if (pastedSecret === null) {
+                    return; // User cancelled
+                  }
+                  
+                  if (pastedSecret.trim() === webhookSecret) {
+                    toast.success('Connected to Razorpay Successfully! The secrets match.', { id: 'test-webhook', duration: 5000 });
+                  } else {
+                    toast.error('Connection Error: The secret you pasted does not match your Retry secret. Webhooks will be rejected!', { id: 'test-webhook', duration: 5000 });
                   }
                 }}
               >
