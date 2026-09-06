@@ -50,17 +50,17 @@ This Buildathon demo uses Razorpay Test Mode only. No real money is charged, no 
 1. Open [Retry Checkout Lab](https://retry-testing.vercel.app/).
 2. Choose any sample product.
 3. Start the Razorpay Test Mode checkout.
-4. Select UPI.
-5. Enter `failure@razorpay`.
-6. Complete the simulated failed payment flow.
+4. Select **Netbanking**.
+5. Select any test bank and click **Pay Now**.
+6. On the Razorpay simulator page, click **Fail** to simulate downtime.
 7. Open the [Retry Dashboard](https://retry-buildathon.vercel.app/) to see the created recovery case.
 
 ### Test a successful payment
 
 1. Start another Razorpay Test Mode checkout.
-2. Select UPI.
-3. Enter `success@razorpay`.
-4. Complete the simulated payment.
+2. Select **Netbanking**.
+3. Select any test bank and click **Pay Now**.
+4. Click **Success**.
 5. Return to the Retry dashboard.
 6. Confirm that payment success is recorded and that further recovery outreach is suppressed when applicable.
 
