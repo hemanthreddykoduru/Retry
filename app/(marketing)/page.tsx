@@ -6,6 +6,7 @@ import { CopyButton } from "@/components/copy-button";
 import { FaGithub } from "react-icons/fa";
 
 import { MetricsRepository } from "@/lib/repositories/metrics";
+import { AgentMenu } from "@/components/agent-menu";
 
 import fs from 'fs';
 import path from 'path';
@@ -47,9 +48,12 @@ export default async function LandingPage(props: { searchParams: Promise<{ view?
         </div>
 
         {viewMode === 'agent' ? (
-          <section className="px-6 lg:px-12 pt-32 pb-20 max-w-4xl mx-auto font-mono text-sm text-text-primary leading-relaxed bg-background min-h-screen">
-            <div className="sharp-card p-8 overflow-x-auto">
-              <pre className="whitespace-pre-wrap">
+          <section className="px-6 lg:px-12 pt-32 pb-20 max-w-5xl mx-auto font-mono text-sm text-[#e2e8f0] leading-relaxed bg-[#0a0a0a] min-h-screen">
+            <div className="relative p-8 overflow-x-auto">
+              <div className="absolute top-8 right-8">
+                <AgentMenu content={fs.readFileSync(path.join(process.cwd(), 'public', 'agents.md'), 'utf8')} />
+              </div>
+              <pre className="whitespace-pre-wrap max-w-3xl mt-12">
                 {fs.readFileSync(path.join(process.cwd(), 'public', 'agents.md'), 'utf8')}
               </pre>
             </div>
