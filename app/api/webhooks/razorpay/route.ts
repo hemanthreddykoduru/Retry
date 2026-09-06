@@ -164,7 +164,7 @@ export async function POST(request: Request) {
     // Fetch merchant policies to see if Cool-off is set to 'Immediate' (0)
     const merchantRes = await sql`SELECT policies FROM merchants WHERE id = ${merchantId}`;
     const policies = merchantRes[0]?.policies || {};
-    const delayMinutes = parseInt(policies.delayMinutes || '15', 10);
+    const delayMinutes = parseInt(policies.delayMinutes ?? '15', 10);
     
     // If cool-off is 'Immediate', automatically dispatch the Voice Agent right now!
     if (event === 'payment.failed' && delayMinutes === 0) {

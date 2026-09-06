@@ -25,7 +25,7 @@ export function checkVoiceGuardrails(
   if (recoveryCase.opened_at) {
     const openedAt = new Date(recoveryCase.opened_at);
     const diffMinutes = (now.getTime() - openedAt.getTime()) / (1000 * 60);
-    const coolOffMinutes = parseInt(merchantPolicies.delayMinutes || '15', 10);
+    const coolOffMinutes = parseInt(merchantPolicies.delayMinutes ?? '15', 10);
     
     if (diffMinutes < coolOffMinutes) {
       reasons.push(`In recovery cool-off period. Please wait ${Math.ceil(coolOffMinutes - diffMinutes)} more minutes before initiating contact.`);
