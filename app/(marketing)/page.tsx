@@ -7,9 +7,15 @@ import { FaGithub } from "react-icons/fa";
 
 import { MetricsRepository } from "@/lib/repositories/metrics";
 
+import fs from 'fs';
+import path from 'path';
+
 export const dynamic = 'force-dynamic';
 
-export default async function LandingPage() {
+export default async function LandingPage(props: { searchParams: Promise<{ view?: string }> }) {
+  const searchParams = await props.searchParams;
+  const viewMode = searchParams?.view === 'agent' ? 'agent' : 'human';
+  
   const merchantId = '00000000-0000-0000-0000-000000000001';
   const dateStr = new Date().toISOString().split('T')[0];
   const dbMetrics = await MetricsRepository.getByMerchant(merchantId, dateStr);
@@ -24,7 +30,33 @@ export default async function LandingPage() {
 
   return (
     <>
-        {/* Hero Section */}
+        {/* View Toggle */}
+        <div className="fixed top-24 right-6 lg:right-12 z-50 flex items-center bg-surface border border-border p-1 rounded-full shadow-lg">
+          <Link 
+            href="/?view=human" 
+            className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest transition-colors ${viewMode === 'human' ? 'bg-active text-background' : 'text-text-secondary hover:text-text-primary'}`}
+          >
+            Human
+          </Link>
+          <Link 
+            href="/?view=agent" 
+            className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest transition-colors ${viewMode === 'agent' ? 'bg-active text-background' : 'text-text-secondary hover:text-text-primary'}`}
+          >
+            Agent
+          </Link>
+        </div>
+
+        {viewMode === 'agent' ? (
+          <section className="px-6 lg:px-12 pt-32 pb-20 max-w-4xl mx-auto font-mono text-sm text-text-primary leading-relaxed bg-background min-h-screen">
+            <div className="sharp-card p-8 overflow-x-auto">
+              <pre className="whitespace-pre-wrap">
+                {fs.readFileSync(path.join(process.cwd(), 'public', 'agents.md'), 'utf8')}
+              </pre>
+            </div>
+          </section>
+        ) : (
+          <>
+            {/* Hero Section */}
         <section className="px-6 lg:px-12 pt-24 pb-20 max-w-6xl mx-auto flex flex-col items-center text-center gap-6">
           <h1 className="text-5xl lg:text-6xl font-extrabold tracking-tight text-text-primary max-w-4xl">
             Stop losing customers to failed payments.
@@ -215,6 +247,8 @@ export default async function LandingPage() {
             Start recovering revenue
           </Link>
         </section>
+      </>
+    )}
     </>
   );
 }
