@@ -82,10 +82,7 @@ export async function POST(request: Request) {
     // Validate UUID format, if invalid fallback to demo
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     if (!uuidRegex.test(merchantId)) {
-      // In the context of the buildathon, we allow 'm_demo_123' as well as valid UUIDs.
-      if (merchantId !== 'm_demo_123') {
-        merchantId = '00000000-0000-0000-0000-000000000001';
-      }
+      merchantId = '00000000-0000-0000-0000-000000000001';
     }
 
     // Try to get merchant secret from DB
