@@ -10,6 +10,10 @@ export default function IntegrationClient({ apiKey, appUrl: serverAppUrl }: { ap
   const [webhookSecret, setWebhookSecret] = useState('retry_buildathon_secret_key_2026');
   const [isEditingSecret, setIsEditingSecret] = useState(false);
   const [tempSecret, setTempSecret] = useState('');
+  
+  // Custom Modal State
+  const [isTestModalOpen, setIsTestModalOpen] = useState(false);
+  const [testSecretInput, setTestSecretInput] = useState('');
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -207,17 +211,8 @@ export default function IntegrationClient({ apiKey, appUrl: serverAppUrl }: { ap
               <button 
                 className="btn-secondary w-full text-xs font-mono uppercase tracking-widest disabled:opacity-50" 
                 onClick={() => {
-                  const pastedSecret = window.prompt("Verify Connection:\n\nPlease paste the Webhook Secret exactly as you entered it in your Razorpay Dashboard:");
-                  
-                  if (pastedSecret === null) {
-                    return; // User cancelled
-                  }
-                  
-                  if (pastedSecret.trim() === webhookSecret) {
-                    toast.success('Connected to Razorpay Successfully! The secrets match.', { id: 'test-webhook', duration: 5000 });
-                  } else {
-                    toast.error('Connection Error: The secret you pasted does not match your Retry secret. Webhooks will be rejected!', { id: 'test-webhook', duration: 5000 });
-                  }
+                  setTestSecretInput('');
+                  setIsTestModalOpen(true);
                 }}
               >
                 Send Test Webhook
@@ -317,6 +312,70 @@ export default function IntegrationClient({ apiKey, appUrl: serverAppUrl }: { ap
           </div>
         </div>
       </div>
+
+      {/* Custom Test Webhook Modal */}
+      {isTestModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+          <div className="sharp-card max-w-md w-full shadow-2xl animate-in slide-in-from-bottom-4 duration-300">
+            <div className="p-6 border-b border-border bg-neutral-bg flex justify-between items-center">
+              <h3 className="font-bold uppercase tracking-widest text-text-primary text-sm flex items-center gap-2">
+                <ShieldCheck size={18} className="text-active" /> Verify Connection
+              </h3>
+              <button 
+                onClick={() => setIsTestModalOpen(false)}
+                className="text-text-secondary hover:text-text-primary transition-colors"
+              >
+                <XCircle size={18} />
+              </button>
+            </div>
+            <div className="p-6 flex flex-col gap-4">
+              <p className="text-sm font-mono text-text-secondary">
+                Please paste the Webhook Secret exactly as you entered it in your Razorpay Dashboard:
+              </p>
+              <input
+                type="text"
+                autoFocus
+                value={testSecretInput}
+                onChange={(e) => setTestSecretInput(e.target.value)}
+                placeholder="Paste secret here..."
+                className="bg-background border border-border p-3 font-mono text-sm w-full focus:outline-none focus:border-active transition-colors"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    document.getElementById('verify-secret-btn')?.click();
+                  }
+                }}
+              />
+            </div>
+            <div className="p-6 border-t border-border flex justify-end gap-3 bg-neutral-bg/50">
+              <button
+                onClick={() => setIsTestModalOpen(false)}
+                className="px-4 py-2 text-xs font-mono uppercase tracking-widest hover:text-text-primary text-text-secondary transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                id="verify-secret-btn"
+                onClick={() => {
+                  if (!testSecretInput || testSecretInput.trim() === '') {
+                    toast.error("Please enter a secret to verify.");
+                    return;
+                  }
+                  if (testSecretInput.trim() === webhookSecret) {
+                    toast.success('Connected to Razorpay Successfully! The secrets match.', { id: 'test-webhook', duration: 5000 });
+                  } else {
+                    toast.error('Connection Error: The secret you pasted does not match your Retry secret. Webhooks will be rejected!', { id: 'test-webhook', duration: 5000 });
+                  }
+                  setIsTestModalOpen(false);
+                }}
+                className="btn-primary px-6 py-2 text-xs font-mono uppercase tracking-widest"
+              >
+                Verify
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
