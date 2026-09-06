@@ -31,16 +31,16 @@ export default async function LandingPage(props: { searchParams: Promise<{ view?
   return (
     <>
         {/* View Toggle */}
-        <div className="fixed top-24 right-6 lg:right-12 z-50 flex items-center bg-surface border border-border p-1 rounded-full shadow-lg">
+        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center bg-[#0a0a0a] border border-[#2a2a2a] p-1.5 rounded-full shadow-2xl">
           <Link 
             href="/?view=human" 
-            className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest transition-colors ${viewMode === 'human' ? 'bg-active text-background' : 'text-text-secondary hover:text-text-primary'}`}
+            className={`px-6 py-2 rounded-full text-xs font-bold uppercase tracking-[0.15em] transition-all ${viewMode === 'human' ? 'bg-[#00ffd1]/10 text-[#00ffd1] border border-[#00ffd1]' : 'text-[#888888] hover:text-[#cccccc] border border-transparent'}`}
           >
             Human
           </Link>
           <Link 
             href="/?view=agent" 
-            className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest transition-colors ${viewMode === 'agent' ? 'bg-active text-background' : 'text-text-secondary hover:text-text-primary'}`}
+            className={`px-6 py-2 rounded-full text-xs font-bold uppercase tracking-[0.15em] transition-all ${viewMode === 'agent' ? 'bg-[#00ffd1]/10 text-[#00ffd1] border border-[#00ffd1]' : 'text-[#888888] hover:text-[#cccccc] border border-transparent'}`}
           >
             Agent
           </Link>
