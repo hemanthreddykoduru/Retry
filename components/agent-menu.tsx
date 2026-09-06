@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { FiCopy, FiFileText, FiExternalLink, FiChevronDown } from "react-icons/fi";
-import { SiOpenai, SiAnthropic, SiPerplexity } from "react-icons/si";
+import { FiCopy, FiFileText, FiExternalLink, FiChevronDown, FiMessageSquare, FiCommand } from "react-icons/fi";
 
 export function AgentMenu({ content }: { content: string }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -72,7 +71,7 @@ export function AgentMenu({ content }: { content: string }) {
               rel="noopener noreferrer"
               className="flex items-start gap-3 w-full px-4 py-3 hover:bg-[#2a2a2a] transition-colors"
             >
-              <div className="mt-0.5 text-text-secondary"><SiOpenai size={16} /></div>
+              <div className="mt-0.5 text-text-secondary"><FiMessageSquare size={16} /></div>
               <div className="flex flex-col">
                 <span className="text-sm font-medium text-[#eee] flex items-center gap-1">Open in ChatGPT <FiExternalLink size={12} /></span>
                 <span className="text-xs text-text-muted">Ask questions about this page</span>
@@ -85,7 +84,7 @@ export function AgentMenu({ content }: { content: string }) {
               rel="noopener noreferrer"
               className="flex items-start gap-3 w-full px-4 py-3 hover:bg-[#2a2a2a] transition-colors"
             >
-              <div className="mt-0.5 text-text-secondary"><SiAnthropic size={16} /></div>
+              <div className="mt-0.5 text-text-secondary"><FiMessageSquare size={16} /></div>
               <div className="flex flex-col">
                 <span className="text-sm font-medium text-[#eee] flex items-center gap-1">Open in Claude <FiExternalLink size={12} /></span>
                 <span className="text-xs text-text-muted">Ask questions about this page</span>
@@ -98,7 +97,7 @@ export function AgentMenu({ content }: { content: string }) {
               rel="noopener noreferrer"
               className="flex items-start gap-3 w-full px-4 py-3 hover:bg-[#2a2a2a] transition-colors"
             >
-              <div className="mt-0.5 text-text-secondary"><SiPerplexity size={16} /></div>
+              <div className="mt-0.5 text-text-secondary"><FiCommand size={16} /></div>
               <div className="flex flex-col">
                 <span className="text-sm font-medium text-[#eee] flex items-center gap-1">Open in Perplexity <FiExternalLink size={12} /></span>
                 <span className="text-xs text-text-muted">Ask questions about this page</span>
