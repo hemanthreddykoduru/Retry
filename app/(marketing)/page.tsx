@@ -48,8 +48,8 @@ export default async function LandingPage(props: { searchParams: Promise<{ view?
         </div>
 
         {viewMode === 'agent' ? (
-          <section className="px-6 lg:px-12 pt-32 pb-20 max-w-5xl mx-auto font-mono text-sm text-[#e2e8f0] leading-relaxed bg-[#0a0a0a] min-h-screen">
-            <div className="relative p-8 overflow-x-auto">
+          <section className="px-6 lg:px-12 pt-32 pb-20 max-w-5xl mx-auto font-mono text-sm text-text-primary leading-relaxed bg-background min-h-screen">
+            <div className="relative p-8 overflow-x-auto border border-border bg-surface rounded-lg shadow-sm">
               <div className="absolute top-8 right-8">
                 <AgentMenu content={fs.readFileSync(path.join(process.cwd(), 'public', 'agents.md'), 'utf8')} />
               </div>
