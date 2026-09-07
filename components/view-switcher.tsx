@@ -7,11 +7,11 @@ import { useRouter, useSearchParams } from "next/navigation";
 export function ViewSwitcher({ 
   initialView, 
   agentContent, 
-  humanChildren 
+  children 
 }: { 
   initialView: 'human' | 'agent', 
   agentContent: string, 
-  humanChildren: React.ReactNode 
+  children: React.ReactNode 
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -56,7 +56,7 @@ export function ViewSwitcher({
           </div>
         </section>
       ) : (
-        <>{humanChildren}</>
+        <>{children}</>
       )}
     </>
   );
