@@ -7,7 +7,7 @@
   />
 </p>
 
-> **वसूली / వసూలు** — "recovery." An agent that plugs into a Razorpay merchant's checkout, catches every failed and silently-abandoned payment, **diagnoses *why* it failed before it acts**, and recovers the money with the lightest touch that works — smart retries, a WhatsApp nudge, or a **vernacular Telugu/Hindi/English voice call**. Every rupee is measured; every action is audited.
+> "retry." An agent that plugs into a Razorpay merchant's checkout, catches every failed and silently-abandoned payment, **diagnoses *why* it failed before it acts**, and recovers the money with the lightest touch that works — smart retries, a WhatsApp nudge, or a **vernacular Telugu/Hindi/English voice call**. Every rupee is measured; every action is audited.
 
 *Razorpay AI Buildathon 2026 · Track 03: AI Revenue Recovery*
 
