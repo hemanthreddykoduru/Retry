@@ -6,7 +6,7 @@ import { CopyButton } from "@/components/copy-button";
 import { FaGithub } from "react-icons/fa";
 
 import { MetricsRepository } from "@/lib/repositories/metrics";
-import { AgentMenu } from "@/components/agent-menu";
+import { ViewSwitcher } from "@/components/view-switcher";
 
 import fs from 'fs';
 import path from 'path';
@@ -29,38 +29,11 @@ export default async function LandingPage(props: { searchParams: Promise<{ view?
     ? Math.max(0, dbMetrics.cases_opened - dbMetrics.calls_placed - dbMetrics.whatsapps_sent) 
     : 0;
 
-  return (
-    <>
-        {/* View Toggle */}
-        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center bg-[#0a0a0a] border border-[#2a2a2a] p-1.5 rounded-full shadow-2xl">
-          <Link 
-            href="/?view=human" 
-            className={`px-6 py-2 rounded-full text-xs font-bold uppercase tracking-[0.15em] transition-all ${viewMode === 'human' ? 'bg-[#00ffd1]/10 text-[#00ffd1] border border-[#00ffd1]' : 'text-[#888888] hover:text-[#cccccc] border border-transparent'}`}
-          >
-            Human
-          </Link>
-          <Link 
-            href="/?view=agent" 
-            className={`px-6 py-2 rounded-full text-xs font-bold uppercase tracking-[0.15em] transition-all ${viewMode === 'agent' ? 'bg-[#00ffd1]/10 text-[#00ffd1] border border-[#00ffd1]' : 'text-[#888888] hover:text-[#cccccc] border border-transparent'}`}
-          >
-            Agent
-          </Link>
-        </div>
+  const agentContent = fs.readFileSync(path.join(process.cwd(), 'public', 'agents.md'), 'utf8');
 
-        {viewMode === 'agent' ? (
-          <section className="px-6 lg:px-12 pt-32 pb-20 max-w-5xl mx-auto font-mono text-sm text-text-primary leading-relaxed bg-background min-h-screen">
-            <div className="relative p-8 overflow-x-auto border border-border bg-surface rounded-lg shadow-sm">
-              <div className="absolute top-8 right-8">
-                <AgentMenu content={fs.readFileSync(path.join(process.cwd(), 'public', 'agents.md'), 'utf8')} />
-              </div>
-              <pre className="whitespace-pre-wrap max-w-3xl mt-12">
-                {fs.readFileSync(path.join(process.cwd(), 'public', 'agents.md'), 'utf8')}
-              </pre>
-            </div>
-          </section>
-        ) : (
-          <>
-            {/* Hero Section */}
+  return (
+    <ViewSwitcher initialView={viewMode} agentContent={agentContent}>
+      {/* Hero Section */}
         <section className="px-6 lg:px-12 pt-24 pb-20 max-w-6xl mx-auto flex flex-col items-center text-center gap-6">
           <h1 className="text-5xl lg:text-6xl font-extrabold tracking-tight text-text-primary max-w-4xl">
             Stop losing customers to failed payments.
@@ -251,8 +224,6 @@ export default async function LandingPage(props: { searchParams: Promise<{ view?
             Start recovering revenue
           </Link>
         </section>
-      </>
-    )}
-    </>
+    </ViewSwitcher>
   );
 }
