@@ -18,8 +18,7 @@ export default async function LandingPage(props: { searchParams: Promise<{ view?
   const viewMode = searchParams?.view === 'agent' ? 'agent' : 'human';
   
   const merchantId = '00000000-0000-0000-0000-000000000001';
-  const dateStr = new Date().toISOString().split('T')[0];
-  const dbMetrics = await MetricsRepository.getByMerchant(merchantId, dateStr);
+  const dbMetrics = await MetricsRepository.getAggregatedByMerchant(merchantId);
 
   const amountRecovered = dbMetrics ? dbMetrics.amount_recovered : 0;
   const recoveryRate = dbMetrics && dbMetrics.amount_at_risk > 0 

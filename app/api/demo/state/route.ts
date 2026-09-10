@@ -25,8 +25,7 @@ export async function GET(request: Request) {
       };
     }));
 
-    const dateStr = new Date().toISOString().split('T')[0];
-    const dbMetrics = await MetricsRepository.getByMerchant(merchantId, dateStr);
+    const dbMetrics = await MetricsRepository.getAggregatedByMerchant(merchantId);
 
     const metrics = dbMetrics ? {
       failures_detected: dbMetrics.failures_detected,
