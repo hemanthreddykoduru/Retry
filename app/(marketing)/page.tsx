@@ -51,7 +51,7 @@ export default async function LandingPage(props: { searchParams: Promise<{ view?
               <FaGithub size={18} />
               View GitHub
             </a>
-            <a href="#" target="_blank" rel="noopener noreferrer" className="btn-secondary text-base px-8 py-3 font-medium border-2 flex items-center gap-2">
+            <a href="https://youtu.be/s3hobYdQoTY" target="_blank" rel="noopener noreferrer" className="btn-secondary text-base px-8 py-3 font-medium border-2 flex items-center gap-2">
               <FaPlayCircle size={18} />
               Watch Demo
             </a>
