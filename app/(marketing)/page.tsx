@@ -3,7 +3,7 @@ import { ReceiptRow } from "@/components/receipt-row";
 import { MetricCard } from "@/components/metric-card";
 import { liveReceipts, formatCurrency } from "@/lib/demo-data";
 import { CopyButton } from "@/components/copy-button";
-import { FaGithub } from "react-icons/fa";
+import { FaGithub, FaPlayCircle } from "react-icons/fa";
 
 import { MetricsRepository } from "@/lib/repositories/metrics";
 import { ViewSwitcher } from "@/components/view-switcher";
@@ -50,6 +50,10 @@ export default async function LandingPage(props: { searchParams: Promise<{ view?
             <a href="https://github.com/hemanthreddykoduru/Retry" target="_blank" rel="noopener noreferrer" className="btn-secondary text-base px-8 py-3 font-medium border-2 flex items-center gap-2">
               <FaGithub size={18} />
               View GitHub
+            </a>
+            <a href="#" target="_blank" rel="noopener noreferrer" className="btn-secondary text-base px-8 py-3 font-medium border-2 flex items-center gap-2">
+              <FaPlayCircle size={18} />
+              Watch Demo
             </a>
           </div>
           
