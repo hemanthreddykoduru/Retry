@@ -44,9 +44,9 @@ export default async function LandingPage(props: { searchParams: Promise<{ view?
             <Link href="/signup" className="btn-primary text-base px-8 py-3 font-medium">
               Start recovering revenue
             </Link>
-            <Link href="/dashboard" className="btn-secondary text-base px-8 py-3 font-medium border-2">
-              View live recovery demo
-            </Link>
+            <a href="https://retry-testing.vercel.app/" target="_blank" rel="noopener noreferrer" className="btn-secondary text-base px-8 py-3 font-medium border-2">
+              View testing website
+            </a>
             <a href="https://github.com/hemanthreddykoduru/Retry" target="_blank" rel="noopener noreferrer" className="btn-secondary text-base px-8 py-3 font-medium border-2 flex items-center gap-2">
               <FaGithub size={18} />
               View GitHub
