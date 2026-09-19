@@ -2,20 +2,10 @@ import os
 import json
 from typing import Dict, Any
 
+# 1. Keep module-level imports lightweight.
 from bedrock_agentcore import BedrockAgentCoreApp
-from strands import Agent, Model
-from strands.providers.bedrock import BedrockProvider
 
-from payment_tools import (
-    lookup_payment_case,
-    diagnose_payment_failure,
-    check_customer_contact_status,
-    start_recovery_call,
-    record_recovery_outcome,
-    MOCK_DB
-)
-from steering_handlers import RateLimiterHook, WorkflowEnforcementHook
-
+# Ensure the BedrockAgentCoreApp object and @app.entrypoint are defined correctly.
 app = BedrockAgentCoreApp()
 
 SYSTEM_PROMPT = """
@@ -39,7 +29,20 @@ Rules:
 - If a tool returns an error (e.g., call blocked), explain the reason to the user and ask how to proceed or recommend corrective action.
 """
 
-def get_agent() -> Agent:
+def get_agent():
+    # 4. Construct the Strands Agent lazily inside get_agent()
+    from strands import Agent, Model
+    from strands.providers.bedrock import BedrockProvider
+    
+    from payment_tools import (
+        lookup_payment_case,
+        diagnose_payment_failure,
+        check_customer_contact_status,
+        start_recovery_call,
+        record_recovery_outcome
+    )
+    from steering_handlers import RateLimiterHook, WorkflowEnforcementHook
+
     provider = BedrockProvider()
     
     # We use Claude 3 Haiku or Sonnet through Bedrock
@@ -68,6 +71,9 @@ def get_agent() -> Agent:
 
 @app.entrypoint
 def handle_invoke(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
+    # Lazy import to avoid loading it globally
+    from payment_tools import MOCK_DB
+    
     prompt = event.get("prompt")
     if not prompt:
         return {"error": "Missing 'prompt' in payload."}
@@ -86,6 +92,8 @@ def handle_invoke(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     }
 
 if __name__ == "__main__":
+    from payment_tools import MOCK_DB
+    
     # Local execution testing
     print("Initializing local agent test...")
     agent = get_agent()

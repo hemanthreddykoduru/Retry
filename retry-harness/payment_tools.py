@@ -24,6 +24,17 @@ MOCK_DB: Dict[str, Dict[str, Any]] = {
         "contact_checked": False,
         "call_started": False,
         "outcome_recorded": False,
+    },
+    "CASE-1001": {
+        "amount": 2500.00,
+        "currency": "INR",
+        "customer_phone_masked": "+91 90*** 3344",
+        "failure_code": "insufficient_funds",
+        "has_been_looked_up": False,
+        "has_been_diagnosed": False,
+        "contact_checked": False,
+        "call_started": False,
+        "outcome_recorded": False,
     }
 }
 
