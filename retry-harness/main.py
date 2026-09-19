@@ -2,10 +2,8 @@ import os
 import json
 from typing import Dict, Any
 
-# 1. Keep module-level imports lightweight.
 from bedrock_agentcore import BedrockAgentCoreApp
 
-# Ensure the BedrockAgentCoreApp object and @app.entrypoint are defined correctly.
 app = BedrockAgentCoreApp()
 
 SYSTEM_PROMPT = """
@@ -30,7 +28,6 @@ Rules:
 """
 
 def get_agent():
-    # 4. Construct the Strands Agent lazily inside get_agent()
     from strands import Agent
     from strands.models.bedrock import BedrockModel
     
@@ -43,7 +40,6 @@ def get_agent():
     )
     from steering_handlers import RateLimiterHook, WorkflowEnforcementHook
 
-    # We use Claude 3 Haiku or Sonnet through Bedrock
     model_id = os.environ.get("BEDROCK_MODEL_ID", "anthropic.claude-3-haiku-20240307-v1:0")
     model = BedrockModel(model_id=model_id)
     
@@ -66,7 +62,6 @@ def get_agent():
 
 @app.entrypoint
 def handle_invoke(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
-    # Lazy import to avoid loading it globally
     from payment_tools import MOCK_DB
     
     prompt = event.get("prompt")
@@ -74,8 +69,6 @@ def handle_invoke(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         return {"error": "Missing 'prompt' in payload."}
         
     case_id = event.get("case_id")
-    
-    # Prepend case_id to prompt if provided
     full_prompt = f"Case ID: {case_id}\n\n{prompt}" if case_id else prompt
     
     agent = get_agent()
@@ -85,19 +78,3 @@ def handle_invoke(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         "response": response.content,
         "mock_db_state": MOCK_DB.get(case_id) if case_id else None
     }
-
-if __name__ == "__main__":
-    from payment_tools import MOCK_DB
-    
-    # Local execution testing
-    print("Initializing local agent test...")
-    agent = get_agent()
-    test_prompt = "Can you process case_123 for me? Please follow the full workflow."
-    print(f"User: {test_prompt}")
-    
-    try:
-        response = agent(test_prompt)
-        print(f"Agent: {response.content}")
-        print("\nFinal Mock DB State for case_123:", json.dumps(MOCK_DB["case_123"], indent=2))
-    except Exception as e:
-        print(f"Error during local execution: {e}")
