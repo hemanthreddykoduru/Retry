@@ -1,7 +1,11 @@
 import postgres from 'postgres';
 
-const directUrl = "postgresql://postgres:654f24421313c41d7addad16b7079437@67eyaefq.us-east.database.insforge.app:5432/insforge?sslmode=require";
-const poolerUrl = "postgresql://postgres:654f24421313c41d7addad16b7079437@67eyaefq.us-east.database.insforge.app:6543/insforge?sslmode=require&pgbouncer=true";
+const directUrl = process.env.DIRECT_URL;
+const poolerUrl = process.env.DATABASE_URL;
+
+if (!poolerUrl) {
+  throw new Error("Missing DATABASE_URL in environment variables.");
+}
 
 const sql = postgres(poolerUrl, { max: 1 });
 
