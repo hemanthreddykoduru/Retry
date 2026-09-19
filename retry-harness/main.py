@@ -31,8 +31,8 @@ Rules:
 
 def get_agent():
     # 4. Construct the Strands Agent lazily inside get_agent()
-    from strands import Agent, Model
-    from strands.providers.bedrock import BedrockProvider
+    from strands import Agent
+    from strands.models.bedrock import BedrockModel
     
     from payment_tools import (
         lookup_payment_case,
@@ -43,14 +43,9 @@ def get_agent():
     )
     from steering_handlers import RateLimiterHook, WorkflowEnforcementHook
 
-    provider = BedrockProvider()
-    
     # We use Claude 3 Haiku or Sonnet through Bedrock
     model_id = os.environ.get("BEDROCK_MODEL_ID", "anthropic.claude-3-haiku-20240307-v1:0")
-    model = Model(
-        provider=provider,
-        name=model_id
-    )
+    model = BedrockModel(model_id=model_id)
     
     rate_limiter = RateLimiterHook(max_calls_per_tool=3)
     workflow_enforcer = WorkflowEnforcementHook()
