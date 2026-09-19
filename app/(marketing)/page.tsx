@@ -7,6 +7,7 @@ import { FaGithub, FaPlayCircle } from "react-icons/fa";
 
 import { MetricsRepository } from "@/lib/repositories/metrics";
 import { ViewSwitcher } from "@/components/view-switcher";
+import { HeroSection } from "@/components/hero-section";
 
 import fs from 'fs';
 import path from 'path';
@@ -44,46 +45,7 @@ export default async function LandingPage(props: { searchParams: Promise<{ view?
           <div className="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent"></div>
         </div>
 
-        <section className="px-6 lg:px-12 pt-32 pb-24 max-w-7xl mx-auto flex flex-col items-start text-left gap-8 relative z-10">
-          <h1 className="text-6xl lg:text-7xl xl:text-[80px] font-bold tracking-tighter text-[#17191F] max-w-4xl leading-[1.05]">
-            Recover lost revenue <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-400">effortlessly.</span><br/>
-            <span className="text-[#5B6270] font-medium text-4xl lg:text-5xl tracking-tight leading-tight mt-4 block">
-              Automate your retry logic and follow-ups.
-            </span>
-          </h1>
-          <p className="text-[19px] text-[#5B6270] max-w-2xl leading-relaxed font-medium">
-            Retry automatically figures out why a payment failed and follows up with your customer at the right time. Built from the ground up for Indian businesses and UPI.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center gap-4 mt-4">
-            <Link href="/signup" className="bg-[#635BFF] text-white text-[15px] px-8 py-3.5 rounded-full font-medium hover:bg-[#635BFF]/90 transition-colors shadow-[0_4px_14px_0_rgba(99,91,255,0.39)]">
-              Start recovering revenue
-            </Link>
-            <a href="https://retry-testing.vercel.app/" target="_blank" rel="noopener noreferrer" className="bg-white text-[#17191F] text-[15px] px-8 py-3.5 rounded-full font-medium border border-[#E6E8EC] hover:bg-[#F7F8FA] transition-colors shadow-sm">
-              View testing website
-            </a>
-            <a href="https://github.com/hemanthreddykoduru/Retry" target="_blank" rel="noopener noreferrer" className="bg-white text-[#17191F] text-[15px] px-6 py-3.5 rounded-full font-medium border border-[#E6E8EC] hover:bg-[#F7F8FA] transition-colors shadow-sm flex items-center gap-2">
-              <FaGithub size={18} className="text-[#5B6270]" />
-              GitHub
-            </a>
-            <a href="https://youtu.be/s3hobYdQoTY" target="_blank" rel="noopener noreferrer" className="bg-white text-[#17191F] text-[15px] px-6 py-3.5 rounded-full font-medium border border-[#E6E8EC] hover:bg-[#F7F8FA] transition-colors shadow-sm flex items-center gap-2">
-              <FaPlayCircle size={18} className="text-[#5B6270]" />
-              Demo
-            </a>
-          </div>
-          
-          {/* Compact Product Preview */}
-          <div className="mt-12 font-mono text-xs text-[#5B6270] flex flex-wrap items-center justify-center gap-3 bg-white/60 backdrop-blur-md px-6 py-3 border border-[#E6E8EC] rounded-2xl shadow-sm">
-            <span className="animate-pipeline-1 bg-[#FFF4E5] text-[#B55D00] font-medium px-2.5 py-1 rounded-md border border-[#FDE68A]">payment.failed</span>
-            <span className="text-[#858B98]">→</span>
-            <span className="animate-pipeline-2 font-medium">cause diagnosed</span>
-            <span className="text-[#858B98]">→</span>
-            <span className="animate-pipeline-3 font-medium">policy selected</span>
-            <span className="text-[#858B98]">→</span>
-            <span className="animate-pipeline-4 bg-[#E3F2ED] text-[#0F9F6E] font-semibold px-2.5 py-1 rounded-md border border-[#A7F3D0]">
-              payment recovered
-            </span>
-          </div>
-        </section>
+        <HeroSection />
       </div>
 
         {/* Evidence Section */}
