@@ -79,7 +79,7 @@ def handle_invoke(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     full_prompt = f"Case ID: {case_id}\n\n{prompt}" if case_id else prompt
     
     agent = get_agent()
-    response = agent.invoke(full_prompt)
+    response = agent(full_prompt)
     
     return {
         "response": response.content,
@@ -96,7 +96,7 @@ if __name__ == "__main__":
     print(f"User: {test_prompt}")
     
     try:
-        response = agent.invoke(test_prompt)
+        response = agent(test_prompt)
         print(f"Agent: {response.content}")
         print("\nFinal Mock DB State for case_123:", json.dumps(MOCK_DB["case_123"], indent=2))
     except Exception as e:
