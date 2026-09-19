@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "retry-harness"
+version = "0.1.0"
+description = "AWS Strands Agents and Amazon Bedrock AgentCore harness for Retry."
+dependencies = [
+    "strands-agents",
+    "bedrock-agentcore",
+    "aws-opentelemetry-distro",
+    "boto3"
+]

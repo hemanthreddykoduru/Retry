@@ -1,0 +1,4 @@
+strands-agents
+bedrock-agentcore
+aws-opentelemetry-distro
+boto3

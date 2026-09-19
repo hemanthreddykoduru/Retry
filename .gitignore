@@ -54,3 +54,12 @@ next-env.d.ts
 .roo
 .trae
 .windsurf
+
+retry-harness/.venv/
+__pycache__/
+*.pyc
+
+retry-harness/venv/
+retry-harness/.venv/
+retry-harness/__pycache__/
+*.pyc
