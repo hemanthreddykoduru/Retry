@@ -3,11 +3,7 @@ import Link from "next/link";
 export default function MarketingLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Announcement Strip */}
-      <div className="w-full bg-[#635BFF] text-white py-2 px-4 text-center text-xs font-medium tracking-wide flex items-center justify-center gap-2">
-        <span className="w-2 h-2 rounded-full bg-[#00D4FF] animate-pulse"></span>
-        Built for Razorpay test-mode recovery workflows
-      </div>
+      {/* Announcement Strip removed for hackathon submission */}
 
       <header className="flex justify-between items-center p-6 lg:px-12 bg-transparent sticky top-0 z-10 transition-colors backdrop-blur-md bg-white/80 border-b border-[#E6E8EC]">
         <Link href="/" className="font-bold text-xl tracking-tight text-[#17191F]">Retry</Link>
