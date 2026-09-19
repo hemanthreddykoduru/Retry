@@ -8,15 +8,15 @@ export default function DashboardLayout({
 }) {
   return (
     <div className="flex flex-col h-screen overflow-hidden bg-background text-text-primary">
-      <div className="bg-neutral-bg border-b border-border py-1.5 px-4 flex flex-wrap items-center justify-between text-[10px] font-mono uppercase tracking-widest text-text-secondary gap-4 z-20">
-        <div className="flex items-center gap-4">
-          <span className="flex items-center gap-1 text-active font-bold"><span className="w-1.5 h-1.5 rounded-full bg-active animate-pulse"></span> DEMO MODE</span>
+      <div className="bg-[#FFFFFF] border-b border-[#E6E8EC] py-2 px-6 flex flex-wrap items-center justify-between text-xs font-medium text-[#5B6270] gap-4 z-20">
+        <div className="flex items-center gap-2">
+          <span className="flex items-center gap-1.5 text-[#1769E0] font-semibold bg-[#EDF5FF] px-2 py-0.5 rounded-md"><span className="w-1.5 h-1.5 rounded-full bg-[#1769E0] animate-pulse"></span> Demo Mode</span>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           <span>Sarvam Mock Mode</span>
-          <span className="text-border-strong">•</span>
-          <span className="bg-[#facc15] text-[#854d0e] font-bold px-1.5 py-0.5 rounded-sm">Razorpay Test Mode</span>
-          <span className="text-border-strong">•</span>
+          <span className="text-[#D1D5DB]">•</span>
+          <span className="bg-[#FFF4E5] text-[#B55D00] font-medium px-2 py-0.5 rounded-md border border-[#FDE68A]">Razorpay Test Mode</span>
+          <span className="text-[#D1D5DB]">•</span>
           <span>Payment Links Mock Mode</span>
         </div>
       </div>

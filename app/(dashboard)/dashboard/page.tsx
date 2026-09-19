@@ -53,16 +53,18 @@ export default function Dashboard() {
 
   return (
     <div className="max-w-[1400px] mx-auto flex flex-col gap-8 pb-10">
-      {/* Page Heading */}
-      <div className="flex flex-col gap-1">
-        <div className="text-[11px] font-bold tracking-[0.12em] uppercase text-text-secondary">
-          Overview
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex flex-col gap-1.5">
+          <h1 className="text-2xl lg:text-3xl font-semibold tracking-tight text-[#17191F]">
+            Good evening, {businessName}
+          </h1>
+          <div className="text-[15px] text-[#5B6270]">
+            Here is your recovery activity for the last 30 days.
+          </div>
         </div>
-        <h1 className="text-2xl lg:text-3xl font-bold tracking-tight text-text-primary">
-          Revenue recovery, measured and attributable.
-        </h1>
-        <div className="text-sm text-text-secondary font-mono mt-1 uppercase tracking-widest text-[10px]">
-          {businessName} · Razorpay test-mode sample
+        <div className="flex items-center gap-3">
+          <button className="btn-secondary">Run test recovery</button>
+          <button className="btn-primary">Create recovery case</button>
         </div>
       </div>
 

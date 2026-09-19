@@ -14,7 +14,7 @@ export default function AnalyticsPage() {
   const refreshState = async () => {
     try {
       const merchantId = typeof window !== 'undefined' ? localStorage.getItem('retry_merchant_id') : null;
-      const res = await fetch('/api/demo/state', {
+      const res = await fetch('/api/demo/state?metrics_only=true', {
         headers: { 'x-merchant-id': merchantId || '00000000-0000-0000-0000-000000000001' }
       });
       const data = await res.json();
@@ -26,7 +26,7 @@ export default function AnalyticsPage() {
     const merchantId = typeof window !== 'undefined' ? localStorage.getItem('retry_merchant_id') : null;
     const headers = { 'x-merchant-id': merchantId || '00000000-0000-0000-0000-000000000001' };
 
-    fetch('/api/demo/state', { headers })
+    fetch('/api/demo/state?metrics_only=true', { headers })
       .then(r => r.json())
       .then(data => {
         if (data && data.metrics) setMetrics(data.metrics);
@@ -86,36 +86,36 @@ export default function AnalyticsPage() {
                 <th className="py-3 px-4 text-text-primary font-bold">Retry diagnosis-first policy</th>
               </tr>
             </thead>
-            <tbody className="font-mono text-sm">
-              <tr className="border-b border-border/50 hover:bg-neutral-bg transition-colors">
-                <td className="py-3 px-4 text-text-secondary">Recovery rate</td>
-                <td className="py-3 px-4">37.8%</td>
-                <td className="py-3 px-4 font-bold text-recovered">{metrics.recovery_rate || 0}%</td>
+            <tbody className="text-sm">
+              <tr className="border-b border-[#E6E8EC] hover:bg-[#F7F8FA] transition-colors">
+                <td className="py-3 px-4 text-[#5B6270]">Recovery rate</td>
+                <td className="py-3 px-4">-</td>
+                <td className="py-3 px-4 font-semibold text-[#0F9F6E]">{metrics.recovery_rate || 0}%</td>
               </tr>
-              <tr className="border-b border-border/50 hover:bg-neutral-bg transition-colors">
-                <td className="py-3 px-4 text-text-secondary">Recovered revenue</td>
-                <td className="py-3 px-4">₹0</td>
-                <td className="py-3 px-4 font-bold text-recovered">{formatCurrency(metrics.recovered_revenue_paise || 0)}</td>
+              <tr className="border-b border-[#E6E8EC] hover:bg-[#F7F8FA] transition-colors">
+                <td className="py-3 px-4 text-[#5B6270]">Recovered revenue</td>
+                <td className="py-3 px-4">-</td>
+                <td className="py-3 px-4 font-semibold text-[#0F9F6E]">{formatCurrency(metrics.recovered_revenue_paise || 0)}</td>
               </tr>
-              <tr className="border-b border-border/50 hover:bg-neutral-bg transition-colors">
-                <td className="py-3 px-4 text-text-secondary">Customer contacts</td>
+              <tr className="border-b border-[#E6E8EC] hover:bg-[#F7F8FA] transition-colors">
+                <td className="py-3 px-4 text-[#5B6270]">Customer contacts</td>
                 <td className="py-3 px-4">{metrics.cases_opened || 0} (All cases)</td>
-                <td className="py-3 px-4 font-bold">{(metrics.calls_placed || 0) + (metrics.whatsapps_sent || 0)} (Bounded)</td>
+                <td className="py-3 px-4 font-semibold">{(metrics.calls_placed || 0) + (metrics.whatsapps_sent || 0)} (Bounded)</td>
               </tr>
-              <tr className="border-b border-border/50 hover:bg-neutral-bg transition-colors">
-                <td className="py-3 px-4 text-text-secondary">Contacts avoided</td>
-                <td className="py-3 px-4 text-lost">0</td>
-                <td className="py-3 px-4 font-bold text-waiting">{metrics.contacts_avoided || 0} (Downtime)</td>
+              <tr className="border-b border-[#E6E8EC] hover:bg-[#F7F8FA] transition-colors">
+                <td className="py-3 px-4 text-[#5B6270]">Contacts avoided</td>
+                <td className="py-3 px-4 text-[#C33D3D]">-</td>
+                <td className="py-3 px-4 font-semibold text-[#B55D00]">{metrics.contacts_avoided || 0} (Downtime)</td>
               </tr>
-              <tr className="border-b border-border/50 hover:bg-neutral-bg transition-colors">
-                <td className="py-3 px-4 text-text-secondary">Cost per recovery</td>
-                <td className="py-3 px-4">₹0</td>
-                <td className="py-3 px-4 font-bold">₹{metrics.cost_per_recovery || 0}</td>
+              <tr className="border-b border-[#E6E8EC] hover:bg-[#F7F8FA] transition-colors">
+                <td className="py-3 px-4 text-[#5B6270]">Cost per recovery</td>
+                <td className="py-3 px-4">-</td>
+                <td className="py-3 px-4 font-semibold">₹{metrics.cost_per_recovery || 0}</td>
               </tr>
-              <tr className="hover:bg-neutral-bg transition-colors">
-                <td className="py-3 px-4 text-text-secondary">Unresolved cases</td>
+              <tr className="hover:bg-[#F7F8FA] transition-colors">
+                <td className="py-3 px-4 text-[#5B6270]">Unresolved cases</td>
                 <td className="py-3 px-4">{metrics.cases_opened || 0}</td>
-                <td className="py-3 px-4 font-bold">{(metrics.cases_opened || 0) - (metrics.cases_recovered || 0)}</td>
+                <td className="py-3 px-4 font-semibold">{(metrics.cases_opened || 0) - (metrics.cases_recovered || 0)}</td>
               </tr>
             </tbody>
           </table>

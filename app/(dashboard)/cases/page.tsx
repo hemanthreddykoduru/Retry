@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { formatCurrency, RecoveryCase } from "@/lib/demo-data";
 import { StatusBadge } from "@/components/status-badge";
 import { Search, Download, FilterX, Inbox } from "lucide-react";
+import AgentChat from "@/components/AgentChat";
 
 export default function CasesPage() {
   const [search, setSearch] = useState("");
@@ -154,8 +155,9 @@ export default function CasesPage() {
         </div>
       </div>
 
-      <div className="sharp-card flex-1 overflow-auto flex flex-col min-h-[500px]">
-        <div className="grid grid-cols-12 gap-4 p-4 border-b border-border bg-background/50 text-[10px] font-bold tracking-[0.12em] uppercase text-text-secondary min-w-[1000px]">
+      <div className="flex flex-row gap-6 flex-1 h-full min-h-[500px]">
+        <div className="sharp-card flex-1 overflow-auto flex flex-col min-h-[500px]">
+        <div className="grid grid-cols-12 gap-4 p-4 border-b border-[#E6E8EC] bg-[#F7F8FA] text-[11px] font-semibold tracking-wider uppercase text-[#5B6270] min-w-[1000px]">
           <div className="col-span-2">Case ID / Date</div>
           <div className="col-span-2">Customer</div>
           <div className="col-span-1 text-right">Amount</div>
@@ -164,72 +166,77 @@ export default function CasesPage() {
           <div className="col-span-3 text-right">Status</div>
         </div>
 
-        <div className="flex flex-col min-w-[1000px] flex-1">
-          {isLoading ? (
-            Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className="grid grid-cols-12 gap-4 p-4 border-b border-border/50 animate-pulse items-center">
-                <div className="col-span-2">
-                  <div className="h-4 bg-neutral-bg rounded w-24 mb-2"></div>
-                  <div className="h-3 bg-neutral-bg rounded w-16"></div>
+          <div className="flex flex-col min-w-[1000px] flex-1">
+            {isLoading ? (
+              Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} className="grid grid-cols-12 gap-4 p-4 border-b border-border/50 animate-pulse items-center">
+                  <div className="col-span-2">
+                    <div className="h-4 bg-neutral-bg rounded w-24 mb-2"></div>
+                    <div className="h-3 bg-neutral-bg rounded w-16"></div>
+                  </div>
+                  <div className="col-span-2">
+                    <div className="h-4 bg-neutral-bg rounded w-32 mb-2"></div>
+                    <div className="h-3 bg-neutral-bg rounded w-24"></div>
+                  </div>
+                  <div className="col-span-1 flex justify-end">
+                    <div className="h-4 bg-neutral-bg rounded w-16"></div>
+                  </div>
+                  <div className="col-span-2">
+                    <div className="h-4 bg-neutral-bg rounded w-20 mb-2"></div>
+                    <div className="h-4 bg-neutral-bg rounded w-24"></div>
+                  </div>
+                  <div className="col-span-2">
+                    <div className="h-4 bg-neutral-bg rounded w-24 mb-2"></div>
+                    <div className="h-3 bg-neutral-bg rounded w-20"></div>
+                  </div>
+                  <div className="col-span-3 flex justify-end">
+                    <div className="h-6 bg-neutral-bg rounded w-24"></div>
+                  </div>
                 </div>
-                <div className="col-span-2">
-                  <div className="h-4 bg-neutral-bg rounded w-32 mb-2"></div>
-                  <div className="h-3 bg-neutral-bg rounded w-24"></div>
-                </div>
-                <div className="col-span-1 flex justify-end">
-                  <div className="h-4 bg-neutral-bg rounded w-16"></div>
-                </div>
-                <div className="col-span-2">
-                  <div className="h-4 bg-neutral-bg rounded w-20 mb-2"></div>
-                  <div className="h-4 bg-neutral-bg rounded w-24"></div>
-                </div>
-                <div className="col-span-2">
-                  <div className="h-4 bg-neutral-bg rounded w-24 mb-2"></div>
-                  <div className="h-3 bg-neutral-bg rounded w-20"></div>
-                </div>
-                <div className="col-span-3 flex justify-end">
-                  <div className="h-6 bg-neutral-bg rounded w-24"></div>
-                </div>
+              ))
+            ) : filteredCases.length === 0 ? (
+              <div className="flex flex-col items-center justify-center flex-1 text-text-secondary font-mono text-sm gap-2">
+                <Inbox size={32} className="text-border" />
+                <div>No cases match your filters.</div>
+                <button onClick={clearFilters} className="text-text-primary underline">Clear filters</button>
               </div>
-            ))
-          ) : filteredCases.length === 0 ? (
-            <div className="flex flex-col items-center justify-center flex-1 text-text-secondary font-mono text-sm gap-2">
-              <Inbox size={32} className="text-border" />
-              <div>No cases match your filters.</div>
-              <button onClick={clearFilters} className="text-text-primary underline">Clear filters</button>
-            </div>
-          ) : (
-            filteredCases.map((c) => (
-              <Link 
-                href={`/cases/${c.id}`} 
-                key={c.id}
-                className="grid grid-cols-12 gap-4 p-4 border-b border-border/50 hover:bg-neutral-bg transition-colors cursor-pointer group last:border-0 items-center"
-              >
-                <div className="col-span-2 font-mono text-xs text-text-primary">
-                  <div className="font-bold">{c.id}</div>
-                  <div className="text-text-muted mt-1 text-[10px]" suppressHydrationWarning>{new Date(c.opened_at).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true })}</div>
-                </div>
-                <div className="col-span-2 font-mono text-xs">
-                  <div className="text-text-primary">{c.customer?.name || "Unknown"}</div>
-                  <div className="text-text-secondary mt-1">{maskPhone(c.customer?.phone || "")}</div>
-                </div>
-                <div className="col-span-1 font-mono text-xs text-text-primary text-right font-bold">
-                  {formatCurrency(c.amount)}
-                </div>
-                <div className="col-span-2 font-mono text-[11px]">
-                  <div className="text-text-secondary uppercase">{formatTrigger(c.trigger_source)}</div>
-                  <div className="text-text-primary mt-1">{formatRootCause(c.root_cause)}</div>
-                </div>
-                <div className="col-span-2 font-mono text-[11px]">
-                  <div className="text-text-primary capitalize">{getLatestIntervention(c)}</div>
-                  <div className="text-text-secondary mt-1 text-[10px] uppercase tracking-wider">{getNextAction(c)}</div>
-                </div>
-                <div className="col-span-3 text-right flex justify-end">
-                  <StatusBadge status={c.status} showDot={true} />
-                </div>
-              </Link>
-            ))
-          )}
+            ) : (
+              filteredCases.map((c) => (
+                <Link 
+                  href={`/cases/${c.id}`} 
+                  key={c.id}
+                  className="grid grid-cols-12 gap-4 p-4 border-b border-border/50 hover:bg-neutral-bg transition-colors cursor-pointer group last:border-0 items-center"
+                >
+                  <div className="col-span-2 font-mono text-xs text-text-primary">
+                    <div className="font-bold">{c.id}</div>
+                    <div className="text-text-muted mt-1 text-[10px]" suppressHydrationWarning>{new Date(c.opened_at).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true })}</div>
+                  </div>
+                  <div className="col-span-2 font-mono text-xs">
+                    <div className="text-text-primary">{c.customer?.name || "Unknown"}</div>
+                    <div className="text-text-secondary mt-1">{maskPhone(c.customer?.phone || "")}</div>
+                  </div>
+                  <div className="col-span-1 font-mono text-xs text-text-primary text-right font-bold">
+                    {formatCurrency(c.amount)}
+                  </div>
+                  <div className="col-span-2 font-mono text-[11px]">
+                    <div className="text-text-secondary uppercase">{formatTrigger(c.trigger_source)}</div>
+                    <div className="text-text-primary mt-1">{formatRootCause(c.root_cause)}</div>
+                  </div>
+                  <div className="col-span-2 font-mono text-[11px]">
+                    <div className="text-text-primary capitalize">{getLatestIntervention(c)}</div>
+                    <div className="text-text-secondary mt-1 text-[10px] uppercase tracking-wider">{getNextAction(c)}</div>
+                  </div>
+                  <div className="col-span-3 text-right flex justify-end">
+                    <StatusBadge status={c.status} showDot={true} />
+                  </div>
+                </Link>
+              ))
+            )}
+          </div>
+        </div>
+        
+        <div className="w-1/3 flex-shrink-0 h-full min-w-[350px]">
+          <AgentChat />
         </div>
       </div>
     </div>

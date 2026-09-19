@@ -4,21 +4,21 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
   return (
     <div className="flex flex-col min-h-screen">
       {/* Announcement Strip */}
-      <div className="w-full bg-surface border-b border-border py-2 px-4 text-center text-xs font-mono text-text-secondary uppercase tracking-widest flex items-center justify-center gap-2">
-        <span className="w-2 h-2 rounded-full bg-waiting animate-pulse"></span>
-        Built for <span className="bg-[#facc15] text-[#854d0e] font-bold px-1.5 py-0.5 rounded-sm">Razorpay test-mode</span> recovery workflows
+      <div className="w-full bg-[#635BFF] text-white py-2 px-4 text-center text-xs font-medium tracking-wide flex items-center justify-center gap-2">
+        <span className="w-2 h-2 rounded-full bg-[#00D4FF] animate-pulse"></span>
+        Built for Razorpay test-mode recovery workflows
       </div>
 
-      <header className="flex justify-between items-center p-6 lg:px-12 border-b border-border bg-surface sticky top-0 z-10">
-        <Link href="/" className="font-bold text-xl tracking-tight">RETRY</Link>
-        <nav className="hidden md:flex gap-6 text-sm font-medium text-text-secondary">
-          <Link href="/features" className="hover:text-text-primary">Features</Link>
-          <Link href="/how-it-works" className="hover:text-text-primary">How it works</Link>
-          <Link href="/pricing" className="hover:text-text-primary">Pricing</Link>
+      <header className="flex justify-between items-center p-6 lg:px-12 bg-transparent sticky top-0 z-10 transition-colors backdrop-blur-md bg-white/80 border-b border-[#E6E8EC]">
+        <Link href="/" className="font-bold text-xl tracking-tight text-[#17191F]">Retry</Link>
+        <nav className="hidden md:flex gap-8 text-[15px] font-medium text-[#5B6270]">
+          <Link href="/features" className="hover:text-[#17191F] transition-colors">Features</Link>
+          <Link href="/how-it-works" className="hover:text-[#17191F] transition-colors">How it works</Link>
+          <Link href="/pricing" className="hover:text-[#17191F] transition-colors">Pricing</Link>
         </nav>
-        <div className="flex items-center gap-4 text-sm font-medium">
-          <Link href="/login" className="text-text-secondary hover:text-text-primary">Log in</Link>
-          <Link href="/signup" className="btn-primary">Sign up</Link>
+        <div className="flex items-center gap-6 text-[15px] font-medium">
+          <Link href="/login" className="text-[#5B6270] hover:text-[#17191F] transition-colors">Log in</Link>
+          <Link href="/signup" className="bg-[#635BFF] text-white px-4 py-2 rounded-full shadow-sm hover:bg-[#635BFF]/90 transition-colors">Sign up</Link>
         </div>
       </header>
 

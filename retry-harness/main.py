@@ -3,7 +3,6 @@ import json
 from typing import Dict, Any
 
 from bedrock_agentcore import BedrockAgentCoreApp
-
 app = BedrockAgentCoreApp()
 
 SYSTEM_PROMPT = """
@@ -40,7 +39,8 @@ def get_agent():
     )
     from steering_handlers import RateLimiterHook, WorkflowEnforcementHook
 
-    model_id = os.environ.get("BEDROCK_MODEL_ID", "anthropic.claude-3-haiku-20240307-v1:0")
+    # REQUIRED BY WORKSHOP: Must use the specific Sonnet inference profile
+    model_id = os.environ.get("BEDROCK_MODEL_ID", "us.anthropic.claude-sonnet-4-5-20250514-v1:0")
     model = BedrockModel(model_id=model_id)
     
     rate_limiter = RateLimiterHook(max_calls_per_tool=3)

@@ -103,16 +103,16 @@ export default function SignupPage() {
     return (
       <div className="flex flex-col">
         <div className="mb-6 text-center">
-          <h2 className="text-xl font-bold tracking-tight text-text-primary">Check your email</h2>
-          <p className="text-sm text-text-secondary mt-1">We sent a verification code to {formData.email}</p>
+          <h2 className="text-2xl font-semibold tracking-tight text-[#17191F]">Check your email</h2>
+          <p className="text-sm text-[#5B6270] mt-1">We sent a verification code to {formData.email}</p>
         </div>
         
         <form className="flex flex-col" onSubmit={handleOtpSubmit}>
           <FormField label="Verification Code (OTP)" id="otp" type="text" required placeholder="Enter 6-digit code" />
           
-          {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+          {error && <p className="text-[#C33D3D] text-sm mb-4">{error}</p>}
 
-          <button type="submit" disabled={loading} className="w-full bg-text-primary text-surface py-2 rounded-md font-medium text-sm hover:bg-text-primary/90 transition-colors disabled:opacity-50">
+          <button type="submit" disabled={loading} className="w-full bg-[#635BFF] text-white py-2.5 rounded-lg font-medium text-sm hover:bg-[#635BFF]/90 transition-colors shadow-sm disabled:opacity-50 mt-2">
             {loading ? 'Verifying...' : 'Verify Email'}
           </button>
         </form>
@@ -123,8 +123,8 @@ export default function SignupPage() {
   return (
     <div className="flex flex-col">
       <div className="mb-6 text-center">
-        <h2 className="text-xl font-bold tracking-tight text-text-primary">Start recovering revenue</h2>
-        <p className="text-sm text-text-secondary mt-1">Create your Retry account.</p>
+        <h2 className="text-2xl font-semibold tracking-tight text-[#17191F]">Start recovering revenue</h2>
+        <p className="text-sm text-[#5B6270] mt-1">Create your Retry account.</p>
       </div>
       
       <form className="flex flex-col" onSubmit={handleSignupSubmit}>
@@ -134,22 +134,22 @@ export default function SignupPage() {
         <FormField label="Password" id="password" type="password" required />
         <FormField label="Confirm password" id="confirm_password" type="password" required />
         
-        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+        {error && <p className="text-[#C33D3D] text-sm mb-4">{error}</p>}
         
         <div className="flex items-start gap-2 mb-6 mt-2">
-          <input type="checkbox" id="terms" required className="mt-1 rounded border-border text-active focus:ring-active" />
-          <label htmlFor="terms" className="text-sm text-text-secondary leading-snug">
-            I agree to the <Link href="#" className="text-active hover:underline">Terms of Service</Link> and <Link href="#" className="text-active hover:underline">Privacy Policy</Link>.
+          <input type="checkbox" id="terms" required className="mt-1 rounded border-[#E6E8EC] text-[#635BFF] focus:ring-[#635BFF]" />
+          <label htmlFor="terms" className="text-sm text-[#5B6270] leading-snug">
+            I agree to the <Link href="#" className="text-[#635BFF] hover:underline">Terms of Service</Link> and <Link href="#" className="text-[#635BFF] hover:underline">Privacy Policy</Link>.
           </label>
         </div>
 
-        <button type="submit" disabled={loading} className="w-full bg-text-primary text-surface py-2 rounded-md font-medium text-sm hover:bg-text-primary/90 transition-colors disabled:opacity-50">
+        <button type="submit" disabled={loading} className="w-full bg-[#635BFF] text-white py-2.5 rounded-lg font-medium text-sm hover:bg-[#635BFF]/90 transition-colors shadow-sm disabled:opacity-50">
           {loading ? 'Creating account...' : 'Create account'}
         </button>
       </form>
 
-      <p className="text-center text-sm text-text-secondary mt-6">
-        Already have an account? <Link href="/login" className="font-medium text-active hover:underline">Log in</Link>
+      <p className="text-center text-sm text-[#5B6270] mt-6">
+        Already have an account? <Link href="/login" className="font-medium text-[#635BFF] hover:underline">Log in</Link>
       </p>
     </div>
   );

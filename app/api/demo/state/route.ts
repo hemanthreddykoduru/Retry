@@ -5,28 +5,16 @@ import { AuditLogRepository } from '@/lib/repositories/audit-log';
 import { MetricsRepository } from '@/lib/repositories/metrics';
 
 export async function GET(request: Request) {
+  const url = new URL(request.url);
+  const metricsOnly = url.searchParams.get('metrics_only') === 'true';
+
   let merchantId = request.headers.get('x-merchant-id') || '00000000-0000-0000-0000-000000000001';
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     if (!uuidRegex.test(merchantId)) {
       merchantId = '00000000-0000-0000-0000-000000000001';
     }
   try {
-    const rawCases = await RecoveryCasesRepository.listByMerchant(merchantId);
-    
-    // Stitch interventions and audit logs to match the demoStore structure for the frontend
-    const cases = await Promise.all(rawCases.map(async (c) => {
-      const interventions = await InterventionsRepository.listByCase(c.id);
-      const audit_logs = await AuditLogRepository.listByCase(c.id);
-      
-      return {
-        ...c,
-        interventions,
-        audit_logs
-      };
-    }));
-
     const dbMetrics = await MetricsRepository.getAggregatedByMerchant(merchantId);
-
     const metrics = dbMetrics ? {
       failures_detected: dbMetrics.failures_detected,
       cases_opened: dbMetrics.cases_opened,
@@ -60,6 +48,26 @@ export async function GET(request: Request) {
       cost_per_recovery: 0,
       revenue_at_risk_trend: 0
     };
+
+    if (metricsOnly) {
+      return NextResponse.json({ cases: [], customers: [], metrics });
+    }
+
+    const rawCases = await RecoveryCasesRepository.listByMerchant(merchantId);
+    
+    // Stitch interventions and audit logs to match the demoStore structure for the frontend
+    const cases = await Promise.all(rawCases.map(async (c) => {
+      const interventions = await InterventionsRepository.listByCase(c.id);
+      const audit_logs = await AuditLogRepository.listByCase(c.id);
+      
+      return {
+        ...c,
+        interventions,
+        audit_logs
+      };
+    }));
+
+
 
     return NextResponse.json({
       cases,

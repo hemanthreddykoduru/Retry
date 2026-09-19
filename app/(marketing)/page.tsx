@@ -33,43 +33,58 @@ export default async function LandingPage(props: { searchParams: Promise<{ view?
   return (
     <ViewSwitcher initialView={viewMode} agentContent={agentContent}>
       {/* Hero Section */}
-        <section className="px-6 lg:px-12 pt-24 pb-20 max-w-6xl mx-auto flex flex-col items-center text-center gap-6">
-          <h1 className="text-5xl lg:text-6xl font-extrabold tracking-tight text-text-primary max-w-4xl">
-            Stop losing customers to failed payments.
+      <div className="relative overflow-hidden bg-white isolate">
+        {/* Vibrant Stripe-inspired Mesh Gradient */}
+        <div className="absolute top-0 right-0 w-[120%] lg:w-[80%] h-[800px] pointer-events-none skew-y-[-10deg] origin-top-right transform translate-y-[-10%] opacity-100 overflow-hidden rounded-bl-[100px] z-0">
+          <div className="absolute top-[-10%] right-[10%] w-[50%] h-[80%] rounded-[100%] bg-pink-400 blur-[100px] opacity-40 animate-pulse-slow"></div>
+          <div className="absolute top-[10%] right-[30%] w-[60%] h-[90%] rounded-[100%] bg-purple-400 blur-[120px] opacity-40"></div>
+          <div className="absolute bottom-[10%] right-[0%] w-[50%] h-[70%] rounded-[100%] bg-orange-400 blur-[100px] opacity-40"></div>
+          <div className="absolute top-[40%] right-[40%] w-[40%] h-[60%] rounded-[100%] bg-blue-400 blur-[90px] opacity-40"></div>
+          {/* Fading overlay to blend into the white background smoothly */}
+          <div className="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent"></div>
+        </div>
+
+        <section className="px-6 lg:px-12 pt-32 pb-24 max-w-7xl mx-auto flex flex-col items-start text-left gap-8 relative z-10">
+          <h1 className="text-6xl lg:text-7xl xl:text-[80px] font-bold tracking-tighter text-[#17191F] max-w-4xl leading-[1.05]">
+            Recover lost revenue <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-400">effortlessly.</span><br/>
+            <span className="text-[#5B6270] font-medium text-4xl lg:text-5xl tracking-tight leading-tight mt-4 block">
+              Automate your retry logic and follow-ups.
+            </span>
           </h1>
-          <p className="text-xl text-text-secondary max-w-2xl leading-relaxed">
+          <p className="text-[19px] text-[#5B6270] max-w-2xl leading-relaxed font-medium">
             Retry automatically figures out why a payment failed and follows up with your customer at the right time. Built from the ground up for Indian businesses and UPI.
           </p>
-          <div className="flex flex-col sm:flex-row items-center gap-4 mt-6">
-            <Link href="/signup" className="btn-primary text-base px-8 py-3 font-medium">
+          <div className="flex flex-col sm:flex-row items-center gap-4 mt-4">
+            <Link href="/signup" className="bg-[#635BFF] text-white text-[15px] px-8 py-3.5 rounded-full font-medium hover:bg-[#635BFF]/90 transition-colors shadow-[0_4px_14px_0_rgba(99,91,255,0.39)]">
               Start recovering revenue
             </Link>
-            <a href="https://retry-testing.vercel.app/" target="_blank" rel="noopener noreferrer" className="btn-secondary text-base px-8 py-3 font-medium border-2">
+            <a href="https://retry-testing.vercel.app/" target="_blank" rel="noopener noreferrer" className="bg-white text-[#17191F] text-[15px] px-8 py-3.5 rounded-full font-medium border border-[#E6E8EC] hover:bg-[#F7F8FA] transition-colors shadow-sm">
               View testing website
             </a>
-            <a href="https://github.com/hemanthreddykoduru/Retry" target="_blank" rel="noopener noreferrer" className="btn-secondary text-base px-8 py-3 font-medium border-2 flex items-center gap-2">
-              <FaGithub size={18} />
-              View GitHub
+            <a href="https://github.com/hemanthreddykoduru/Retry" target="_blank" rel="noopener noreferrer" className="bg-white text-[#17191F] text-[15px] px-6 py-3.5 rounded-full font-medium border border-[#E6E8EC] hover:bg-[#F7F8FA] transition-colors shadow-sm flex items-center gap-2">
+              <FaGithub size={18} className="text-[#5B6270]" />
+              GitHub
             </a>
-            <a href="https://youtu.be/s3hobYdQoTY" target="_blank" rel="noopener noreferrer" className="btn-secondary text-base px-8 py-3 font-medium border-2 flex items-center gap-2">
-              <FaPlayCircle size={18} />
-              Watch Demo
+            <a href="https://youtu.be/s3hobYdQoTY" target="_blank" rel="noopener noreferrer" className="bg-white text-[#17191F] text-[15px] px-6 py-3.5 rounded-full font-medium border border-[#E6E8EC] hover:bg-[#F7F8FA] transition-colors shadow-sm flex items-center gap-2">
+              <FaPlayCircle size={18} className="text-[#5B6270]" />
+              Demo
             </a>
           </div>
           
           {/* Compact Product Preview */}
-          <div className="mt-8 font-mono text-xs text-text-muted flex flex-wrap items-center justify-center gap-3 bg-neutral-bg px-5 py-2.5 border border-border">
-            <span className="animate-pipeline-1 bg-lost-bg text-lost font-medium px-2 py-1 rounded-sm border border-lost/20">payment.failed</span>
-            <span className="text-text-muted">→</span>
-            <span className="animate-pipeline-2">cause diagnosed</span>
-            <span className="text-text-muted">→</span>
-            <span className="animate-pipeline-3">policy selected</span>
-            <span className="text-text-muted">→</span>
-            <span className="animate-pipeline-4 bg-recovered-bg text-recovered font-bold px-2 py-1 rounded-sm border border-recovered/20">
+          <div className="mt-12 font-mono text-xs text-[#5B6270] flex flex-wrap items-center justify-center gap-3 bg-white/60 backdrop-blur-md px-6 py-3 border border-[#E6E8EC] rounded-2xl shadow-sm">
+            <span className="animate-pipeline-1 bg-[#FFF4E5] text-[#B55D00] font-medium px-2.5 py-1 rounded-md border border-[#FDE68A]">payment.failed</span>
+            <span className="text-[#858B98]">→</span>
+            <span className="animate-pipeline-2 font-medium">cause diagnosed</span>
+            <span className="text-[#858B98]">→</span>
+            <span className="animate-pipeline-3 font-medium">policy selected</span>
+            <span className="text-[#858B98]">→</span>
+            <span className="animate-pipeline-4 bg-[#E3F2ED] text-[#0F9F6E] font-semibold px-2.5 py-1 rounded-md border border-[#A7F3D0]">
               payment recovered
             </span>
           </div>
         </section>
+      </div>
 
         {/* Evidence Section */}
         <section className="bg-surface border-y border-border py-16">

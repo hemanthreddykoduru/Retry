@@ -30,77 +30,57 @@ const SidebarContent = ({ navClass }: { navClass: (path: string) => string }) =>
   }, []);
 
   return (
-    <div className="flex flex-col h-full bg-surface border-r border-border">
-      <div className="h-14 lg:h-16 flex items-center px-4 font-bold text-lg tracking-tight border-b border-border">
-        RETRY
-        <div className="ml-2 text-[10px] text-text-secondary font-normal uppercase tracking-widest">
-          Revenue Recovery
-        </div>
+    <div className="flex flex-col h-full bg-[#F7F8FA] border-r border-[#E6E8EC]">
+      <div className="h-16 flex items-center px-6 font-bold text-lg tracking-tight border-b border-[#E6E8EC] text-[#17191F]">
+        Retry
       </div>
-      <div className="flex-1 py-6 flex flex-col gap-8 px-2 overflow-y-auto">
+      <div className="flex-1 py-6 flex flex-col gap-2 px-3 overflow-y-auto">
         
-        {/* OPERATE */}
-        <div>
-          <div className="px-3 mb-2 text-[10px] uppercase tracking-widest text-zinc-500 font-bold">Operate</div>
-          <div className="flex flex-col gap-1">
-            <Link href="/dashboard" className={navClass("/dashboard")}>
-              <LayoutDashboard size={16} /> Overview
-            </Link>
-            <Link href="/cases" className={navClass("/cases")}>
-              <Inbox size={16} /> Recovery cases
-            </Link>
-            <Link href="/analytics" className={navClass("/analytics")}>
-              <BarChart3 size={16} /> Analytics
-            </Link>
-          </div>
-        </div>
+        <Link href="/dashboard" className={navClass("/dashboard")} prefetch={true}>
+          <LayoutDashboard size={18} /> Overview
+        </Link>
+        <Link href="/cases" className={navClass("/cases")} prefetch={true}>
+          <Inbox size={18} /> Recovery cases
+        </Link>
+        <Link href="/interventions" className={navClass("/interventions")} prefetch={true}>
+          <ShieldAlert size={18} /> Interventions
+        </Link>
+        <Link href="/customers" className={navClass("/customers")} prefetch={true}>
+          <Beaker size={18} /> Customers
+        </Link>
+        <Link href="/analytics" className={navClass("/analytics")} prefetch={true}>
+          <BarChart3 size={18} /> Analytics
+        </Link>
+        <Link href="/integration" className={navClass("/integration")} prefetch={true}>
+          <Plug size={18} /> Integrations
+        </Link>
+        <Link href="/settings" className={navClass("/settings")} prefetch={true}>
+          <Settings size={18} /> Settings
+        </Link>
 
-        {/* DEVELOP */}
-        <div>
-          <div className="px-3 mb-2 text-[10px] uppercase tracking-widest text-zinc-500 font-bold">Develop</div>
-          <div className="flex flex-col gap-1">
-            <Link href="/demo" className={navClass("/demo")}>
-              <Beaker size={16} /> Simulator
-            </Link>
-            <Link href="/integration" className={navClass("/integration")}>
-              <Plug size={16} /> API Integration
-            </Link>
-          </div>
-        </div>
-
-        {/* CONTROL */}
-        <div>
-          <div className="px-3 mb-2 text-[10px] uppercase tracking-widest text-zinc-500 font-bold">Control</div>
-          <div className="flex flex-col gap-1">
-            <Link href="/settings/guardrails" className={navClass("/settings/guardrails")}>
-              <ShieldAlert size={16} /> Guardrails
-            </Link>
-            <Link href="/settings" className={navClass("/settings")}>
-              <Settings size={16} /> Settings
-            </Link>
-          </div>
-        </div>
       </div>
 
-      <div className="mt-auto border-t border-border p-4 bg-background">
-        <div className="text-[9px] font-mono uppercase tracking-widest text-text-secondary mb-3 pl-2">
-          {businessName || 'Workspace'} · Live
+      <div className="mt-auto border-t border-[#E6E8EC] p-4 bg-[#FFFFFF]">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-md bg-[#EEEFFF] text-[#635BFF] flex items-center justify-center font-bold text-sm">
+            {businessName ? businessName.charAt(0) : 'W'}
+          </div>
+          <div className="flex flex-col min-w-0 flex-1">
+            <div className="text-sm font-medium text-[#17191F] truncate">{businessName || 'Workspace'}</div>
+            <div className="text-xs text-[#5B6270] truncate">{userName || 'Merchant'}</div>
+          </div>
         </div>
-        <div className="flex flex-col gap-1">
-          <div className="text-sm font-bold truncate">{userName}</div>
-          <div className="text-xs text-text-secondary truncate mb-2">{businessName}</div>
-          <button onClick={async () => {
-            localStorage.removeItem('retry_business_name');
-            localStorage.removeItem('retry_user_name');
-            localStorage.removeItem('retry_user_email');
-            localStorage.removeItem('retry_merchant_id');
-            const { insforge } = await import('@/lib/insforge');
-            await insforge.auth.signOut();
-            window.location.href = '/login';
-          }} className="flex items-center gap-2 text-xs text-text-secondary hover:text-text-primary transition-colors">
-            <LogOut size={12} /> Log out
-          </button>
-        </div>
+        <button onClick={async () => {
+          localStorage.removeItem('retry_business_name');
+          localStorage.removeItem('retry_user_name');
+          localStorage.removeItem('retry_user_email');
+          localStorage.removeItem('retry_merchant_id');
+          const { insforge } = await import('@/lib/insforge');
+          await insforge.auth.signOut();
+          window.location.href = '/login';
+        }} className="mt-4 flex w-full items-center gap-2 text-xs font-medium text-[#5B6270] hover:text-[#17191F] transition-colors px-2 py-1.5 rounded-md hover:bg-[#F2F4F7]">
+          <LogOut size={14} /> Log out
+        </button>
       </div>
     </div>
   );
@@ -114,16 +94,19 @@ export function Sidebar() {
 
   const isActive = (path: string) => {
     if (path === '/cases') return pathname?.startsWith('/cases');
-    if (path === '/settings') return pathname === '/settings' || pathname === '/settings/team';
+    if (path === '/interventions') return pathname?.startsWith('/interventions');
+    if (path === '/customers') return pathname?.startsWith('/customers');
+    if (path === '/integration') return pathname?.startsWith('/integration');
+    if (path === '/settings') return pathname?.startsWith('/settings');
     return pathname === path;
   };
 
   const navClass = (path: string) => {
     const active = isActive(path);
-    return `flex items-center gap-3 px-3 py-2 text-sm font-medium border-l-2 transition-colors ${
+    return `flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
       active 
-        ? 'bg-neutral-bg border-text-primary text-text-primary' 
-        : 'border-transparent text-text-secondary hover:text-text-primary hover:bg-neutral-bg/50'
+        ? 'bg-[#EEEFFF] text-[#635BFF]' 
+        : 'text-[#5B6270] hover:text-[#17191F] hover:bg-[#F2F4F7]'
     }`;
   };
 

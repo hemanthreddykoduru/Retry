@@ -1,50 +1,68 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fafafa;
-  --surface: #ffffff;
-  /* Stronger borders for grid layout */
-  --border: #e4e4e7;
-  --border-strong: #d4d4d8;
-  --text-primary: #18181b;
-  --text-secondary: #71717a;
-  --text-muted: #a1a1aa;
+  --background: #F7F8FA;
+  --surface: #FFFFFF;
+  --surface-subtle: #F2F4F7;
+  
+  --border: #E6E8EC;
+  --border-strong: #D1D5DB; /* Fallback for stronger borders if needed */
+  
+  --primary: #635BFF;
+  --primary-hover: #4F46E5;
+  --primary-subtle: #EEEFFF;
+  
+  --text-primary: #17191F;
+  --text-secondary: #5B6270;
+  --text-muted: #858B98;
 
-  --recovered: #059669;
-  --recovered-bg: #ecfdf5;
-  --waiting: #d97706;
-  --waiting-bg: #fffbeb;
-  --active: #2563eb;
-  --active-bg: #eff6ff;
-  --lost: #dc2626;
-  --lost-bg: #fef2f2;
-  --neutral: #52525b;
-  --neutral-bg: #f4f4f5;
+  --success: #0F9F6E;
+  --success-subtle: #E8F7F0;
+  
+  --warning: #B55D00;
+  --warning-subtle: #FFF4E5;
+  
+  --danger: #C33D3D;
+  --danger-subtle: #FFF0F0;
+  
+  --info: #1769E0;
+  --info-subtle: #EDF5FF;
+  
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-surface: var(--surface);
+  --color-surface-subtle: var(--surface-subtle);
+  
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
+  
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-subtle: var(--primary-subtle);
   
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
   --color-text-muted: var(--text-muted);
   
-  --color-recovered: var(--recovered);
-  --color-recovered-bg: var(--recovered-bg);
-  --color-waiting: var(--waiting);
-  --color-waiting-bg: var(--waiting-bg);
-  --color-active: var(--active);
-  --color-active-bg: var(--active-bg);
-  --color-lost: var(--lost);
-  --color-lost-bg: var(--lost-bg);
-  --color-neutral: var(--neutral);
-  --color-neutral-bg: var(--neutral-bg);
+  --color-success: var(--success);
+  --color-success-subtle: var(--success-subtle);
+  
+  --color-warning: var(--warning);
+  --color-warning-subtle: var(--warning-subtle);
+  
+  --color-danger: var(--danger);
+  --color-danger-subtle: var(--danger-subtle);
+  
+  --color-info: var(--info);
+  --color-info-subtle: var(--info-subtle);
 
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-geist-sans), "Inter", sans-serif;
+  --font-mono: var(--font-geist-mono), monospace;
 }
 
 body {
@@ -60,19 +78,21 @@ body {
   background-size: 24px 24px;
 }
 
-/* Sharp elements */
+/* Soft, premium cards */
 .sharp-card {
-  border: 1px solid var(--border-strong);
-  border-radius: 0;
+  border: 1px solid var(--border);
+  border-radius: 12px;
   background-color: var(--surface);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
 }
 
 /* Button style */
 .btn-primary {
-  @apply bg-text-primary text-surface px-4 py-2 font-medium hover:bg-text-primary/90 transition-colors uppercase tracking-widest text-[11px];
+  @apply bg-primary text-surface px-4 py-2 font-medium hover:bg-primary-hover transition-colors rounded-lg tracking-wide shadow-sm;
 }
 .btn-secondary {
-  @apply border border-border-strong text-text-primary px-4 py-2 font-medium hover:bg-neutral-bg transition-colors uppercase tracking-widest text-[11px];
+  @apply border border-border text-text-primary px-4 py-2 font-medium hover:bg-surface-subtle transition-colors rounded-lg tracking-wide shadow-sm bg-surface;
 }
 
 @media (prefers-reduced-motion: no-preference) {
