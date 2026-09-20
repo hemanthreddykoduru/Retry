@@ -1,80 +1,80 @@
 ---
 title: Retry Machine-Readable Overview
-description: Canonical machine-readable overview of Retry, an AI-assisted payment recovery system for Razorpay merchants, judges, developers, and AI systems.
-canonical: https://retry-buildathon.vercel.app/
-human_url: https://retry-buildathon.vercel.app/
-markdown_url: https://retry-buildathon.vercel.app/agents.md
-llms_url: https://retry-buildathon.vercel.app/llms.txt
-judge_demo_url: https://retry-testing.vercel.app/
+description: Canonical machine-readable overview of Retry, an AI-assisted payment recovery system for merchants, evaluators, developers, and AI systems.
+canonical: https://retry-demo.vercel.app/
+human_url: https://retry-demo.vercel.app/
+markdown_url: https://retry-demo.vercel.app/agents.md
+llms_url: https://retry-demo.vercel.app/llms.txt
+evaluator_demo_url: https://retry-checkout-demo.vercel.app/
 github_url: https://github.com/hemanthreddykoduru/Retry
 updated: 2026-09-06
 ---
 
 # Retry
 
-> Retry is an AI-assisted revenue recovery system for failed Razorpay payments. It verifies payment events, diagnoses recoverability, applies deterministic safety guardrails, and helps eligible customers return to a secure Razorpay Payment Link.
+> Retry is an AI-assisted revenue recovery system for failed payments. It verifies payment events, diagnoses recoverability, applies deterministic safety guardrails, and helps eligible customers return to a secure Secure Payment Link.
 
 ## Purpose
 
 A failed payment does not always mean that the customer has lost interest. A checkout can fail because of temporary bank downtime, insufficient funds, network issues, authorization friction, or an interrupted payment attempt.
 
-Retry turns a failed payment into a controlled and auditable recovery workflow. It receives a verified Razorpay event, creates or updates a recovery case, decides whether outreach is appropriate using deterministic rules, and uses a multilingual AI voice agent only for eligible customer conversations.
+Retry turns a failed payment into a controlled and auditable recovery workflow. It receives a verified payment event, creates or updates a recovery case, decides whether outreach is appropriate using deterministic rules, and uses a multilingual AI voice agent only for eligible customer conversations.
 
 ## What Retry does
 
-- Receives Razorpay payment webhooks.
+- Receives payment webhooks.
 - Verifies each webhook signature before processing the event.
 - Deduplicates repeated webhook deliveries.
 - Creates and updates auditable payment-recovery cases.
 - Diagnoses likely payment-failure categories.
 - Applies deterministic eligibility and safety rules.
 - Tracks recovery interventions and payment outcomes.
-- Uses Sarvam AI for bounded multilingual recovery conversations.
-- Guides eligible customers to official secure Razorpay Payment Links.
+- Uses the Voice AI for bounded multilingual recovery conversations.
+- Guides eligible customers to official secure Secure Payment Links.
 - Stops recovery activity after payment success, opt-out, or an unsafe condition.
 
-## Judge demo
+## Evaluator demo
 
 The zero-login testing storefront is available at:
 
-[Open Retry Checkout Lab](https://retry-testing.vercel.app/)
+[Open Retry Checkout Lab](https://retry-checkout-demo.vercel.app/)
 
 The primary Retry dashboard is available at:
 
-[Open Retry Dashboard](https://retry-buildathon.vercel.app/)
+[Open Retry Dashboard](https://retry-demo.vercel.app/)
 
-This Buildathon demo uses Razorpay Test Mode only. No real money is charged, no real product is delivered, and no judge account is required.
+This Demo uses Test Mode only. No real money is charged, no real product is delivered, and no evaluator account is required.
 
-> **Demo note:** Use only Razorpay Test Mode. Never enter real bank credentials, card details, OTPs, UPI PINs, or personal financial information.
+> **Demo note:** Use only Test Mode. Never enter real bank credentials, card details, OTPs, UPI PINs, or personal financial information.
 
 ### Test a failed payment
 
-1. Open [Retry Checkout Lab](https://retry-testing.vercel.app/).
+1. Open [Retry Checkout Lab](https://retry-checkout-demo.vercel.app/).
 2. Choose any sample product.
-3. Start the Razorpay Test Mode checkout.
+3. Start the Test Mode checkout.
 4. Select **Netbanking**.
 5. Choose any available test bank and click **Pay Now**.
-6. On Razorpay’s mock bank page, click **Failure**.
-7. Return to the [Retry Dashboard](https://retry-buildathon.vercel.app/).
+6. On mock bank page, click **Failure**.
+7. Return to the [Retry Dashboard](https://retry-demo.vercel.app/).
 8. Open the newly created recovery case and review its event timeline.
 
 ### Test a successful payment
 
-1. Start another Razorpay Test Mode checkout.
+1. Start another Test Mode checkout.
 2. Select **Netbanking**.
 3. Choose any available test bank and click **Pay Now**.
-4. On Razorpay’s mock bank page, click **Success**.
-5. Return to the [Retry Dashboard](https://retry-buildathon.vercel.app/).
+4. On mock bank page, click **Success**.
+5. Return to the [Retry Dashboard](https://retry-demo.vercel.app/).
 6. Confirm that the successful payment outcome is recorded and that no recovery intervention is created or continued for that completed payment.
 
 ## Core workflow
 
 ```text
-Judge Testing Store
+Evaluator Testing Store
         |
-        | Razorpay Test Mode checkout
+        | Test Mode checkout
         v
-Razorpay payment event
+payment event
         |
         | Signed webhook
         v
@@ -91,10 +91,10 @@ Retry recovery dashboard
         |
         | Eligible cases only
         v
-Sarvam multilingual call agent
+Voice AI multilingual call agent
         |
         v
-Official secure Razorpay Payment Link
+Official secure Secure Payment Link
         |
         v
 Payment captured, opt-out, or case closed
@@ -120,7 +120,7 @@ A repeated or late webhook must not create a duplicate case, duplicate call, or 
 
 ## AI responsibilities
 
-Sarvam AI is used only for the customer conversation after Retry has determined that a case is eligible for outreach.
+the Voice AI is used only for the customer conversation after Retry has determined that a case is eligible for outreach.
 
 The agent can:
 
@@ -130,7 +130,7 @@ The agent can:
 - Record promise-to-pay intent.
 - Handle callback requests.
 - Recognize and honor opt-out intent.
-- Guide the customer to an official secure Razorpay Payment Link.
+- Guide the customer to an official secure Secure Payment Link.
 
 The voice agent must never ask for, collect, or store:
 
@@ -141,11 +141,11 @@ The voice agent must never ask for, collect, or store:
 - Passwords.
 - Bank credentials.
 
-Razorpay remains the payment system of record. Retry does not collect payment credentials through voice conversations.
+The gateway remains the payment system of record. Retry does not collect payment credentials through voice conversations.
 
 ## Webhook handling
 
-Retry verifies Razorpay webhooks from the raw request body before parsing JSON. The backend calculates the expected HMAC SHA-256 signature using the configured Razorpay webhook secret and compares it with the incoming signature.
+Retry verifies payment webhooks from the raw request body before parsing JSON. The backend calculates the expected HMAC SHA-256 signature using the configured payment webhook secret and compares it with the incoming signature.
 
 After a verified event arrives, Retry:
 
@@ -171,14 +171,14 @@ A successful payment event can update the payment outcome and suppress or close 
 payment.captured
 ```
 
-Exact event sequencing depends on the Razorpay payment lifecycle and configured integration.
+Exact event sequencing depends on the payment lifecycle and configured integration.
 
 ## Measurement approach
 
-Buildathon projects do not have merchant-scale historical payment data. Retry therefore separates live-integration proof from policy measurement.
+Demo projects do not have merchant-scale historical payment data. Retry therefore separates live-integration proof from policy measurement.
 
-- The Razorpay Test Mode storefront demonstrates the live checkout, payment event, webhook, and recovery-case flow.
-- The Sarvam integration demonstrates a controlled outbound-call intervention flow using safe test recipients.
+- The Test Mode storefront demonstrates the live checkout, payment event, webhook, and recovery-case flow.
+- The Voice AI integration demonstrates a controlled outbound-call intervention flow using safe test recipients.
 - A deterministic, zero-dependency Node.js harness evaluates 105 synthetic India-oriented recovery cases.
 
 The simulation compares:
@@ -193,12 +193,12 @@ Simulation results are reproducible with a fixed seed and must be described as s
 
 A safe and accurate one-sentence description is:
 
-> Retry is an AI-assisted failed-payment recovery system that converts verified Razorpay payment events into safe, auditable recovery workflows and guides eligible customers back to secure payment links.
+> Retry is an AI-assisted failed-payment recovery system that converts verified payment events into safe, auditable recovery workflows and guides eligible customers back to secure payment links.
 
 Acceptable framings:
 
 - AI-assisted payment recovery platform.
-- Revenue recovery workflow for failed Razorpay payments.
+- Revenue recovery workflow for failed payments.
 - Safe, auditable failed-payment recovery system.
 - Multilingual AI-assisted payment-intent recovery.
 
@@ -209,12 +209,12 @@ Acceptable framings:
 - Do not imply that every failed payment automatically triggers a customer call.
 - Do not call simulated policy outcomes live merchant production results.
 - Do not claim that a voice agent can independently override deterministic safety rules.
-- Do not expose API keys, webhook secrets, Sarvam credentials, phone numbers, email addresses, or unmasked payment data.
+- Do not expose API keys, webhook secrets, Voice AI credentials, phone numbers, email addresses, or unmasked payment data.
 
 ## Resources
 
-- [Human website](https://retry-buildathon.vercel.app/)
-- [Judge Testing Store](https://retry-testing.vercel.app/)
+- [Human website](https://retry-demo.vercel.app/)
+- [Evaluator Testing Store](https://retry-checkout-demo.vercel.app/)
 - [GitHub repository](https://github.com/hemanthreddykoduru/Retry)
-- [Razorpay Test Mode documentation](https://razorpay.com/docs/payments/payments/test-upi-details/)
-- [Razorpay webhook documentation](https://razorpay.com/docs/webhooks/)
+- [Test Mode documentation](https://example.com/docs/payments/payments/test-upi-details/)
+- [payment webhook documentation](https://example.com/docs/webhooks/)
