@@ -14,7 +14,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
         </nav>
         <div className="flex items-center gap-6 text-[15px] font-medium">
           <Link href="/login" className="text-[#5B6270] hover:text-[#17191F] transition-colors">Log in</Link>
-          <Link href="/signup" className="bg-[#635BFF] text-white px-4 py-2 rounded-full shadow-sm hover:bg-[#635BFF]/90 transition-colors">Sign up</Link>
+          <Link href="/signup" className="bg-[#635BFF] text-white px-4 py-2 rounded-none shadow-sm hover:bg-[#635BFF]/90 transition-colors">Sign up</Link>
         </div>
       </header>
 

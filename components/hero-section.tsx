@@ -97,7 +97,7 @@ export function HeroSection() {
         <div className="absolute -inset-4 bg-gradient-to-tr from-indigo-500/10 to-pink-500/10 blur-2xl rounded-[3rem] -z-10" />
         
         <div className="transform -rotate-2 hover:rotate-0 transition-transform duration-500 ease-out">
-          <div className="bg-white/80 backdrop-blur-xl border border-white/50 shadow-[0_24px_48px_-12px_rgba(30,27,75,0.15)] rounded-2xl p-6 overflow-hidden relative">
+          <div className="bg-white/80 backdrop-blur-xl border border-white/50 shadow-[0_24px_48px_-12px_rgba(30,27,75,0.15)] rounded-none p-6 overflow-hidden relative">
             <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 blur-2xl rounded-full -translate-y-1/2 translate-x-1/2" />
             
             <div className="flex items-center justify-between mb-6 pb-4 border-b border-zinc-100">
