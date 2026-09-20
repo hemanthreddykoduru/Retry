@@ -81,7 +81,7 @@ body {
 /* Soft, premium cards */
 .sharp-card {
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 0px;
   background-color: var(--surface);
   box-shadow: var(--shadow-sm);
   overflow: hidden;
