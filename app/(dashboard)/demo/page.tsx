@@ -31,7 +31,7 @@ const ScenarioCard = ({
   caseId 
 }: { 
   title: string; 
-  icon: React.ElementType; 
+  icon: any; 
   flow: string[]; 
   description: string; 
   action: string; 

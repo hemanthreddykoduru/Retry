@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { User, Bell, Shield, LogOut, Trash2, Mail, Users, MapPin, Building, Activity, Copy, AlertTriangle } from "lucide-react";
 
-const TabButton = ({ id, icon: Icon, label, activeTab, setActiveTab }: { id: string, icon: React.ElementType, label: string, activeTab: string, setActiveTab: (id: string) => void }) => (
+const TabButton = ({ id, icon: Icon, label, activeTab, setActiveTab }: { id: string, icon: any, label: string, activeTab: string, setActiveTab: (id: string) => void }) => (
   <button
     onClick={() => setActiveTab(id)}
     className={`flex items-center gap-3 px-4 py-3 text-sm font-bold tracking-wider uppercase w-full text-left transition-colors border-l-2 ${

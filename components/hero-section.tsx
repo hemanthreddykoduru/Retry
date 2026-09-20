@@ -33,6 +33,7 @@ export function HeroSection() {
   return (
     <div className="relative w-full overflow-hidden">
       <div className="absolute inset-0 w-full h-full -z-10 pointer-events-none opacity-30 mix-blend-multiply">
+        {/* @ts-expect-error - importedFiber is not typed but required by shadergradient in Next.js */}
         <ShaderGradientCanvas
           importedFiber={{ ...fiber, ...drei, ...reactSpring }}
           style={{ width: '100%', height: '100%' }}
