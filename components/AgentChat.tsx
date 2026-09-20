@@ -2,8 +2,18 @@
 
 import React, { useState, useRef, useEffect } from "react";
 
+function getSafeErrorMessage(errorStr: string) {
+  if (errorStr.toLowerCase().includes("timeout")) {
+    return "Retry could not complete that request. Please try again.";
+  }
+  if (errorStr.toLowerCase().includes("tokens") || errorStr.toLowerCase().includes("throttling")) {
+    return "The AI agent is currently experiencing high demand. Please try again later.";
+  }
+  return "Something went wrong. No recovery action was changed.";
+}
+
 export default function AgentChat() {
-  const [messages, setMessages] = useState<{ role: "user" | "agent"; content: string }[]>([]);
+  const [messages, setMessages] = useState<{ role: "user" | "agent"; content: string; rawError?: string }[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -58,7 +68,8 @@ export default function AgentChat() {
                 console.error("Agent Error:", data.error);
                 setMessages((prev) => {
                   const newMessages = [...prev];
-                  newMessages[newMessages.length - 1].content = "Error: " + data.error;
+                  newMessages[newMessages.length - 1].content = getSafeErrorMessage(data.error);
+                  newMessages[newMessages.length - 1].rawError = data.error;
                   return newMessages;
                 });
               }
@@ -70,6 +81,12 @@ export default function AgentChat() {
       }
     } catch (error) {
       console.error("Failed to connect to agent:", error);
+      setMessages((prev) => {
+        const newMessages = [...prev];
+        newMessages[newMessages.length - 1].content = getSafeErrorMessage(String(error));
+        newMessages[newMessages.length - 1].rawError = String(error);
+        return newMessages;
+      });
     } finally {
       setIsLoading(false);
     }
@@ -121,6 +138,12 @@ export default function AgentChat() {
               fontSize: "0.95rem"
             }}>
               {msg.content}
+              {msg.rawError && process.env.NODE_ENV === "development" && (
+                <details style={{ marginTop: "12px", padding: "8px", backgroundColor: "rgba(0,0,0,0.2)", borderRadius: "8px", fontSize: "0.75rem", color: "rgba(255,255,255,0.7)" }}>
+                  <summary style={{ cursor: "pointer", fontWeight: "500", marginBottom: "4px" }}>Technical details (Dev Only)</summary>
+                  <pre style={{ margin: 0, whiteSpace: "pre-wrap", wordBreak: "break-all" }}>{msg.rawError}</pre>
+                </details>
+              )}
             </div>
           ))
         )}
