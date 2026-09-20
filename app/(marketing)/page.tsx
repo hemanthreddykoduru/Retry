@@ -53,7 +53,7 @@ export default async function LandingPage(props: { searchParams: Promise<{ view?
           <div className="max-w-6xl mx-auto px-6 lg:px-12">
             <div className="flex flex-col items-center gap-2 mb-10 text-center">
               <div className="text-[11px] font-bold tracking-[0.15em] uppercase text-text-secondary bg-neutral-bg px-3 py-1 border border-border">
-                Razorpay Hackathon Demo · Live Production Metrics
+                Live Production Metrics
               </div>
               <div className="text-xs font-mono text-text-muted">
                 Measured across today's live payment-recovery cases.

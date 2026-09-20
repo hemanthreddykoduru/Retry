@@ -13,9 +13,9 @@ export default function DashboardLayout({
           <span className="flex items-center gap-1.5 text-[#1769E0] font-semibold bg-[#EDF5FF] px-2 py-0.5 rounded-md"><span className="w-1.5 h-1.5 rounded-full bg-[#1769E0] animate-pulse"></span> Demo Mode</span>
         </div>
         <div className="flex items-center gap-3">
-          <span>Sarvam Mock Mode</span>
+          <span>Voice AI Mock Mode</span>
           <span className="text-[#D1D5DB]">•</span>
-          <span className="bg-[#FFF4E5] text-[#B55D00] font-medium px-2 py-0.5 rounded-md border border-[#FDE68A]">Razorpay Test Mode</span>
+          <span className="bg-[#FFF4E5] text-[#B55D00] font-medium px-2 py-0.5 rounded-md border border-[#FDE68A]">Payment Gateway Test Mode</span>
           <span className="text-[#D1D5DB]">•</span>
           <span>Payment Links Mock Mode</span>
         </div>
