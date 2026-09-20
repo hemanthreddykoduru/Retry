@@ -28,14 +28,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Load the agent once
-agent = get_agent()
-
 class ChatRequest(BaseModel):
     prompt: str
 
 @app.post("/chat")
 async def chat_endpoint(request: ChatRequest):
+    # Instantiate a fresh agent for each request to avoid concurrent invocation locks
+    agent = get_agent()
+    
     async def event_generator():
         try:
             async for chunk in agent.stream_async(request.prompt):

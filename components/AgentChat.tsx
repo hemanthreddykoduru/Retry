@@ -56,6 +56,11 @@ export default function AgentChat() {
                 });
               } else if (data.error) {
                 console.error("Agent Error:", data.error);
+                setMessages((prev) => {
+                  const newMessages = [...prev];
+                  newMessages[newMessages.length - 1].content = "Error: " + data.error;
+                  return newMessages;
+                });
               }
             } catch (err) {
               // Ignore incomplete JSON parses
