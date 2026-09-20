@@ -44,7 +44,7 @@ export async function triggerSarvamOutboundCall(input: SarvamCallInput): Promise
 
   const apiUrl = `${baseUrl}/outbounds/v1/orgs/${orgId}/workspaces/${workspaceId}/outbounds`;
   
-  const baseUrlString = process.env.NEXT_PUBLIC_APP_URL || 'https://retry-buildathon.vercel.app';
+  const baseUrlString = process.env.NEXT_PUBLIC_APP_URL || 'https://retry-aws.vercel.app';
   
   const payload = {
     app_config: {

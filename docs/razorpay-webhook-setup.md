@@ -4,7 +4,7 @@
 2. Switch to **Test Mode**.
 3. Go to **Settings → Webhooks → Add New Webhook**.
 4. Set URL:
-   `https://retry-buildathon.vercel.app/api/webhooks/razorpay`
+   `https://retry-aws.vercel.app/api/webhooks/razorpay`
 5. Create a dedicated strong webhook secret.
 6. Save the same secret only as `RAZORPAY_WEBHOOK_SECRET` in Retry’s Vercel environment variables.
 7. Redeploy Retry after environment variable changes.

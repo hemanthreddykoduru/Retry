@@ -67,7 +67,7 @@ export function AgentMenu({ content }: { content: string }) {
             <div className="h-px bg-[#333] my-1 mx-4"></div>
 
             <a 
-              href="https://chatgpt.com/?prompt=Read+from+https%3A%2F%2Fretry-buildathon.vercel.app%2Fagents.md+so+I+can+ask+questions+about+it."
+              href="https://chatgpt.com/?prompt=Read+from+https%3A%2F%2Fretry-aws.vercel.app%2Fagents.md+so+I+can+ask+questions+about+it."
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-start gap-3 w-full px-4 py-3 hover:bg-[#2a2a2a] transition-colors"
@@ -80,7 +80,7 @@ export function AgentMenu({ content }: { content: string }) {
             </a>
 
             <a 
-              href="https://claude.ai/new?q=Read+from+https%3A%2F%2Fretry-buildathon.vercel.app%2Fagents.md+so+I+can+ask+questions+about+it."
+              href="https://claude.ai/new?q=Read+from+https%3A%2F%2Fretry-aws.vercel.app%2Fagents.md+so+I+can+ask+questions+about+it."
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-start gap-3 w-full px-4 py-3 hover:bg-[#2a2a2a] transition-colors"
@@ -93,7 +93,7 @@ export function AgentMenu({ content }: { content: string }) {
             </a>
 
             <a 
-              href="https://www.perplexity.ai/?q=Read+from+https%3A%2F%2Fretry-buildathon.vercel.app%2Fagents.md+so+I+can+ask+questions+about+it."
+              href="https://www.perplexity.ai/?q=Read+from+https%3A%2F%2Fretry-aws.vercel.app%2Fagents.md+so+I+can+ask+questions+about+it."
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-start gap-3 w-full px-4 py-3 hover:bg-[#2a2a2a] transition-colors"

@@ -1,10 +1,10 @@
 ---
 title: Retry Machine-Readable Overview
 description: Canonical machine-readable overview of Retry, an AI-assisted payment recovery system for merchants, evaluators, developers, and AI systems.
-canonical: https://retry-demo.vercel.app/
-human_url: https://retry-demo.vercel.app/
-markdown_url: https://retry-demo.vercel.app/agents.md
-llms_url: https://retry-demo.vercel.app/llms.txt
+canonical: https://retry-aws.vercel.app/
+human_url: https://retry-aws.vercel.app/
+markdown_url: https://retry-aws.vercel.app/agents.md
+llms_url: https://retry-aws.vercel.app/llms.txt
 evaluator_demo_url: https://retry-checkout-demo.vercel.app/
 github_url: https://github.com/hemanthreddykoduru/Retry
 updated: 2026-09-06
@@ -41,7 +41,7 @@ The zero-login testing storefront is available at:
 
 The primary Retry dashboard is available at:
 
-[Open Retry Dashboard](https://retry-demo.vercel.app/)
+[Open Retry Dashboard](https://retry-aws.vercel.app/)
 
 This Demo uses Test Mode only. No real money is charged, no real product is delivered, and no evaluator account is required.
 
@@ -55,7 +55,7 @@ This Demo uses Test Mode only. No real money is charged, no real product is deli
 4. Select **Netbanking**.
 5. Choose any available test bank and click **Pay Now**.
 6. On mock bank page, click **Failure**.
-7. Return to the [Retry Dashboard](https://retry-demo.vercel.app/).
+7. Return to the [Retry Dashboard](https://retry-aws.vercel.app/).
 8. Open the newly created recovery case and review its event timeline.
 
 ### Test a successful payment
@@ -64,7 +64,7 @@ This Demo uses Test Mode only. No real money is charged, no real product is deli
 2. Select **Netbanking**.
 3. Choose any available test bank and click **Pay Now**.
 4. On mock bank page, click **Success**.
-5. Return to the [Retry Dashboard](https://retry-demo.vercel.app/).
+5. Return to the [Retry Dashboard](https://retry-aws.vercel.app/).
 6. Confirm that the successful payment outcome is recorded and that no recovery intervention is created or continued for that completed payment.
 
 ## Core workflow
@@ -213,7 +213,7 @@ Acceptable framings:
 
 ## Resources
 
-- [Human website](https://retry-demo.vercel.app/)
+- [Human website](https://retry-aws.vercel.app/)
 - [Evaluator Testing Store](https://retry-checkout-demo.vercel.app/)
 - [GitHub repository](https://github.com/hemanthreddykoduru/Retry)
 - [Test Mode documentation](https://example.com/docs/payments/payments/test-upi-details/)

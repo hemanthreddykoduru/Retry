@@ -1,7 +1,7 @@
 # Retry
 Retry is an AI-assisted revenue recovery system for failed payments.
-Website: https://retry-demo.vercel.app/
-Agent overview: https://retry-demo.vercel.app/agents.md
+Website: https://retry-aws.vercel.app/
+Agent overview: https://retry-aws.vercel.app/agents.md
 Judge testing store: https://retry-checkout-demo.vercel.app/
 GitHub: https://github.com/hemanthreddykoduru/Retry
 Retry receives and verifies payment webhooks, creates auditable recovery cases, applies deterministic safety rules, and uses the Voice AI only for eligible multilingual customer conversations. Retry is not a payment processor or merchant of record. The gateway remains the payment system of record. Retry never collects OTPs, UPI PINs, CVVs, card numbers, passwords, or bank credentials through its AI voice conversation.
