@@ -157,7 +157,7 @@ export default function CasesPage() {
 
       <div className="flex flex-row gap-6 flex-1 h-full min-h-[500px]">
         <div className="sharp-card flex-1 overflow-auto flex flex-col min-h-[500px]">
-        <div className="grid grid-cols-12 gap-4 p-4 border-b border-[#E6E8EC] bg-[#F7F8FA] text-[11px] font-semibold tracking-wider uppercase text-[#5B6270] min-w-[1000px]">
+        <div className="grid grid-cols-12 gap-4 p-4 border-b border-[#E6E8EC] bg-[#F7F8FA] text-[11px] font-semibold tracking-wider uppercase text-[#5B6270] min-w-[1150px]">
           <div className="col-span-2">Case ID / Date</div>
           <div className="col-span-3">Customer</div>
           <div className="col-span-1 text-right">Amount</div>
@@ -166,7 +166,7 @@ export default function CasesPage() {
           <div className="col-span-2 text-right">Status</div>
         </div>
 
-          <div className="flex flex-col min-w-[1000px] flex-1">
+          <div className="flex flex-col min-w-[1150px] flex-1">
             {isLoading ? (
               Array.from({ length: 5 }).map((_, i) => (
                 <div key={i} className="grid grid-cols-12 gap-4 p-4 border-b border-border/50 animate-pulse items-center">
@@ -208,7 +208,7 @@ export default function CasesPage() {
                   className="grid grid-cols-12 gap-4 p-4 border-b border-border/50 hover:bg-neutral-bg transition-colors cursor-pointer group last:border-0 items-center"
                 >
                   <div className="col-span-2 font-mono text-xs text-text-primary">
-                    <div className="font-bold">{c.id}</div>
+                    <div className="font-bold uppercase tracking-wide">{c.id.split('-')[0]}</div>
                     <div className="text-text-muted mt-1 text-[10px]" suppressHydrationWarning>{new Date(c.opened_at).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true })}</div>
                   </div>
                   <div className="col-span-3 font-mono text-xs min-w-0 pr-4">
@@ -223,8 +223,8 @@ export default function CasesPage() {
                     <div className="text-text-primary mt-1">{formatRootCause(c.root_cause)}</div>
                   </div>
                   <div className="col-span-2 font-mono text-[11px]">
-                    <div className="text-text-primary capitalize">{getLatestIntervention(c)}</div>
-                    <div className="text-text-secondary mt-1 text-[10px] uppercase tracking-wider">{getNextAction(c)}</div>
+                    <div className="text-text-primary capitalize truncate">{getLatestIntervention(c)}</div>
+                    <div className="text-text-secondary mt-1 text-[10px] uppercase tracking-wider truncate">{getNextAction(c)}</div>
                   </div>
                   <div className="col-span-2 text-right flex justify-end">
                     <StatusBadge status={c.status} showDot={true} />
