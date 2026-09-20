@@ -5,6 +5,10 @@ import { motion, Variants } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { FaGithub, FaPlayCircle } from 'react-icons/fa';
+import { ShaderGradientCanvas, ShaderGradient } from 'shadergradient';
+import * as reactSpring from '@react-spring/three';
+import * as drei from '@react-three/drei';
+import * as fiber from '@react-three/fiber';
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -27,7 +31,19 @@ const itemVariants: Variants = {
 
 export function HeroSection() {
   return (
-    <section className="relative px-6 lg:px-12 pt-32 pb-24 max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 z-10">
+    <div className="relative w-full overflow-hidden">
+      <div className="absolute inset-0 w-full h-full -z-10 pointer-events-none opacity-30 mix-blend-multiply">
+        <ShaderGradientCanvas
+          importedFiber={{ ...fiber, ...drei, ...reactSpring }}
+          style={{ width: '100%', height: '100%' }}
+        >
+          <ShaderGradient
+            control='query'
+            urlString='https://www.shadergradient.co/customize?animate=on&color1=%23818cf8&color2=%23c084fc&color3=%23f472b6&type=waterPlane&uDensity=1.2&uFrequency=4.5&uSpeed=0.15&uStrength=2.5&cAzimuthAngle=180&cDistance=2.8&cPolarAngle=80&cameraZoom=1.5'
+          />
+        </ShaderGradientCanvas>
+      </div>
+      <section className="relative px-6 lg:px-12 pt-32 pb-24 max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 z-10">
       <motion.div 
         className="flex w-full flex-col max-w-2xl text-left"
         variants={containerVariants}
@@ -149,5 +165,6 @@ export function HeroSection() {
         </div>
       </motion.div>
     </section>
+    </div>
   );
 }
