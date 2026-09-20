@@ -59,7 +59,7 @@ export function HeroSection() {
         <motion.div variants={itemVariants} className="mt-8 flex flex-wrap items-center gap-4">
           <Link
             href="/signup"
-            className="group inline-flex items-center gap-2 rounded-full bg-[#635BFF] px-8 py-3.5 text-[15px] font-medium text-white shadow-[0_4px_14px_0_rgba(99,91,255,0.39)] transition-all hover:bg-[#635BFF]/90 active:scale-[0.98]"
+            className="group inline-flex items-center gap-2 rounded-none bg-[#635BFF] px-8 py-3.5 text-[15px] font-medium text-white shadow-[0_4px_14px_0_rgba(99,91,255,0.39)] transition-all hover:bg-[#635BFF]/90 active:scale-[0.98]"
           >
             Start recovering revenue
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
@@ -68,7 +68,7 @@ export function HeroSection() {
             href="https://retry-testing.vercel.app/"
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-flex items-center gap-2 rounded-full bg-white border border-[#E6E8EC] px-8 py-3.5 text-[15px] font-medium text-[#17191F] shadow-sm transition-all hover:bg-[#F7F8FA]"
+            className="group inline-flex items-center gap-2 rounded-none bg-white border border-[#E6E8EC] px-8 py-3.5 text-[15px] font-medium text-[#17191F] shadow-sm transition-all hover:bg-[#F7F8FA]"
           >
             View testing website
             <ArrowRight className="h-4 w-4 text-[#5B6270] transition-transform group-hover:translate-x-0.5" />
@@ -76,11 +76,11 @@ export function HeroSection() {
         </motion.div>
 
         <motion.div variants={itemVariants} className="mt-6 flex items-center gap-4">
-          <a href="https://github.com/hemanthreddykoduru/Retry" target="_blank" rel="noopener noreferrer" className="bg-white text-[#17191F] text-[14px] px-5 py-2.5 rounded-full font-medium border border-[#E6E8EC] hover:bg-[#F7F8FA] transition-colors shadow-sm flex items-center gap-2">
+          <a href="https://github.com/hemanthreddykoduru/Retry" target="_blank" rel="noopener noreferrer" className="bg-white text-[#17191F] text-[14px] px-5 py-2.5 rounded-none font-medium border border-[#E6E8EC] hover:bg-[#F7F8FA] transition-colors shadow-sm flex items-center gap-2">
             <FaGithub size={16} className="text-[#5B6270]" />
             GitHub
           </a>
-          <a href="https://youtu.be/s3hobYdQoTY" target="_blank" rel="noopener noreferrer" className="bg-white text-[#17191F] text-[14px] px-5 py-2.5 rounded-full font-medium border border-[#E6E8EC] hover:bg-[#F7F8FA] transition-colors shadow-sm flex items-center gap-2">
+          <a href="https://youtu.be/s3hobYdQoTY" target="_blank" rel="noopener noreferrer" className="bg-white text-[#17191F] text-[14px] px-5 py-2.5 rounded-none font-medium border border-[#E6E8EC] hover:bg-[#F7F8FA] transition-colors shadow-sm flex items-center gap-2">
             <FaPlayCircle size={16} className="text-[#5B6270]" />
             Demo
           </a>
