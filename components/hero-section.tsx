@@ -102,7 +102,7 @@ export function HeroSection() {
             
             <div className="flex items-center justify-between mb-6 pb-4 border-b border-zinc-100">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold text-lg shadow-inner">
+                <div className="w-10 h-10 rounded-none bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold text-lg shadow-inner">
                   ₹
                 </div>
                 <div>
@@ -110,23 +110,23 @@ export function HeroSection() {
                   <p className="text-xs text-zinc-500">Just now • Network issue</p>
                 </div>
               </div>
-              <div className="px-2.5 py-1 rounded-md bg-red-50 text-red-600 text-xs font-semibold border border-red-100">
+              <div className="px-2.5 py-1 rounded-none bg-red-50 text-red-600 text-xs font-semibold border border-red-100">
                 -₹4,500
               </div>
             </div>
             
             <div className="space-y-4">
               <div className="flex gap-3 items-start">
-                <div className="w-6 h-6 rounded-full bg-indigo-50 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <div className="w-2 h-2 rounded-full bg-indigo-500 animate-ping" />
+                <div className="w-6 h-6 rounded-none bg-indigo-50 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <div className="w-2 h-2 rounded-none bg-indigo-500 animate-ping" />
                 </div>
                 <div className="space-y-1.5 flex-1">
-                  <div className="h-4 bg-zinc-100 rounded-md w-3/4" />
-                  <div className="h-3 bg-zinc-50 rounded-md w-1/2" />
+                  <div className="h-4 bg-zinc-100 rounded-none w-3/4" />
+                  <div className="h-3 bg-zinc-50 rounded-none w-1/2" />
                 </div>
               </div>
               <div className="flex gap-3 items-start">
-                <div className="w-6 h-6 rounded-full bg-emerald-50 flex items-center justify-center flex-shrink-0 mt-0.5 border border-emerald-100">
+                <div className="w-6 h-6 rounded-none bg-emerald-50 flex items-center justify-center flex-shrink-0 mt-0.5 border border-emerald-100">
                   <span className="text-[10px]">✓</span>
                 </div>
                 <div className="space-y-1.5 flex-1">
@@ -137,11 +137,11 @@ export function HeroSection() {
             </div>
             
             <div className="mt-6 pt-4 border-t border-zinc-100 flex items-center justify-between">
-              <span className="text-xs font-semibold text-emerald-600 flex items-center gap-1 bg-emerald-50 px-2 py-1 rounded">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-xs font-semibold text-emerald-600 flex items-center gap-1 bg-emerald-50 px-2 py-1 rounded-none">
+                <span className="w-1.5 h-1.5 rounded-none bg-emerald-500 animate-pulse" />
                 Recovered
               </span>
-              <span className="text-xs font-medium text-zinc-500 border border-zinc-200 rounded px-2 py-1">
+              <span className="text-xs font-medium text-zinc-500 border border-zinc-200 rounded-none px-2 py-1">
                 +₹4,500
               </span>
             </div>
